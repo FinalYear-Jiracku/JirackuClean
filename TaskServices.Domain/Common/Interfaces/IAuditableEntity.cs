@@ -8,9 +8,9 @@ namespace TaskServices.Domain.Common.Interfaces
 {
     public interface IAuditableEntity : IEntity
     {
-        int? CreatedBy { get; set; }
-        DateTime? CreatedDate { get; set; }
-        int? UpdatedBy { get; set; }
-        DateTime? UpdatedDate { get; set; }
+        string? CreatedBy { get; set; }
+        DateTimeOffset? CreatedAt { get; set; }
+        string? UpdatedBy { get; set; }
+        DateTimeOffset? UpdatedAt { get; set; }
     }
 }

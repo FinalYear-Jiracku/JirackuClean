@@ -1,0 +1,26 @@
+version: '3.4'
+
+services:
+  redisstack:
+    container_name: "redis-stack"
+    image: redis/redis-stack
+
+  rabbitmq:
+    image: rabbitmq:3-management-alpine
+    container_name: 'rabbitmq'
+
+  postgressql:
+    image: postgres
+    container_name: postgressql
+
+  apigateways.services:
+    image: ${DOCKER_REGISTRY-}apigateways
+    build:
+      context: .
+      dockerfile: ApiGateways/Dockerfile
+
+  taskservices.webapi:
+    image: ${DOCKER_REGISTRY-}taskserviceswebapi
+    build:
+      context: .
+      dockerfile: TaskServices.WebAPI/Dockerfile

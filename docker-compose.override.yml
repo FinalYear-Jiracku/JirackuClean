@@ -1,0 +1,44 @@
+version: '3.4'
+
+services:
+  redisstack:
+    ports:
+    - 6379:6379
+    - 8001:8001
+
+  rabbitmq:
+    ports:
+      - 5672:5672
+      - 15672:15672
+    volumes:
+      - ~/.docker-conf/rabbitmq/data/:/var/lib/rabbitmq/
+      - ~/.docker-conf/rabbitmq/log/:/var/log/rabbitmq
+
+  postgressql:
+    environment:
+      - TZ=Asia/Ho_Chi_Minh
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=bao
+      - POSTGRES_MULTIPLE_DATABASES=Task
+    restart: always
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data/
+      - /etc/timezone:/etc/timezone:ro
+      - /etc/localtime:/etc/localtime:ro
+
+  apigateways.services:
+    depends_on:
+    - taskservices.webapi
+    ports:
+    - "4206:80"
+
+  taskservices.webapi:
+    environment:
+    - CONNECTIONSTRINGS__DEFAULTCONNECTION=Server=postgressql; Port=5432; Database=Task; Username=postgres; Password=bao;
+    ports:
+    - "4202:80"
+
+volumes:
+  postgres_data:

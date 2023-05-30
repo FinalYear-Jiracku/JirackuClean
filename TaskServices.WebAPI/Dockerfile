@@ -8,6 +8,11 @@ EXPOSE 443
 FROM mcr.microsoft.com/dotnet/sdk:7.0 AS build
 WORKDIR /src
 COPY ["TaskServices.WebAPI/TaskServices.WebAPI.csproj", "TaskServices.WebAPI/"]
+COPY ["TaskServices.Domain/TaskServices.Domain.csproj", "TaskServices.Domain/"]
+COPY ["TaskServices.Application/TaskServices.Application.csproj", "TaskServices.Application/"]
+COPY ["TaskServices.Persistence/TaskServices.Persistence.csproj", "TaskServices.Persistence/"]
+COPY ["TaskServices.Infrastructure/TaskServices.Infrastructure.csproj", "TaskServices.Infrastructure/"]
+COPY ["TaskServices.Shared/TaskServices.Shared.csproj", "TaskServices.Shared/"]
 RUN dotnet restore "TaskServices.WebAPI/TaskServices.WebAPI.csproj"
 COPY . .
 WORKDIR "/src/TaskServices.WebAPI"

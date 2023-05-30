@@ -10,9 +10,9 @@ namespace TaskServices.Domain.Common
     public abstract class BaseAuditableEntity : BaseEntity, IAuditableEntity
     {
         public bool? IsDeleted { get; set; } = false;
-        public int? CreatedBy { get; set; }
-        public DateTime? CreatedDate { get; set; }
-        public int? UpdatedBy { get; set; }
-        public DateTime? UpdatedDate { get; set; }
+        public string? CreatedBy { get; set; }
+        public DateTimeOffset? CreatedAt { get; set; } = DateTimeOffset.Now;
+        public string? UpdatedBy { get; set; }
+        public DateTimeOffset? UpdatedAt { get; set; } = DateTimeOffset.Now;
     }
 }
