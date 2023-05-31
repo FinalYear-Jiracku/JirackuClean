@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Components;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,10 +16,7 @@ namespace TaskServices.Persistence.Contexts
     public class ApplicationDbContext : DbContext
     {
         private readonly IDomainEventDispatcher? _dispatcher;
-        public ApplicationDbContext(DbContextOptions options) : base(options)
-        {
-        }
-        public ApplicationDbContext(IDomainEventDispatcher dispatcher)
+        public ApplicationDbContext(DbContextOptions options, IDomainEventDispatcher dispatcher) : base(options)
         {
             _dispatcher = dispatcher;
         }

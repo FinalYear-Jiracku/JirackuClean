@@ -1,10 +1,8 @@
 ﻿using MediatR;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using TaskServices.Application.DTOs;
 using TaskServices.Application.Features.Commands.Projects;
 using TaskServices.Application.Features.Queries.Projects;   
-using TaskServices.Domain.Entities;
 using TaskServices.Shared.Pagination.Filter;
 using TaskServices.Shared.Pagination.Helpers;
 using TaskServices.Shared.Pagination.Uris;
@@ -33,58 +31,58 @@ namespace TaskServices.WebAPI.Controllers
             return Ok(pagedResponse);
         }
 
-        //[HttpGet("{id}")]
-        //public async Task<IActionResult> GetProjectDetail(int id)
-        //{
-        //    var project = await _mediator.Send(new GetProjectByIdQuery(id));
-        //    if (project == null)
-        //    {
-        //        return StatusCode(400, "Project Does Not Exist");
-        //    }
-        //    return Ok(project);
-        //}
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetProjectDetail(int id)
+        {
+            var project = await _mediator.Send(new GetProjectByIdQuery(id));
+            if (project == null)
+            {
+                return StatusCode(400, "Project Does Not Exist");
+            }
+            return Ok(project);
+        }
         #endregion
 
         #region POST API
         [HttpPost]
         public async Task<IActionResult> CreateProject([FromBody] CreateProjectCommand projectCommand)
         {
-            //var checkProjectName = await _mediator.Send(new CheckProjectNameCommand(project.Id, project.Name));
-            //if (checkProjectName)
-            //{
-            //    return StatusCode(400, "Project Name already Exist");
-            //}
-            var newProject = await _mediator.Send(projectCommand);
-            return Ok(newProject);
+            var checkProjectName = await _mediator.Send(new CheckProjectNameQuery(projectCommand.Name));
+            if (checkProjectName)
+            {
+                return StatusCode(400, "Project Name already Exist");
+            }
+            var project = await _mediator.Send(projectCommand);
+            return Ok(project);
         }
         #endregion
 
         #region PUT API
-        //[HttpPut]
-        //public async Task<IActionResult> UpdateProject([FromBody] UpdateProjectCommand projectCommand)
-        //{
-        //    var checkProjectName = await _mediator.Send(new CheckProjectNameCommand(project.Id, project.Name));
-        //    if (checkProjectName)
-        //    {
-        //        return StatusCode(400, "Project Name already Exist");
-        //    }
-        //    var newProject = await _mediator.Send(projectCommand);
-        //    return Ok(newProject);
-        //}
+        [HttpPut]
+        public async Task<IActionResult> UpdateProject([FromBody] UpdateProjectCommand projectCommand)
+        {
+            var checkProjectName = await _mediator.Send(new CheckProjectNameQuery(projectCommand.Id, projectCommand.Name));
+            if (checkProjectName)
+            {
+                return StatusCode(400, "Project Name already Exist");
+            }
+            var project = await _mediator.Send(projectCommand);
+            return Ok(project);
+        }
         #endregion
 
         #region DELETE API
-        //[HttpDelete("{id}")]
-        //public async Task<IActionResult> DeleteProject(int id)
-        //{
-        //    var findProject = await _mediator.Send(new GetProjectByIdQuery(id));
-        //    if (findProject == null)
-        //    {
-        //        return StatusCode(400, "Project Does Not Exist");
-        //    }
-        //    await _mediator.Send(new DeleteProjectCommand(id));
-        //    return Ok();
-        //}
+        [HttpPut("{id}")]
+        public async Task<IActionResult> DeleteProject(int id)
+        {
+            var findProject = await _mediator.Send(new GetProjectByIdQuery(id));
+            if (findProject == null)
+            {
+                return StatusCode(400, "Project Does Not Exist");
+            }
+            await _mediator.Send(new DeleteProjectCommand(id));
+            return Ok();
+        }
         #endregion
     }
 }

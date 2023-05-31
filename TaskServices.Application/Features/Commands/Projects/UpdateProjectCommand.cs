@@ -9,17 +9,21 @@ using TaskServices.Domain.Entities;
 
 namespace TaskServices.Application.Features.Commands.Projects
 {
-    public class CreateProjectCommand : IRequest<Project>
+    public class UpdateProjectCommand : IRequest<int>
     {
+        public int Id { get; set; }
         public string? Name { get; set; }
-        public string? CreatedBy { get; set; }
-        public string? UpdatedBy { get; set; }
+        public UpdateProjectCommand(int id, string? name)
+        {
+            Id = id;
+            Name = name;
+        }
     }
-    public class ProjectCreatedEvent : BaseEvent
+    public class ProjectUpdatedEvent : BaseEvent
     {
         public Project Project { get; }
 
-        public ProjectCreatedEvent(Project project)
+        public ProjectUpdatedEvent(Project project)
         {
             Project = project;
         }

@@ -4,9 +4,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TaskServices.Application.DTOs;
 using TaskServices.Application.Interfaces;
 using TaskServices.Domain.Common;
 using TaskServices.Persistence.Contexts;
+using TaskServices.Persistence.Services;
 
 namespace TaskServices.Persistence.Repositories
 {
@@ -42,7 +44,7 @@ namespace TaskServices.Persistence.Repositories
 
         public async Task<List<T>> GetAllAsync()
         {
-            return await _dbContext.Set<T>().ToListAsync();
+            return await _dbContext.Set<T>().ToListAsync(); ;
         }
 
         public async Task<T> GetByIdAsync(int id)

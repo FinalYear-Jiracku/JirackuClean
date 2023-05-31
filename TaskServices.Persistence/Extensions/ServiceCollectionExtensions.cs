@@ -22,23 +22,12 @@ namespace TaskServices.Persistence.Extensions
         public static void AddPersistenceLayer(this IServiceCollection services, IConfiguration configuration)
         {
             services.AddDbContext(configuration);
-            services.AddAutoMapper();
             services.AddRepositories();
         }
 
-        public static void PersistenceConfigure(this IApplicationBuilder app)
+        public static void PersistenceErrorHandlerMiddleware(this IApplicationBuilder app)
         {
             app.UseMiddleware<ErrorHandlerMiddleware>();
-        }
-
-        private static void AddAutoMapper(this IServiceCollection services)
-        {
-            services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
-            //var configuration = new MapperConfiguration(cfg => {
-            //    cfg.AddProfile<MappingProfile>();
-            //});
-            IMapper mapper = MappingConfig.RegisterMaps().CreateMapper();
-            services.AddSingleton(mapper);
         }
 
         public static void AddDbContext(this IServiceCollection services, IConfiguration configuration)

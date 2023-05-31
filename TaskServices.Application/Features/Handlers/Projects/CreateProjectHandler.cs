@@ -15,11 +15,9 @@ namespace TaskServices.Application.Features.Handlers.Projects
     public class CreateProjectHandler : IRequestHandler<CreateProjectCommand, Project>
     {
         private readonly IUnitOfWork _unitOfWork;
-        private readonly IMapper _mapper;
-        public CreateProjectHandler(IUnitOfWork unitOfWork, IMapper mapper)
+        public CreateProjectHandler(IUnitOfWork unitOfWork)
         {
             _unitOfWork = unitOfWork;
-            _mapper = mapper;
         }
         public async Task<Project> Handle(CreateProjectCommand command, CancellationToken cancellationToken)
         {
@@ -27,6 +25,7 @@ namespace TaskServices.Application.Features.Handlers.Projects
             {
                 Name = command.Name,
                 CreatedBy = command.CreatedBy,
+                UpdatedBy = command.UpdatedBy,
             };
             await _unitOfWork.Repository<Project>().AddAsync(newProject);
             newProject.AddDomainEvent(new ProjectCreatedEvent(newProject));

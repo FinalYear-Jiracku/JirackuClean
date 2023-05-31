@@ -16,12 +16,13 @@ namespace TaskServices.Persistence.Repositories
         private readonly ApplicationDbContext _dbContext;
         private Hashtable _repositories;
         private bool disposed;
-        public UnitOfWork(ApplicationDbContext dbContext)
+        public IProjectRepository ProjectRepository { get; }
+        public UnitOfWork(ApplicationDbContext dbContext, IProjectRepository projectRepository)
         {
             _dbContext = dbContext;
-            ProjectRepository = new ProjectRepository(_dbContext);
+            ProjectRepository = projectRepository;
         }
-        public IProjectRepository ProjectRepository { get; }
+
         public void Dispose()
         {
             Dispose(true);

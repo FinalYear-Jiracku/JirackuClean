@@ -32,8 +32,16 @@ namespace TaskServices.Application.Features.Handlers.Projects
         public async Task<(List<ProjectDTO>, PaginationFilter, int)> Handle(GetProjectListQuery query, CancellationToken cancellationToken)
         {
             var validFilter = new PaginationFilter(query.Filter.PageNumber, query.Filter.PageSize, query.Filter.Search);
-            var projects = await _unitOfWork.ProjectRepository.GetProjectPagination(validFilter);
-            var projectsDto = _mapper?.Map<List<ProjectDTO>>(projects)
+            var projects = await _unitOfWork.Repository<Project>().GetAllAsync();
+            if (!String.IsNullOrEmpty(query.Filter.Search))
+            {
+                var projectsDtoFilter = _mapper.Map<List<ProjectDTO>>(projects).Where(x => x.Name.Equals(query.Filter.Search))
+                                  .Skip((validFilter.PageNumber - 1) * validFilter.PageSize)
+                                  .Take(validFilter.PageSize).ToList();
+                var countDataFilter = projectsDtoFilter.Count();
+                return (projectsDtoFilter, validFilter, countDataFilter);
+            }
+            var projectsDto = _mapper.Map<List<ProjectDTO>>(projects)
                               .Skip((validFilter.PageNumber - 1) * validFilter.PageSize)
                               .Take(validFilter.PageSize).ToList();
             var countData = projectsDto.Count();

@@ -12,4 +12,13 @@
     <None Remove="Services\**" />
   </ItemGroup>
 
+  <ItemGroup>
+    <PackageReference Include="MediatR" Version="12.0.1" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="7.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\TaskServices.Application\TaskServices.Application.csproj" />
+  </ItemGroup>
+
 </Project>

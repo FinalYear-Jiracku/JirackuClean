@@ -21,28 +21,19 @@ namespace TaskServices.Application.Extensions
             services.AddHttpContextAccessor();
             services.AddAutoMapper();
             services.AddMediator();
-            services.AddValidators();
             services.AddUri();
         }
 
         private static void AddAutoMapper(this IServiceCollection services)
         {
-            services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
-            //var configuration = new MapperConfiguration(cfg => {
-            //    cfg.AddProfile<MappingProfile>();
-            //});
             IMapper mapper = MappingConfig.RegisterMaps().CreateMapper();
             services.AddSingleton(mapper);
+            services.AddAutoMapper(Assembly.GetExecutingAssembly());
         }
 
         private static void AddMediator(this IServiceCollection services)
         {
             services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(Assembly.GetExecutingAssembly()));
-        }
-
-        private static void AddValidators(this IServiceCollection services)
-        {
-            services.AddValidatorsFromAssembly(Assembly.GetExecutingAssembly());
         }
 
         private static void AddUri(this IServiceCollection services)

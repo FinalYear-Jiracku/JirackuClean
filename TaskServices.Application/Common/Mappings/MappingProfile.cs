@@ -12,5 +12,5 @@ namespace TaskServices.Application.Common.Mappings
         {
             CreateMap<Project, ProjectDTO>().ReverseMap();
         }
-    } 
+    }
 }

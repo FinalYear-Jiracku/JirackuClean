@@ -13,6 +13,8 @@ namespace TaskServices.Application.DTOs
         public bool? IsUpgraded { get; set; }
         public bool? IsDeleted { get; set; }
         public string? CreatedBy { get; set; }
-        public DateTime CreatedAt { get; set; }
+        public string? UpdatedBy { get; set; }
+        public DateTimeOffset? CreatedAt { get; set; }
+        public DateTimeOffset? UpdatedAt { get; set; }
     }
 }

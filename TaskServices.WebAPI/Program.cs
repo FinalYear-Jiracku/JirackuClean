@@ -1,15 +1,15 @@
 using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 using System;
-using TaskServices.Application.Common.Mappings;
 using TaskServices.Application.Extensions;
+using TaskServices.Infrastructure.Extensions;
 using TaskServices.Persistence.Contexts;
 using TaskServices.Persistence.Extensions;
-using TaskServices.Shared.Middleware;
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddApplicationLayer();
+builder.Services.AddInfrastructureLayer();
 builder.Services.AddPersistenceLayer(builder.Configuration);
 
 // Add services to the container.
@@ -28,7 +28,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-app.PersistenceConfigure();
+app.PersistenceErrorHandlerMiddleware();
 
 app.UseHttpsRedirection();
 

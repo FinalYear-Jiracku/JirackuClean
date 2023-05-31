@@ -14,7 +14,9 @@ namespace TaskServices.Domain.Configurations
             builder.Property(x => x.Content).IsRequired(false).HasMaxLength(1000);
             builder.Property(x => x.IsDeleted).IsRequired(false);
             builder.Property(x => x.CreatedBy).IsRequired(false).HasMaxLength(100);
-            builder.Property(x => x.CreatedAt).IsRequired(true);
+            builder.Property(x => x.CreatedAt).IsRequired(false);
+            builder.Property(x => x.UpdatedBy).IsRequired(false).HasMaxLength(100);
+            builder.Property(x => x.UpdatedAt).IsRequired(false);
 
             builder.HasOne(x => x.Issue).WithMany(x => x.Comments).OnDelete(DeleteBehavior.SetNull);
             builder.HasOne(x => x.SubIssue).WithMany(x => x.Comments).OnDelete(DeleteBehavior.SetNull);

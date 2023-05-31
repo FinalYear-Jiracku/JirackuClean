@@ -15,7 +15,7 @@ namespace TaskServices.Application.Common.Mappings
         {
             var mappingConfig = new MapperConfiguration(config =>
             {
-                config.CreateMap<ProjectDTO, Project>().ReverseMap();
+                config.AddProfile<MappingProfile>();
             });
             return mappingConfig;
         }
