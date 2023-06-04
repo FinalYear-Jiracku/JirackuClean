@@ -1,8 +1,10 @@
-﻿using TaskServices.Domain.Entities;
-using TaskServices.Shared.Pagination.Filter;
-using TaskServices.Shared.Pagination.Wrapper;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
-namespace TaskServices.Persistence.Services
+namespace TaskServices.Application.Interfaces
 {
     public interface ICacheService
     {

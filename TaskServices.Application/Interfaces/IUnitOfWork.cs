@@ -11,6 +11,9 @@ namespace TaskServices.Application.Interfaces
     {
         IGenericRepository<T> Repository<T>() where T : BaseAuditableEntity;
         IProjectRepository ProjectRepository { get; }
+        ISprintRepository SprintRepository { get; }
+        IStatusRepository StatusRepository { get; }
+        IIssueRepository IssueRepository { get; }
         Task<int> Save(CancellationToken cancellationToken);
         Task<int> SaveAndRemoveCache(CancellationToken cancellationToken, params string[] cacheKeys);
         Task Rollback();

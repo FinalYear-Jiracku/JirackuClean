@@ -4,7 +4,7 @@
     {
         public int ProjectId { get; set; }
         public int UserId { get; set; }
-        public DateTime JoinDate { get; set; } = DateTime.UtcNow;
+        public DateTimeOffset? JoinDate { get; set; } = DateTimeOffset.Now;
         public Project? Project { get; set; }
 
     }

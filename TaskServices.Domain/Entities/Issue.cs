@@ -11,8 +11,8 @@ namespace TaskServices.Domain.Entities
         public IssuePriority? Priority { get; set; }
         public int? StoryPoint { get; set; }
         public int? Order { get; set; }
-        public DateTime StartDate { get; set; }
-        public DateTime DueDate { get; set; }
+        public DateTimeOffset? StartDate { get; set; }
+        public DateTimeOffset? DueDate { get; set; }
         public int? StatusId { get; set; }
         public int? SprintId { get; set; }
         public Status? Status { get; set; }
@@ -20,5 +20,6 @@ namespace TaskServices.Domain.Entities
         public ICollection<Attachment>? Attachments { get; set; }
         public ICollection<SubIssue>? SubIssues { get; set; }
         public ICollection<Comment>? Comments { get; set; }
+        public ICollection<UserIssue>? UserIssues { get; set; }
     }
 }

@@ -33,7 +33,7 @@ namespace TaskServices.WebAPI.Controllers
 
         [HttpGet("{id}")]
         public async Task<IActionResult> GetProjectDetail(int id)
-        {
+        {   
             var project = await _mediator.Send(new GetProjectByIdQuery(id));
             if (project == null)
             {
@@ -52,8 +52,8 @@ namespace TaskServices.WebAPI.Controllers
             {
                 return StatusCode(400, "Project Name already Exist");
             }
-            var project = await _mediator.Send(projectCommand);
-            return Ok(project);
+            await _mediator.Send(projectCommand);
+            return Ok();
         }
         #endregion
 
@@ -66,13 +66,13 @@ namespace TaskServices.WebAPI.Controllers
             {
                 return StatusCode(400, "Project Name already Exist");
             }
-            var project = await _mediator.Send(projectCommand);
-            return Ok(project);
+            await _mediator.Send(projectCommand);
+            return Ok();
         }
         #endregion
 
         #region DELETE API
-        [HttpPut("{id}")]
+        [HttpPatch("{id}")]
         public async Task<IActionResult> DeleteProject(int id)
         {
             var findProject = await _mediator.Send(new GetProjectByIdQuery(id));

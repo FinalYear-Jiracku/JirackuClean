@@ -5,9 +5,9 @@ namespace TaskServices.Domain.Entities
     public class Sprint : BaseAuditableEntity
     {
         public string? Name { get; set; }
-        public DateTime StartDate { get; set; }
-        public DateTime EndDate { get; set; }
-        public bool? IsCompleted { get; set; }
+        public DateTimeOffset? StartDate { get; set; }
+        public DateTimeOffset? EndDate { get; set; }
+        public bool? IsCompleted { get; set; } = false;
         public int? ProjectId { get; set; }
         public Project? Project { get; set; }
         public ICollection<Status>? Statuses { get; set; }

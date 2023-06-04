@@ -25,7 +25,6 @@ namespace TaskServices.Application.Features.Handlers.Projects
             {
                 Name = command.Name,
                 CreatedBy = command.CreatedBy,
-                UpdatedBy = command.UpdatedBy,
             };
             await _unitOfWork.Repository<Project>().AddAsync(newProject);
             newProject.AddDomainEvent(new ProjectCreatedEvent(newProject));

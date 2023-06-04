@@ -20,7 +20,7 @@ namespace TaskServices.Application.Features.Handlers.Projects
         public async Task<int> Handle(DeleteProjectCommand command, CancellationToken cancellationToken)
         {
             var project = await _unitOfWork.ProjectRepository.GetProjectById(command.Id);
-            if (project == null)
+            if(project == null)
             {
                 return default;
             }

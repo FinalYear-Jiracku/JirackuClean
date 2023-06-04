@@ -17,10 +17,20 @@ namespace TaskServices.Persistence.Repositories
         private Hashtable _repositories;
         private bool disposed;
         public IProjectRepository ProjectRepository { get; }
-        public UnitOfWork(ApplicationDbContext dbContext, IProjectRepository projectRepository)
+        public ISprintRepository SprintRepository { get; }
+        public IStatusRepository StatusRepository { get; }
+        public IIssueRepository IssueRepository { get; }
+        public UnitOfWork(ApplicationDbContext dbContext, 
+                          IProjectRepository projectRepository, 
+                          ISprintRepository sprintRepository, 
+                          IStatusRepository statusRepository,
+                          IIssueRepository issueRepository)
         {
             _dbContext = dbContext;
             ProjectRepository = projectRepository;
+            SprintRepository = sprintRepository;
+            StatusRepository = statusRepository;
+            IssueRepository = issueRepository;
         }
 
         public void Dispose()

@@ -38,8 +38,8 @@ namespace TaskServices.Persistence.Migrations
                     Id = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     Name = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: true),
-                    StartDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    EndDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    StartDate = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: true),
+                    EndDate = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: true),
                     IsCompleted = table.Column<bool>(type: "boolean", nullable: true),
                     ProjectId = table.Column<int>(type: "integer", nullable: true),
                     IsDeleted = table.Column<bool>(type: "boolean", nullable: true),
@@ -65,7 +65,7 @@ namespace TaskServices.Persistence.Migrations
                 {
                     ProjectId = table.Column<int>(type: "integer", nullable: false),
                     UserId = table.Column<int>(type: "integer", nullable: false),
-                    JoinDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
+                    JoinDate = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -197,8 +197,8 @@ namespace TaskServices.Persistence.Migrations
                     Priority = table.Column<int>(type: "integer", nullable: true),
                     StoryPoint = table.Column<int>(type: "integer", nullable: true),
                     Order = table.Column<int>(type: "integer", nullable: true),
-                    StartDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    DueDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    StartDate = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: true),
+                    DueDate = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: true),
                     StatusId = table.Column<int>(type: "integer", nullable: true),
                     SprintId = table.Column<int>(type: "integer", nullable: true),
                     IsDeleted = table.Column<bool>(type: "boolean", nullable: true),
@@ -236,8 +236,8 @@ namespace TaskServices.Persistence.Migrations
                     Priority = table.Column<int>(type: "integer", nullable: true),
                     StoryPoint = table.Column<int>(type: "integer", nullable: true),
                     Order = table.Column<int>(type: "integer", nullable: true),
-                    StartDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    DueDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    StartDate = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: true),
+                    DueDate = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: true),
                     StatusId = table.Column<int>(type: "integer", nullable: true),
                     IssueId = table.Column<int>(type: "integer", nullable: true),
                     IsDeleted = table.Column<bool>(type: "boolean", nullable: true),
@@ -259,6 +259,25 @@ namespace TaskServices.Persistence.Migrations
                         name: "FK_SubIssues_Statuses_StatusId",
                         column: x => x.StatusId,
                         principalTable: "Statuses",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "UserIssue",
+                columns: table => new
+                {
+                    IssueId = table.Column<int>(type: "integer", nullable: false),
+                    UserId = table.Column<int>(type: "integer", nullable: false),
+                    JoinDate = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_UserIssue", x => new { x.IssueId, x.UserId });
+                    table.ForeignKey(
+                        name: "FK_UserIssue_Issues_IssueId",
+                        column: x => x.IssueId,
+                        principalTable: "Issues",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -332,6 +351,25 @@ namespace TaskServices.Persistence.Migrations
                         principalTable: "SubIssues",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.SetNull);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "UserSubIssue",
+                columns: table => new
+                {
+                    SubIssueId = table.Column<int>(type: "integer", nullable: false),
+                    UserId = table.Column<int>(type: "integer", nullable: false),
+                    JoinDate = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_UserSubIssue", x => new { x.SubIssueId, x.UserId });
+                    table.ForeignKey(
+                        name: "FK_UserSubIssue_SubIssues_SubIssueId",
+                        column: x => x.SubIssueId,
+                        principalTable: "SubIssues",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateIndex(
@@ -418,7 +456,13 @@ namespace TaskServices.Persistence.Migrations
                 name: "Pages");
 
             migrationBuilder.DropTable(
+                name: "UserIssue");
+
+            migrationBuilder.DropTable(
                 name: "UserProject");
+
+            migrationBuilder.DropTable(
+                name: "UserSubIssue");
 
             migrationBuilder.DropTable(
                 name: "Notes");

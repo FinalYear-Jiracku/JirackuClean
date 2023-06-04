@@ -6,8 +6,6 @@ using System.Text;
 using System.Threading.Tasks;
 using TaskServices.Application.Features.Queries.Projects;
 using TaskServices.Application.Interfaces;
-using TaskServices.Domain.Entities;
-using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
 
 namespace TaskServices.Application.Features.Handlers.Projects
 {

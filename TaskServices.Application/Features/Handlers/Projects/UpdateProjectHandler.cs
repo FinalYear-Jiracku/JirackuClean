@@ -21,11 +21,12 @@ namespace TaskServices.Application.Features.Handlers.Projects
         public async Task<int> Handle(UpdateProjectCommand command, CancellationToken cancellationToken)
         {
             var project = await _unitOfWork.ProjectRepository.GetProjectById(command.Id);
-            if(project == null)
+            if (project == null)
             {
                 return default;
             }
             project.Name = command.Name;
+            project.UpdatedBy = command.UpdatedBy;
             await _unitOfWork.Repository<Project>().UpdateAsync(project);
             project.AddDomainEvent(new ProjectUpdatedEvent(project));
             return await _unitOfWork.Save(cancellationToken);

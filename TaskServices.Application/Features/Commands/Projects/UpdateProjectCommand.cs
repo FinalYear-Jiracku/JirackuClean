@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using TaskServices.Domain.Common;
 using TaskServices.Domain.Entities;
+using TaskServices.Domain.Entities.Enums;
 
 namespace TaskServices.Application.Features.Commands.Projects
 {
@@ -13,10 +14,14 @@ namespace TaskServices.Application.Features.Commands.Projects
     {
         public int Id { get; set; }
         public string? Name { get; set; }
-        public UpdateProjectCommand(int id, string? name)
+        public string? UpdatedBy { get; set; }
+        public DateTimeOffset? UpdatedAt { get; set; } = DateTimeOffset.Now;
+        public UpdateProjectCommand(int id, string? name, string? updatedBy, DateTimeOffset? updatedAt)
         {
             Id = id;
             Name = name;
+            UpdatedBy = updatedBy;
+            UpdatedAt = updatedAt;
         }
     }
     public class ProjectUpdatedEvent : BaseEvent

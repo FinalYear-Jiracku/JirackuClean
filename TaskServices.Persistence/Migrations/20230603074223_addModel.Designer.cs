@@ -12,7 +12,7 @@ using TaskServices.Persistence.Contexts;
 namespace TaskServices.Persistence.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20230531122954_addModel")]
+    [Migration("20230603074223_addModel")]
     partial class addModel
     {
         /// <inheritdoc />
@@ -180,7 +180,7 @@ namespace TaskServices.Persistence.Migrations
                         .HasMaxLength(1000)
                         .HasColumnType("character varying(1000)");
 
-                    b.Property<DateTime>("DueDate")
+                    b.Property<DateTimeOffset?>("DueDate")
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<bool?>("IsDeleted")
@@ -199,7 +199,7 @@ namespace TaskServices.Persistence.Migrations
                     b.Property<int?>("SprintId")
                         .HasColumnType("integer");
 
-                    b.Property<DateTime>("StartDate")
+                    b.Property<DateTimeOffset?>("StartDate")
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<int?>("StatusId")
@@ -373,7 +373,7 @@ namespace TaskServices.Persistence.Migrations
                         .HasMaxLength(100)
                         .HasColumnType("character varying(100)");
 
-                    b.Property<DateTime>("EndDate")
+                    b.Property<DateTimeOffset?>("EndDate")
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<bool?>("IsCompleted")
@@ -389,7 +389,7 @@ namespace TaskServices.Persistence.Migrations
                     b.Property<int?>("ProjectId")
                         .HasColumnType("integer");
 
-                    b.Property<DateTime>("StartDate")
+                    b.Property<DateTimeOffset?>("StartDate")
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<DateTimeOffset?>("UpdatedAt")
@@ -468,7 +468,7 @@ namespace TaskServices.Persistence.Migrations
                         .HasMaxLength(1000)
                         .HasColumnType("character varying(1000)");
 
-                    b.Property<DateTime>("DueDate")
+                    b.Property<DateTimeOffset?>("DueDate")
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<bool?>("IsDeleted")
@@ -487,7 +487,7 @@ namespace TaskServices.Persistence.Migrations
                     b.Property<int?>("Priority")
                         .HasColumnType("integer");
 
-                    b.Property<DateTime>("StartDate")
+                    b.Property<DateTimeOffset?>("StartDate")
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<int?>("StatusId")
@@ -515,6 +515,22 @@ namespace TaskServices.Persistence.Migrations
                     b.ToTable("SubIssues", (string)null);
                 });
 
+            modelBuilder.Entity("TaskServices.Domain.Entities.UserIssue", b =>
+                {
+                    b.Property<int>("IssueId")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("integer");
+
+                    b.Property<DateTimeOffset?>("JoinDate")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.HasKey("IssueId", "UserId");
+
+                    b.ToTable("UserIssue", (string)null);
+                });
+
             modelBuilder.Entity("TaskServices.Domain.Entities.UserProject", b =>
                 {
                     b.Property<int>("ProjectId")
@@ -523,12 +539,28 @@ namespace TaskServices.Persistence.Migrations
                     b.Property<int>("UserId")
                         .HasColumnType("integer");
 
-                    b.Property<DateTime>("JoinDate")
+                    b.Property<DateTimeOffset?>("JoinDate")
                         .HasColumnType("timestamp with time zone");
 
                     b.HasKey("ProjectId", "UserId");
 
                     b.ToTable("UserProject", (string)null);
+                });
+
+            modelBuilder.Entity("TaskServices.Domain.Entities.UserSubIssue", b =>
+                {
+                    b.Property<int>("SubIssueId")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("integer");
+
+                    b.Property<DateTimeOffset?>("JoinDate")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.HasKey("SubIssueId", "UserId");
+
+                    b.ToTable("UserSubIssue", (string)null);
                 });
 
             modelBuilder.Entity("TaskServices.Domain.Entities.Attachment", b =>
@@ -656,6 +688,17 @@ namespace TaskServices.Persistence.Migrations
                     b.Navigation("Status");
                 });
 
+            modelBuilder.Entity("TaskServices.Domain.Entities.UserIssue", b =>
+                {
+                    b.HasOne("TaskServices.Domain.Entities.Issue", "Issue")
+                        .WithMany("UserIssues")
+                        .HasForeignKey("IssueId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Issue");
+                });
+
             modelBuilder.Entity("TaskServices.Domain.Entities.UserProject", b =>
                 {
                     b.HasOne("TaskServices.Domain.Entities.Project", "Project")
@@ -665,6 +708,17 @@ namespace TaskServices.Persistence.Migrations
                         .IsRequired();
 
                     b.Navigation("Project");
+                });
+
+            modelBuilder.Entity("TaskServices.Domain.Entities.UserSubIssue", b =>
+                {
+                    b.HasOne("TaskServices.Domain.Entities.SubIssue", "SubIssue")
+                        .WithMany("UserSubIssues")
+                        .HasForeignKey("SubIssueId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("SubIssue");
                 });
 
             modelBuilder.Entity("TaskServices.Domain.Entities.Column", b =>
@@ -679,6 +733,8 @@ namespace TaskServices.Persistence.Migrations
                     b.Navigation("Comments");
 
                     b.Navigation("SubIssues");
+
+                    b.Navigation("UserIssues");
                 });
 
             modelBuilder.Entity("TaskServices.Domain.Entities.Note", b =>
@@ -716,6 +772,8 @@ namespace TaskServices.Persistence.Migrations
                     b.Navigation("Attachments");
 
                     b.Navigation("Comments");
+
+                    b.Navigation("UserSubIssues");
                 });
 #pragma warning restore 612, 618
         }

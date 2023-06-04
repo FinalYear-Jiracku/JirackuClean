@@ -36,6 +36,19 @@ namespace TaskServices.Persistence.Repositories
             return Task.CompletedTask;
         }
 
+        public async Task UpdateRangeAsync(List<T> entities)
+        {
+            foreach (T entity in entities)
+            {
+                T existingEntity = await _dbContext.Set<T>().FindAsync(entity.Id);
+
+                if (existingEntity != null)
+                {
+                    _dbContext.Entry(existingEntity).CurrentValues.SetValues(entity);
+                }
+            }
+        }
+
         public Task DeleteAsync(T entity)
         {
             _dbContext.Set<T>().Remove(entity);
@@ -44,7 +57,7 @@ namespace TaskServices.Persistence.Repositories
 
         public async Task<List<T>> GetAllAsync()
         {
-            return await _dbContext.Set<T>().ToListAsync(); ;
+            return await _dbContext.Set<T>().Where(x => x.IsDeleted == false).ToListAsync();
         }
 
         public async Task<T> GetByIdAsync(int id)
