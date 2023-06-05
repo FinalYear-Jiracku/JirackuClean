@@ -1,9 +1,13 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using TaskServices.Application.DTOs;
 using TaskServices.Application.Features.Commands.Statuses;
 using TaskServices.Application.Features.Queries.Sprints;
 using TaskServices.Application.Features.Queries.Statuses;
+using TaskServices.Shared.Pagination.Filter;
+using TaskServices.Shared.Pagination.Helpers;
+using TaskServices.Shared.Pagination.Uris;
 
 namespace TaskServices.WebAPI.Controllers
 {
@@ -12,34 +16,39 @@ namespace TaskServices.WebAPI.Controllers
     public class StatusesController : ControllerBase
     {
         private readonly IMediator _mediator;
-        public StatusesController(IMediator mediator)
+        private readonly IUriService _uriService;
+        public StatusesController(IMediator mediator, IUriService uriService)
         {
             _mediator = mediator;
+            _uriService = uriService;
         }
 
         #region GET API
         [HttpGet]
-        [Route("sprints/{id}")]
-        public async Task<IActionResult> GetStatusList(int id)
-        {
-            var findSprint = await _mediator.Send(new GetSprintByIdQuery(id));
-            if (findSprint == null)
-            {
-                return StatusCode(400, "Sprint Does Not Exist");
-            }
-            var statusList = await _mediator.Send(new GetStatusListQuery(id));
-            return Ok(statusList);
-        }
-        [HttpGet]
         [Route("data/sprints/{id}")]
-        public async Task<IActionResult> GetDataStatusList(int id)
+        public async Task<IActionResult> GetDataStatusList([FromQuery] PaginationFilter filter, int id)
         {
             var findSprint = await _mediator.Send(new GetSprintByIdQuery(id));
             if (findSprint == null)
             {
                 return StatusCode(400, "Sprint Does Not Exist");
             }
-            var statusList = await _mediator.Send(new GetDataStatusListQuery(id));
+            var route = Request.Path.Value;
+            var statusList = await _mediator.Send(new GetDataStatusListQuery(id, filter));
+            var pagedResponse = PaginationHelper.CreatePagedReponse<DataStatusDTO>(statusList.Item1, statusList.Item2, statusList.Item3, _uriService, route);
+            return Ok(pagedResponse);
+        }
+
+        [HttpGet]
+        [Route("sprints/{id}")]
+        public async Task<IActionResult> DropdownStatusList(int id)
+        {
+            var findSprint = await _mediator.Send(new GetSprintByIdQuery(id));
+            if (findSprint == null)
+            {
+                return StatusCode(400, "Sprint Does Not Exist");
+            }
+            var statusList = await _mediator.Send(new DropdownStatusListQuery(id));
             return Ok(statusList);
         }
 

@@ -26,7 +26,7 @@ namespace TaskServices.WebAPI.Controllers
 
         #region GET API
         [HttpGet]
-        [Route("projects/{id}")]
+        [Route("data/projects/{id}")]
         public async Task<IActionResult> GetSprintList([FromQuery] PaginationFilter filter, int id)
         {
             var findProject = await _mediator.Send(new GetProjectByIdQuery(id));
@@ -41,10 +41,15 @@ namespace TaskServices.WebAPI.Controllers
         }
 
         [HttpGet]
-        [Route("list")]
-        public async Task<IActionResult> DropdownSprint()
+        [Route("projects/{id}")]
+        public async Task<IActionResult> DropdownSprint(int id)
         {
-            var sprintList = await _mediator.Send(new DropdownSprintListQuery());
+            var findProject = await _mediator.Send(new GetProjectByIdQuery(id));
+            if (findProject == null)
+            {
+                return StatusCode(400, "Project Does Not Exist");
+            }
+            var sprintList = await _mediator.Send(new DropdownSprintListQuery(id));
             return Ok(sprintList);
         }
 

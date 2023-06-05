@@ -17,7 +17,7 @@ namespace TaskServices.Application.DTOs
         public IssuePriority? Priority { get; set; }
         public int? StoryPoint { get; set; }
         public string? SprintName { get; set; }
-        public string? Status { get; set; }
+        public StatusDTO? Status { get; set; }
         public DateTimeOffset? StartDate { get; set; }
         public DateTimeOffset? DueDate { get; set; }
         public ICollection<Attachment>? Attachments { get; set; }

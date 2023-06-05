@@ -13,19 +13,19 @@ using TaskServices.Shared.Pagination.Filter;
 
 namespace TaskServices.Application.Features.Handlers.Statuses
 {
-    public class GetStatusListHandler : IRequestHandler<GetStatusListQuery, List<StatusDTO>>
+    public class DropdownStatusListHandler : IRequestHandler<DropdownStatusListQuery, List<StatusDTO>>
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
         private readonly ICacheService _cacheService;
 
-        public GetStatusListHandler(IUnitOfWork unitOfWork, IMapper mapper, ICacheService cacheService)
+        public DropdownStatusListHandler(IUnitOfWork unitOfWork, IMapper mapper, ICacheService cacheService)
         {
             _unitOfWork = unitOfWork;
             _mapper = mapper;
             _cacheService = cacheService;
         }
-        public async Task<List<StatusDTO>> Handle(GetStatusListQuery query, CancellationToken cancellationToken)
+        public async Task<List<StatusDTO>> Handle(DropdownStatusListQuery query, CancellationToken cancellationToken)
         {
             var cacheData = _cacheService.GetData<List<StatusDTO>>($"StatusDTO{query.Id}");
             if (cacheData != null && cacheData.Count() > 0)

@@ -10,5 +10,10 @@ namespace TaskServices.Application.Features.Queries.Sprints
 {
     public class DropdownSprintListQuery : IRequest<List<SprintDTO>>
     {
+        public int Id { get; set; }
+        public DropdownSprintListQuery(int id)
+        {
+            Id = id;
+        }
     }
 }

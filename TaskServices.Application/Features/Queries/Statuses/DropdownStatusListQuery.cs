@@ -9,10 +9,10 @@ using TaskServices.Shared.Pagination.Filter;
 
 namespace TaskServices.Application.Features.Queries.Statuses
 {
-    public class GetStatusListQuery : IRequest<List<StatusDTO>>
+    public class DropdownStatusListQuery : IRequest<List<StatusDTO>>
     {
         public int Id { get; set; }
-        public GetStatusListQuery(int id)
+        public DropdownStatusListQuery(int id)
         {
             Id = id;
         }

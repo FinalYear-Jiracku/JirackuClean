@@ -9,12 +9,14 @@ using TaskServices.Shared.Pagination.Filter;
 
 namespace TaskServices.Application.Features.Queries.Issues
 {
-    public class GetIssueListQuery : IRequest<List<IssueDTO>>
+    public class GetIssueListQuery : IRequest<(List<IssueDTO>, PaginationFilter, int)>
     {
         public int Id { get; set; }
-        public GetIssueListQuery(int id)
+        public PaginationFilter Filter { get; set; }
+        public GetIssueListQuery(int id, PaginationFilter filter)
         {
             Id = id;
+            Filter = filter;
         }
     }
 }

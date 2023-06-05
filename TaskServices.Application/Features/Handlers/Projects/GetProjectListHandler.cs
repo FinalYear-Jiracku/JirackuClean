@@ -33,28 +33,27 @@ namespace TaskServices.Application.Features.Handlers.Projects
         }
         public async Task<(List<ProjectDTO>, PaginationFilter, int)> Handle(GetProjectListQuery query, CancellationToken cancellationToken)
         {
-            var validFilter = new PaginationFilter(query.Filter.PageNumber, query.Filter.PageSize, query.Filter.Search);
+            var validFilter = new PaginationFilter(query.Filter.PageNumber, query.Filter.PageSize, query.Filter.Search, query.Filter.Type, query.Filter.Priority, query.Filter.StatusId, query.Filter.UserId);
             var cacheData = _cacheService.GetData<List<ProjectDTO>>($"ProjectDTO{query.Filter.PageNumber}");
             if (cacheData != null && cacheData.Count() > 0)
             {
                 return (cacheData,validFilter,cacheData.Count());
             }
             var projects = await _unitOfWork.ProjectRepository.GetProjectList();
+            var projectsDto = _mapper.Map<List<ProjectDTO>>(projects);
             if (!String.IsNullOrEmpty(query.Filter.Search))
             {
-                var projectsDtoFilter = _mapper.Map<List<ProjectDTO>>(projects).Where(x => x.Name.Equals(query.Filter.Search))
+                projectsDto = _mapper.Map<List<ProjectDTO>>(projects).Where(x => x.Name.Equals(query.Filter.Search))
                                   .Skip((validFilter.PageNumber - 1) * validFilter.PageSize)
                                   .Take(validFilter.PageSize).ToList();
-                var countDataFilter = projectsDtoFilter.Count();
-                return (projectsDtoFilter, validFilter, countDataFilter);
+                return (projectsDto, validFilter, projectsDto.Count());
             }
-            var projectsDto = _mapper.Map<List<ProjectDTO>>(projects)
+            projectsDto = _mapper.Map<List<ProjectDTO>>(projects)
                               .Skip((validFilter.PageNumber - 1) * validFilter.PageSize)
                               .Take(validFilter.PageSize).ToList();
-            var countData = projectsDto.Count();
             var expireTime = DateTimeOffset.Now.AddSeconds(30);
             _cacheService.SetData<List<ProjectDTO>>($"ProjectDTO{query.Filter.PageNumber}", projectsDto, expireTime);
-            return (projectsDto, validFilter, countData);
+            return (projectsDto, validFilter, projectsDto.Count());
         }
     }
 }

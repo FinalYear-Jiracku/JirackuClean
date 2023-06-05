@@ -1,11 +1,15 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using TaskServices.Application.DTOs;
 using TaskServices.Application.Features.Commands.Issues;
 using TaskServices.Application.Features.Commands.Statuses;
 using TaskServices.Application.Features.Queries.Issues;
 using TaskServices.Application.Features.Queries.Sprints;
 using TaskServices.Application.Features.Queries.Statuses;
+using TaskServices.Shared.Pagination.Filter;
+using TaskServices.Shared.Pagination.Helpers;
+using TaskServices.Shared.Pagination.Uris;
 
 namespace TaskServices.WebAPI.Controllers
 {
@@ -14,23 +18,27 @@ namespace TaskServices.WebAPI.Controllers
     public class IssuesController : ControllerBase
     {
         private readonly IMediator _mediator;
-        public IssuesController(IMediator mediator)
+        private readonly IUriService _uriService;
+        public IssuesController(IMediator mediator, IUriService uriService)
         {
             _mediator = mediator;
+            _uriService = uriService;
         }
 
         #region GET API
         [HttpGet]
         [Route("sprints/{id}")]
-        public async Task<IActionResult> GetIssueList(int id)
+        public async Task<IActionResult> GetIssueList([FromQuery] PaginationFilter filter, int id)
         {
             var findSprint = await _mediator.Send(new GetSprintByIdQuery(id));
             if (findSprint == null)
             {
                 return StatusCode(400, "Sprint Does Not Exist");
             }
-            var issueList = await _mediator.Send(new GetIssueListQuery(id));
-            return Ok(issueList);
+            var route = Request.Path.Value;
+            var issueList = await _mediator.Send(new GetIssueListQuery(id,filter));
+            var pagedResponse = PaginationHelper.CreatePagedReponse<IssueDTO>(issueList.Item1, issueList.Item2, issueList.Item3, _uriService, route);
+            return Ok(pagedResponse);
         }
 
         [HttpGet]
