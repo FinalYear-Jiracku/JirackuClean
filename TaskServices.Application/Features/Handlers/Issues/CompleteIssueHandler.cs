@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TaskServices.Application.Features.Commands.Columns;
 using TaskServices.Application.Features.Commands.Issues;
 using TaskServices.Application.Features.Commands.Sprints;
 using TaskServices.Application.Features.Commands.Statuses;
@@ -24,11 +25,15 @@ namespace TaskServices.Application.Features.Handlers.Issues
             var sprint = await _unitOfWork.SprintRepository.GetSprintById(command.SprintId);
             var issueNotComplete = await _unitOfWork.IssueRepository.IssueNotCompleted(command.SprintId);
             var statusToDo = await _unitOfWork.StatusRepository.GetStatusToDo(command.SprintIdToUpdate);
+            var order = _unitOfWork.IssueRepository.CheckOrder(statusToDo.Id);
+            var i = 1;
             if (command.SprintIdToUpdate == 0)
             {
+                var baseName = "New Sprint";
+                var uniqueName = _unitOfWork.SprintRepository.GenerateUniqueSprintName(baseName);
                 var newSprint = new Sprint()
                 {
-                    Name = "New Sprint",
+                    Name = uniqueName,
                     ProjectId = sprint.ProjectId,
                     CreatedBy = "Dinh Gia Bao",
                 };
@@ -54,7 +59,7 @@ namespace TaskServices.Application.Features.Handlers.Issues
 
                 var status3 = new Status()
                 {
-                    Name = "Completed",
+                    Name = "Done",
                     Color = "#e0f2fe",
                     CreatedBy = newSprint.CreatedBy,
                 };
@@ -68,6 +73,7 @@ namespace TaskServices.Application.Features.Handlers.Issues
                     Color = "#dcfce7",
                     CreatedBy = newSprint.CreatedBy,
                 };
+                column1.AddDomainEvent(new ColumnCreatedEvent(column1));
                 newSprint.Columns.Add(column1);
 
                 var column2 = new Column
@@ -76,6 +82,7 @@ namespace TaskServices.Application.Features.Handlers.Issues
                     Color = "#dcfce7",
                     CreatedBy = newSprint.CreatedBy,
                 };
+                column2.AddDomainEvent(new ColumnCreatedEvent(column2));
                 newSprint.Columns.Add(column2);
 
                 var column3 = new Column
@@ -84,6 +91,7 @@ namespace TaskServices.Application.Features.Handlers.Issues
                     Color = "#dcfce7",
                     CreatedBy = newSprint.CreatedBy,
                 };
+                column3.AddDomainEvent(new ColumnCreatedEvent(column3));
                 newSprint.Columns.Add(column3);
 
                 await _unitOfWork.Repository<Sprint>().AddAsync(newSprint);
@@ -95,6 +103,12 @@ namespace TaskServices.Application.Features.Handlers.Issues
                 {
                     issue.SprintId = newSprint.Id;
                     issue.StatusId = statusToDo.Id;
+                    issue.Order = i++;
+                    var subIssueNotCompleteForNewSprint = await _unitOfWork.SubIssueRepository.SubIssueNotCompleted(issue.Id);
+                    foreach (var subIssue in subIssueNotCompleteForNewSprint)
+                    {
+                        subIssue.StatusId = statusToDo.Id;
+                    }
                 }
                 await _unitOfWork.Repository<Issue>().UpdateRangeAsync(issueNotComplete);
                 await _unitOfWork.Save(cancellationToken);
@@ -102,8 +116,23 @@ namespace TaskServices.Application.Features.Handlers.Issues
             }
             foreach (var issue in issueNotComplete)
             {
-                issue.SprintId = command.SprintIdToUpdate;
-                issue.StatusId = statusToDo.Id;
+                if (order != 0)
+                {
+                    issue.SprintId = command.SprintIdToUpdate;
+                    issue.StatusId = statusToDo.Id;
+                    issue.Order = order ++;
+                }
+                else
+                {
+                    issue.SprintId = command.SprintIdToUpdate;
+                    issue.StatusId = statusToDo.Id;
+                    issue.Order = i++;
+                }
+                var subIssueNotCompleteForExistSprint = await _unitOfWork.SubIssueRepository.SubIssueNotCompleted(issue.Id);
+                foreach (var subIssue in subIssueNotCompleteForExistSprint)
+                {
+                    subIssue.StatusId = statusToDo.Id;
+                }
             }
             await _unitOfWork.Repository<Issue>().UpdateRangeAsync(issueNotComplete);
             await _unitOfWork.Save(cancellationToken);

@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TaskServices.Application.Features.Commands.Columns;
 using TaskServices.Application.Features.Commands.Sprints;
 using TaskServices.Application.Features.Commands.Statuses;
 using TaskServices.Application.Interfaces;
@@ -49,7 +50,7 @@ namespace TaskServices.Application.Features.Handlers.Sprints
             
             var status3 = new Status()
             {
-                Name = "Completed",
+                Name = "Done",
                 Color = "#e0f2fe",
                 CreatedBy = newSprint.CreatedBy,
             };
@@ -63,6 +64,7 @@ namespace TaskServices.Application.Features.Handlers.Sprints
                 Color = "#dcfce7",
                 CreatedBy = newSprint.CreatedBy,
             };
+            column1.AddDomainEvent(new ColumnCreatedEvent(column1));
             newSprint.Columns.Add(column1);
 
             var column2 = new Column
@@ -71,6 +73,7 @@ namespace TaskServices.Application.Features.Handlers.Sprints
                 Color = "#dcfce7",
                 CreatedBy = newSprint.CreatedBy,
             };
+            column2.AddDomainEvent(new ColumnCreatedEvent(column2));
             newSprint.Columns.Add(column2);
 
             var column3 = new Column
@@ -79,6 +82,7 @@ namespace TaskServices.Application.Features.Handlers.Sprints
                 Color = "#dcfce7",
                 CreatedBy = newSprint.CreatedBy,
             };
+            column2.AddDomainEvent(new ColumnCreatedEvent(column2));
             newSprint.Columns.Add(column3);
             await _unitOfWork.Repository<Sprint>().AddAsync(newSprint);
             newSprint.AddDomainEvent(new SprintCreatedEvent(newSprint));

@@ -16,13 +16,13 @@ namespace TaskServices.Application.DTOs
         public IssueType? Type { get; set; }
         public IssuePriority? Priority { get; set; }
         public int? StoryPoint { get; set; }
-        public string? SprintName { get; set; }
+        public string? Sprint { get; set; }
         public StatusDTO? Status { get; set; }
         public DateTimeOffset? StartDate { get; set; }
         public DateTimeOffset? DueDate { get; set; }
-        public ICollection<Attachment>? Attachments { get; set; }
-        public ICollection<SubIssue>? SubIssues { get; set; }
-        public ICollection<Comment>? Comments { get; set; }
+        public ICollection<AttachmentDTO>? Attachments { get; set; }
+        public ICollection<SubIssueDTO>? SubIssues { get; set; }
+        public ICollection<CommentDTO>? Comments { get; set; }
         public ICollection<UserIssue>? UserIssues { get; set; }
         
     }

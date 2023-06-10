@@ -11,7 +11,6 @@ namespace TaskServices.Application.Features.Commands.Statuses
 {
     public class CreateStatusCommand : IRequest<Status>
     {
-        public int Id { get; set; }
         public string? Name { get; set; }
         public string? Color { get; set; }
         public int? SprintId { get; set; }

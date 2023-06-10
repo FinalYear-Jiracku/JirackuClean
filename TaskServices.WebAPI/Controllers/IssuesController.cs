@@ -3,10 +3,8 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using TaskServices.Application.DTOs;
 using TaskServices.Application.Features.Commands.Issues;
-using TaskServices.Application.Features.Commands.Statuses;
 using TaskServices.Application.Features.Queries.Issues;
 using TaskServices.Application.Features.Queries.Sprints;
-using TaskServices.Application.Features.Queries.Statuses;
 using TaskServices.Shared.Pagination.Filter;
 using TaskServices.Shared.Pagination.Helpers;
 using TaskServices.Shared.Pagination.Uris;
@@ -77,7 +75,23 @@ namespace TaskServices.WebAPI.Controllers
 
         #region PUT API
         [HttpPut]
-        public async Task<IActionResult> UpdateIssue([FromBody] UpdateIssueCommand issueCommand)
+        public async Task<IActionResult> UpdateIssue([FromForm] UpdateIssueCommand issueCommand)
+        {
+            await _mediator.Send(issueCommand);
+            return Ok();
+        }
+
+        [HttpPut]
+        [Route("order")]
+        public async Task<IActionResult> UpdateOrderIssue([FromBody] UpdateOrderIssueCommand issueCommand)
+        {
+            await _mediator.Send(issueCommand);
+            return Ok();
+        }
+
+        [HttpPut]
+        [Route("dnd")]
+        public async Task<IActionResult> UpdateDndIssue([FromBody] DndIssueCommand issueCommand)
         {
             await _mediator.Send(issueCommand);
             return Ok();

@@ -20,17 +20,32 @@ namespace TaskServices.Persistence.Repositories
         public ISprintRepository SprintRepository { get; }
         public IStatusRepository StatusRepository { get; }
         public IIssueRepository IssueRepository { get; }
+        public ISubIssueRepository SubIssueRepository { get; }
+        public IColumnRepository ColumnRepository { get; }
+        public INoteRepository NoteRepository { get; }
+        public ICommentRepository CommentRepository { get; }
+        public IPageRepository PageRepository { get; }
         public UnitOfWork(ApplicationDbContext dbContext, 
                           IProjectRepository projectRepository, 
                           ISprintRepository sprintRepository, 
                           IStatusRepository statusRepository,
-                          IIssueRepository issueRepository)
+                          IIssueRepository issueRepository,
+                          ISubIssueRepository subIssueRepository,
+                          IColumnRepository columnRepository,
+                          INoteRepository noteRepository,
+                          ICommentRepository commentRepository,
+                          IPageRepository pageRepository)
         {
             _dbContext = dbContext;
             ProjectRepository = projectRepository;
             SprintRepository = sprintRepository;
             StatusRepository = statusRepository;
             IssueRepository = issueRepository;
+            SubIssueRepository = subIssueRepository;
+            ColumnRepository = columnRepository;
+            NoteRepository = noteRepository;
+            CommentRepository = commentRepository;
+            PageRepository = pageRepository;
         }
 
         public void Dispose()

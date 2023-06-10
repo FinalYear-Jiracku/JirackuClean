@@ -37,7 +37,15 @@ namespace TaskServices.Persistence.Migrations
                         .HasMaxLength(100)
                         .HasColumnType("character varying(100)");
 
+                    b.Property<byte[]>("FileData")
+                        .HasMaxLength(1000)
+                        .HasColumnType("bytea");
+
                     b.Property<string>("FileName")
+                        .HasMaxLength(1000)
+                        .HasColumnType("character varying(1000)");
+
+                    b.Property<string>("FileType")
                         .HasMaxLength(200)
                         .HasColumnType("character varying(200)");
 

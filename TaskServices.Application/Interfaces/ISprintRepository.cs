@@ -13,5 +13,6 @@ namespace TaskServices.Application.Interfaces
         Task<List<Sprint>> GetSprintListByProjectId(int projectId);
         Task<Sprint> GetSprintById(int id);
         Task<bool> CheckSprintName(CheckSprintNameQuery sprint);
+        string GenerateUniqueSprintName(string baseName);
     }
 }

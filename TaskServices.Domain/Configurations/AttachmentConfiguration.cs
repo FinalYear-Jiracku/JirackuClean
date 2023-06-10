@@ -11,7 +11,9 @@ namespace TaskServices.Domain.Configurations
             builder.ToTable("Attachments");
             builder.HasKey(x => x.Id);
             builder.Property(x => x.Id).UseIdentityColumn();
-            builder.Property(x => x.FileName).IsRequired(false).HasMaxLength(200);
+            builder.Property(x => x.FileName).IsRequired(false).HasMaxLength(1000);
+            builder.Property(x => x.FileType).IsRequired(false).HasMaxLength(200);
+            builder.Property(x => x.FileData).IsRequired(false).HasMaxLength(1000);
             builder.Property(x => x.IsDeleted).IsRequired(false);
             builder.Property(x => x.CreatedBy).IsRequired(false).HasMaxLength(100);
             builder.Property(x => x.CreatedAt).IsRequired(false);

@@ -46,9 +46,12 @@ namespace TaskServices.Persistence.Extensions
                     .AddScoped<IProjectRepository, ProjectRepository>()
                     .AddScoped<ISprintRepository, SprintRepository>()
                     .AddScoped<IStatusRepository, StatusRepository>()
-                    .AddScoped<IIssueRepository, IssueRepository>();
-
-
+                    .AddScoped<IIssueRepository, IssueRepository>()
+                    .AddScoped<ISubIssueRepository, SubIssueRepository>()
+                    .AddScoped<IColumnRepository, ColumnRepository>()
+                    .AddScoped<INoteRepository, NoteRepository>()
+                    .AddScoped<ICommentRepository, CommentRepository>()
+                    .AddScoped<IPageRepository, PageRepository>();
         }
     }
 }

@@ -33,6 +33,19 @@ namespace TaskServices.Persistence.Repositories
             var findSprint = await _connection.QueryFirstOrDefaultAsync<Sprint>("SELECT * FROM \"Sprints\" WHERE \"IsDeleted\" = false AND \"Id\" <> @Id AND \"Name\" = @Name", new { Id = sprint.Id, Name = sprint.Name });
             return findSprint == null ? false : true;
         }
+
+        public string GenerateUniqueSprintName(string baseName)
+        {
+            var existingNames = _dbContext.Sprints.Where(x => x.Name.StartsWith(baseName)).Select(x => x.Name).ToList();
+            var index = 1;
+            var uniqueName = baseName;
+            while (existingNames.Contains(uniqueName))
+            {
+                uniqueName = $"{baseName} {index}";
+                index++;
+            }
+            return uniqueName;
+        }
         #endregion
 
         #region Get Services

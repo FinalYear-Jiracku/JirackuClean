@@ -31,15 +31,15 @@ namespace TaskServices.Application.Features.Handlers.Issues
             {
                 return cacheData;
             }
-            var project = await _unitOfWork.IssueRepository.GetIssueById(query.Id);
-            var projectDto = _mapper.Map<DataIssueDTO>(project);
-            if (projectDto == null)
+            var issue = await _unitOfWork.IssueRepository.GetIssueById(query.Id);
+            var issueDto = _mapper.Map<DataIssueDTO>(issue);
+            if (issueDto == null)
             {
                 return null;
             }
             var expireTime = DateTimeOffset.Now.AddSeconds(30);
-            _cacheService.SetData<DataIssueDTO>($"DataIssueDTO{projectDto.Id}", projectDto, expireTime);
-            return projectDto;
+            _cacheService.SetData<DataIssueDTO>($"DataIssueDTO{issueDto.Id}", issueDto, expireTime);
+            return issueDto;
         }
     }
 }

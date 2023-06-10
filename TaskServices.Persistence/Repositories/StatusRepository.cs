@@ -43,7 +43,7 @@ namespace TaskServices.Persistence.Repositories
 
         public async Task<List<Status>> GetStatusListBySprintId(int sprintId)
         {
-             return await _dbContext.Statuses.Include(x=>x.Sprint).Include(x => x.Issues).Include(x => x.SubIssues).Where(x => x.IsDeleted == false && x.SprintId == sprintId).ToListAsync();
+             return await _dbContext.Statuses.Include(x=>x.Sprint).Include(x => x.Issues.Where(x => x.IsDeleted == false)).Include(x => x.SubIssues.Where(x => x.IsDeleted == false)).Where(x => x.IsDeleted == false && x.SprintId == sprintId).ToListAsync();
         }
 
         public async Task<Status> GetStatusToDo(int? sprintId)

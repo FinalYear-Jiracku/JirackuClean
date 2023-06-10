@@ -27,6 +27,7 @@ namespace TaskServices.Application.Features.Handlers.Projects
             }
             project.Name = command.Name;
             project.UpdatedBy = command.UpdatedBy;
+            project.UpdatedAt = DateTimeOffset.Now;
             await _unitOfWork.Repository<Project>().UpdateAsync(project);
             project.AddDomainEvent(new ProjectUpdatedEvent(project));
             return await _unitOfWork.Save(cancellationToken);

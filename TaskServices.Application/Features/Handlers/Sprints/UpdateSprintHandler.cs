@@ -28,6 +28,7 @@ namespace TaskServices.Application.Features.Handlers.Sprints
             sprint.StartDate = command.StartDate;
             sprint.EndDate = command.EndDate;
             sprint.UpdatedBy = command.UpdatedBy;
+            sprint.UpdatedAt = DateTimeOffset.Now;
             await _unitOfWork.Repository<Sprint>().UpdateAsync(sprint);
             sprint.AddDomainEvent(new SprintUpdatedEvent(sprint));
             return await _unitOfWork.Save(cancellationToken);

@@ -1,4 +1,5 @@
 ﻿using MediatR;
+using Microsoft.AspNetCore.Http;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -22,38 +23,10 @@ namespace TaskServices.Application.Features.Commands.Issues
         public int? SprintId { get; set; }
         public DateTimeOffset? StartDate { get; set; }
         public DateTimeOffset? DueDate { get; set; }
+        public List<IFormFile>? Files { get; set; }
         public ICollection<Attachment>? Attachments { get; set; }
         public ICollection<UserIssue>? UserIssues { get; set; }
         public string? UpdatedBy { get; set; }
-        public DateTimeOffset? UpdatedAt { get; set; } = DateTimeOffset.Now;
-        public UpdateIssueCommand(int id, 
-                                  string? name,
-                                  string? description,
-                                  IssueType? type,
-                                  IssuePriority? priority,
-                                  int? storyPoint,
-                                  int? statusId,
-                                  DateTimeOffset? startDate,
-                                  DateTimeOffset? dueDate,
-                                  ICollection<Attachment>? attachments,
-                                  ICollection<UserIssue>? userIssues,
-                                  string? updatedBy, 
-                                  DateTimeOffset? updatedAt)
-        {
-            Id = id;
-            Name = name;
-            Description = description;
-            Type = type;
-            Priority = priority;
-            StoryPoint = storyPoint;
-            StatusId = statusId;
-            StartDate = startDate;
-            DueDate = dueDate;
-            Attachments = attachments;
-            UserIssues = userIssues;
-            UpdatedBy = updatedBy;
-            UpdatedAt = updatedAt;
-        }
     }
     public class IssueUpdatedEvent : BaseEvent
     {

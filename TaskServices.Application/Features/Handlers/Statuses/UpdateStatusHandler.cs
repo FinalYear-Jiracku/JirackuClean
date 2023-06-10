@@ -28,6 +28,7 @@ namespace TaskServices.Application.Features.Handlers.Statuses
             status.Name = command.Name;
             status.Color = command.Color;
             status.UpdatedBy = command.UpdatedBy;
+            status.UpdatedAt = DateTimeOffset.Now;
             await _unitOfWork.Repository<Status>().UpdateAsync(status);
             status.AddDomainEvent(new StatusUpdatedEvent(status));
             return await _unitOfWork.Save(cancellationToken);

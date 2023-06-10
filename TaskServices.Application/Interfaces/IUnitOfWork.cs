@@ -14,6 +14,11 @@ namespace TaskServices.Application.Interfaces
         ISprintRepository SprintRepository { get; }
         IStatusRepository StatusRepository { get; }
         IIssueRepository IssueRepository { get; }
+        ISubIssueRepository SubIssueRepository { get; }
+        IColumnRepository ColumnRepository { get; }
+        INoteRepository NoteRepository { get; }
+        ICommentRepository CommentRepository { get; }
+        IPageRepository PageRepository { get; }
         Task<int> Save(CancellationToken cancellationToken);
         Task<int> SaveAndRemoveCache(CancellationToken cancellationToken, params string[] cacheKeys);
         Task Rollback();
