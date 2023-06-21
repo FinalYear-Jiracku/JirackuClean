@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using TaskServices.Application.DTOs;
 using TaskServices.Application.Features.Queries.Statuses;
 using TaskServices.Application.Interfaces;
+using TaskServices.Application.Interfaces.IServices;
 using TaskServices.Domain.Entities.Enums;
 using TaskServices.Shared.Pagination.Filter;
 
@@ -50,7 +51,7 @@ namespace TaskServices.Application.Features.Handlers.Statuses
                                                       issue.Name.Contains(query.Filter.Search)).ToList();
                         return dto;
                     }).Where(dto => dto.Issues != null && dto.Issues.Any()).ToList();
-                    return (statusDto, validFilter, statusDto.Count());
+                    return (statusDto, validFilter, _mapper.Map<List<DataStatusDTO>>(status).Count());
                 }
                 if (query.Filter.Priority == IssuePriority.Low || query.Filter.Priority == IssuePriority.Normal || 
                     query.Filter.Priority == IssuePriority.High || query.Filter.Priority == IssuePriority.Urgent)
@@ -61,7 +62,7 @@ namespace TaskServices.Application.Features.Handlers.Statuses
                                                       issue.Name.Contains(query.Filter.Search)).ToList();
                         return dto;
                     }).Where(dto => dto.Issues != null && dto.Issues.Any()).ToList();
-                    return (statusDto, validFilter, statusDto.Count());
+                    return (statusDto, validFilter, _mapper.Map<List<DataStatusDTO>>(status).Count());
                 }
                 if (query.Filter.StatusId != null)
                 {
@@ -71,7 +72,7 @@ namespace TaskServices.Application.Features.Handlers.Statuses
                                                       issue.Name.Contains(query.Filter.Search)).ToList();
                         return dto;
                     }).Where(dto => dto.Issues != null && dto.Issues.Any()).ToList();
-                    return (statusDto, validFilter, statusDto.Count());
+                    return (statusDto, validFilter, _mapper.Map<List<DataStatusDTO>>(status).Count());
                 }
                 if (query.Filter.UserId != null)
                 {
@@ -81,9 +82,9 @@ namespace TaskServices.Application.Features.Handlers.Statuses
                                                       issue.Name.Contains(query.Filter.Search)).ToList();
                         return dto;
                     }).Where(dto => dto.Issues != null && dto.Issues.Any()).ToList();
-                    return (statusDto, validFilter, statusDto.Count());
+                    return (statusDto, validFilter, _mapper.Map<List<DataStatusDTO>>(status).Count());
                 }
-                return (statusDto, validFilter, statusDto.Count());
+                return (statusDto, validFilter, _mapper.Map<List<DataStatusDTO>>(status).Count());
             }
             if (query.Filter.Type == IssueType.Bug || query.Filter.Type == IssueType.Task)
             {
@@ -92,7 +93,7 @@ namespace TaskServices.Application.Features.Handlers.Statuses
                     dto.Issues = dto.Issues.Where(issue => issue.Type.Equals(query.Filter.Type)).ToList();
                     return dto;
                 }).Where(dto => dto.Issues != null && dto.Issues.Any()).ToList();
-                return (statusDto, validFilter, statusDto.Count());
+                return (statusDto, validFilter, _mapper.Map<List<DataStatusDTO>>(status).Count());
             }
             if (query.Filter.Priority == IssuePriority.Low || query.Filter.Priority == IssuePriority.Normal ||
                 query.Filter.Priority == IssuePriority.High || query.Filter.Priority == IssuePriority.Urgent)
@@ -102,12 +103,12 @@ namespace TaskServices.Application.Features.Handlers.Statuses
                     dto.Issues = dto.Issues.Where(issue => issue.Priority.Equals(query.Filter.Priority)).ToList();
                     return dto;
                 }).Where(dto => dto.Issues != null && dto.Issues.Any()).ToList();
-                return (statusDto, validFilter, statusDto.Count());
+                return (statusDto, validFilter, _mapper.Map<List<DataStatusDTO>>(status).Count());
             }
             if (query.Filter.StatusId != null)
             {
                 statusDto = _mapper.Map<List<DataStatusDTO>>(status).Where(dto => dto.Id.Equals(query.Filter.StatusId)).ToList();
-                return (statusDto, validFilter, statusDto.Count());
+                return (statusDto, validFilter, _mapper.Map<List<DataStatusDTO>>(status).Count());
             }
             if (query.Filter.UserId != null)
             {
@@ -116,7 +117,7 @@ namespace TaskServices.Application.Features.Handlers.Statuses
                     dto.Issues = dto.Issues.Where(issue => issue.UserIssues.Equals(query.Filter.UserId)).ToList();
                     return dto;
                 }).Where(dto => dto.Issues != null && dto.Issues.Any()).ToList();
-                return (statusDto, validFilter, statusDto.Count());
+                return (statusDto, validFilter, _mapper.Map<List<DataStatusDTO>>(status).Count());
             }
             var expireTime = DateTimeOffset.Now.AddSeconds(30);
             _cacheService.SetData<List<DataStatusDTO>>($"DataStatusDTO{query.Id}", statusDto, expireTime);

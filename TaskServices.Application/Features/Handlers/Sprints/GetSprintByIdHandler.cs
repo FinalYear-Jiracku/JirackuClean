@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using TaskServices.Application.DTOs;
 using TaskServices.Application.Features.Queries.Sprints;
 using TaskServices.Application.Interfaces;
+using TaskServices.Application.Interfaces.IServices;
 
 namespace TaskServices.Application.Features.Handlers.Sprints
 {
@@ -25,7 +26,7 @@ namespace TaskServices.Application.Features.Handlers.Sprints
 
         public async Task<SprintDTO> Handle(GetSprintByIdQuery query, CancellationToken cancellationToken)
         {
-            var cacheData = _cacheService.GetData<SprintDTO>($"sprints{query.Id}");
+            var cacheData = _cacheService.GetData<SprintDTO>($"SprintDTO/{query.Id}");
             if (cacheData != null)
             {
                 return cacheData;
@@ -37,7 +38,7 @@ namespace TaskServices.Application.Features.Handlers.Sprints
                 return null;
             }
             var expireTime = DateTimeOffset.Now.AddSeconds(30);
-            _cacheService.SetData<SprintDTO>($"sprints{sprintDto.Id}", sprintDto, expireTime);
+            _cacheService.SetData<SprintDTO>($"SprintDTO/{sprintDto.Id}", sprintDto, expireTime);
             return sprintDto;
         }
     }

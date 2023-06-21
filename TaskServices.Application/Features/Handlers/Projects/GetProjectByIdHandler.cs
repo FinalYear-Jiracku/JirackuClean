@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using TaskServices.Application.DTOs;
 using TaskServices.Application.Features.Queries.Projects;
 using TaskServices.Application.Interfaces;
+using TaskServices.Application.Interfaces.IServices;
 using TaskServices.Domain.Entities;
 
 namespace TaskServices.Application.Features.Handlers.Projects
@@ -26,7 +27,7 @@ namespace TaskServices.Application.Features.Handlers.Projects
 
         public async Task<ProjectDTO> Handle(GetProjectByIdQuery query, CancellationToken cancellationToken)
         {
-            var cacheData = _cacheService.GetData<ProjectDTO>($"ProjectDTO{query.Id}");
+            var cacheData = _cacheService.GetData<ProjectDTO>($"ProjectDTO:Id{query.Id}");
             if (cacheData != null)
             {
                 return cacheData;
@@ -38,7 +39,7 @@ namespace TaskServices.Application.Features.Handlers.Projects
                 return null;
             }
             var expireTime = DateTimeOffset.Now.AddSeconds(30);
-            _cacheService.SetData<ProjectDTO>($"ProjectDTO{projectDto.Id}", projectDto, expireTime);
+            _cacheService.SetData<ProjectDTO>($"ProjectDTO:Id{projectDto.Id}", projectDto, expireTime);
             return projectDto;
         }
     }

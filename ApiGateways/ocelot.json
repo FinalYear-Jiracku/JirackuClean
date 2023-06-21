@@ -10,7 +10,7 @@
         }
       ],
       "UpstreamPathTemplate": "/api/projects",
-      "UpstreamHttpMethod": [ "GET", "POST", "PUT" ],
+      "UpstreamHttpMethod": [ "GET", "POST", "PUT", "OPTIONS" ],
       "AuthenticationOptions": {
         "AuthenticationProviderKey": "",
         "AllowedScopes": [ "" ]
@@ -26,7 +26,7 @@
         }
       ],
       "UpstreamPathTemplate": "/api/projects/{id}",
-      "UpstreamHttpMethod": [ "GET", "PUT", "DELETE", "PATCH" ],
+      "UpstreamHttpMethod": [ "GET", "PUT", "DELETE", "PATCH", "OPTIONS" ],
       "AuthenticationOptions": {
         "AuthenticationProviderKey": "",
         "AllowedScopes": [ "" ]
@@ -42,7 +42,7 @@
         }
       ],
       "UpstreamPathTemplate": "/api/sprints",
-      "UpstreamHttpMethod": [ "GET", "POST", "PUT" ],
+      "UpstreamHttpMethod": [ "GET", "POST", "PUT", "OPTIONS" ],
       "AuthenticationOptions": {
         "AuthenticationProviderKey": "",
         "AllowedScopes": [ "" ]
@@ -58,7 +58,7 @@
         }
       ],
       "UpstreamPathTemplate": "/api/sprints/{id}",
-      "UpstreamHttpMethod": [ "GET", "PUT", "DELETE", "PATCH" ],
+      "UpstreamHttpMethod": [ "GET", "PUT", "DELETE", "PATCH", "OPTIONS" ],
       "AuthenticationOptions": {
         "AuthenticationProviderKey": "",
         "AllowedScopes": [ "" ]
@@ -74,7 +74,7 @@
         }
       ],
       "UpstreamPathTemplate": "/api/statuses",
-      "UpstreamHttpMethod": [ "GET", "POST", "PUT" ],
+      "UpstreamHttpMethod": [ "GET", "POST", "PUT", "OPTIONS" ],
       "AuthenticationOptions": {
         "AuthenticationProviderKey": "",
         "AllowedScopes": [ "" ]
@@ -90,7 +90,7 @@
         }
       ],
       "UpstreamPathTemplate": "/api/statuses/{id}",
-      "UpstreamHttpMethod": [ "GET", "PUT", "DELETE", "PATCH" ],
+      "UpstreamHttpMethod": [ "GET", "PUT", "DELETE", "PATCH", "OPTIONS" ],
       "AuthenticationOptions": {
         "AuthenticationProviderKey": "",
         "AllowedScopes": [ "" ]
@@ -106,7 +106,7 @@
         }
       ],
       "UpstreamPathTemplate": "/api/issues",
-      "UpstreamHttpMethod": [ "GET", "POST", "PUT" ],
+      "UpstreamHttpMethod": [ "GET", "POST", "PUT", "OPTIONS" ],
       "AuthenticationOptions": {
         "AuthenticationProviderKey": "",
         "AllowedScopes": [ "" ]
@@ -122,7 +122,7 @@
         }
       ],
       "UpstreamPathTemplate": "/api/issues/{id}",
-      "UpstreamHttpMethod": [ "GET", "PUT", "DELETE", "PATCH" ],
+      "UpstreamHttpMethod": [ "GET", "PUT", "DELETE", "PATCH", "OPTIONS" ],
       "AuthenticationOptions": {
         "AuthenticationProviderKey": "",
         "AllowedScopes": [ "" ]
@@ -138,7 +138,7 @@
         }
       ],
       "UpstreamPathTemplate": "/api/subIssues",
-      "UpstreamHttpMethod": [ "GET", "POST", "PUT" ],
+      "UpstreamHttpMethod": [ "GET", "POST", "PUT", "OPTIONS" ],
       "AuthenticationOptions": {
         "AuthenticationProviderKey": "",
         "AllowedScopes": [ "" ]
@@ -154,7 +154,7 @@
         }
       ],
       "UpstreamPathTemplate": "/api/subIssues/{id}",
-      "UpstreamHttpMethod": [ "GET", "PUT", "DELETE", "PATCH" ],
+      "UpstreamHttpMethod": [ "GET", "PUT", "DELETE", "PATCH", "OPTIONS" ],
       "AuthenticationOptions": {
         "AuthenticationProviderKey": "",
         "AllowedScopes": [ "" ]
@@ -170,7 +170,7 @@
         }
       ],
       "UpstreamPathTemplate": "/api/columns",
-      "UpstreamHttpMethod": [ "GET", "POST", "PUT" ],
+      "UpstreamHttpMethod": [ "GET", "POST", "PUT", "OPTIONS" ],
       "AuthenticationOptions": {
         "AuthenticationProviderKey": "",
         "AllowedScopes": [ "" ]
@@ -186,7 +186,7 @@
         }
       ],
       "UpstreamPathTemplate": "/api/columns/{id}",
-      "UpstreamHttpMethod": [ "GET", "PUT", "DELETE", "PATCH" ],
+      "UpstreamHttpMethod": [ "GET", "PUT", "DELETE", "PATCH", "OPTIONS" ],
       "AuthenticationOptions": {
         "AuthenticationProviderKey": "",
         "AllowedScopes": [ "" ]
@@ -202,7 +202,7 @@
         }
       ],
       "UpstreamPathTemplate": "/api/notes",
-      "UpstreamHttpMethod": [ "GET", "POST", "PUT" ],
+      "UpstreamHttpMethod": [ "GET", "POST", "PUT", "OPTIONS" ],
       "AuthenticationOptions": {
         "AuthenticationProviderKey": "",
         "AllowedScopes": [ "" ]
@@ -218,7 +218,7 @@
         }
       ],
       "UpstreamPathTemplate": "/api/notes/{id}",
-      "UpstreamHttpMethod": [ "GET", "PUT", "DELETE", "PATCH" ],
+      "UpstreamHttpMethod": [ "GET", "PUT", "DELETE", "PATCH", "OPTIONS" ],
       "AuthenticationOptions": {
         "AuthenticationProviderKey": "",
         "AllowedScopes": [ "" ]
@@ -234,7 +234,7 @@
         }
       ],
       "UpstreamPathTemplate": "/api/comments",
-      "UpstreamHttpMethod": [ "GET", "POST", "PUT" ],
+      "UpstreamHttpMethod": [ "GET", "POST", "PUT", "OPTIONS" ],
       "AuthenticationOptions": {
         "AuthenticationProviderKey": "",
         "AllowedScopes": [ "" ]
@@ -250,7 +250,7 @@
         }
       ],
       "UpstreamPathTemplate": "/api/comments/{id}",
-      "UpstreamHttpMethod": [ "GET", "PUT", "DELETE", "PATCH" ],
+      "UpstreamHttpMethod": [ "GET", "PUT", "DELETE", "PATCH", "OPTIONS" ],
       "AuthenticationOptions": {
         "AuthenticationProviderKey": "",
         "AllowedScopes": [ "" ]
@@ -266,7 +266,7 @@
         }
       ],
       "UpstreamPathTemplate": "/api/pages",
-      "UpstreamHttpMethod": [ "GET", "POST", "PUT" ],
+      "UpstreamHttpMethod": [ "GET", "POST", "PUT", "OPTIONS" ],
       "AuthenticationOptions": {
         "AuthenticationProviderKey": "",
         "AllowedScopes": [ "" ]
@@ -282,7 +282,7 @@
         }
       ],
       "UpstreamPathTemplate": "/api/pages/{id}",
-      "UpstreamHttpMethod": [ "GET", "PUT", "DELETE", "PATCH" ],
+      "UpstreamHttpMethod": [ "GET", "PUT", "DELETE", "PATCH", "OPTIONS" ],
       "AuthenticationOptions": {
         "AuthenticationProviderKey": "",
         "AllowedScopes": [ "" ]

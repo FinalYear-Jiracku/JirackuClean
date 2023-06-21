@@ -1,13 +1,18 @@
-﻿using MediatR;
+﻿using AutoMapper;
+using MediatR;
+using Microsoft.VisualBasic;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TaskServices.Application.DTOs;
 using TaskServices.Application.Features.Commands.Columns;
 using TaskServices.Application.Features.Commands.Sprints;
 using TaskServices.Application.Features.Commands.Statuses;
+using TaskServices.Application.Features.Queries.Sprints;
 using TaskServices.Application.Interfaces;
+using TaskServices.Application.Interfaces.IServices;
 using TaskServices.Domain.Entities;
 
 namespace TaskServices.Application.Features.Handlers.Sprints
@@ -15,9 +20,13 @@ namespace TaskServices.Application.Features.Handlers.Sprints
     public class CreateSprintHandler : IRequestHandler<CreateSprintCommand, Sprint>
     {
         private readonly IUnitOfWork _unitOfWork;
-        public CreateSprintHandler(IUnitOfWork unitOfWork)
+        private readonly IMapper _mapper;
+        private readonly ICacheService _cacheService;
+        public CreateSprintHandler(IUnitOfWork unitOfWork, ICacheService cacheService, IMapper mapper)
         {
             _unitOfWork = unitOfWork;
+            _cacheService = cacheService;
+            _mapper = mapper;
         }
         public async Task<Sprint> Handle(CreateSprintCommand command, CancellationToken cancellationToken)
         {
@@ -87,7 +96,11 @@ namespace TaskServices.Application.Features.Handlers.Sprints
             await _unitOfWork.Repository<Sprint>().AddAsync(newSprint);
             newSprint.AddDomainEvent(new SprintCreatedEvent(newSprint));
             await _unitOfWork.Save(cancellationToken);
+            var sprints = await _unitOfWork.SprintRepository.GetSprintListByProjectId(command.ProjectId);
+            var sprintsDto = _mapper.Map<List<SprintDTO>>(sprints).OrderByDescending(x => x.Id).Take(8).ToList();
+            var expireTime = DateTimeOffset.Now.AddSeconds(30);
+            _cacheService.SetData<List<SprintDTO>>($"SprintDTO?projectId={command.ProjectId}&pageNumber=1&search=", sprintsDto, expireTime);
             return newSprint;
         }
-    }
+    } 
 }

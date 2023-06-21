@@ -5,8 +5,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TaskServices.Application.Interfaces.IServices;
 using TaskServices.Domain.Common;
 using TaskServices.Domain.Common.Interfaces;
+using TaskServices.Infrastructure.Services;
 
 namespace TaskServices.Infrastructure.Extensions
 {
@@ -19,8 +21,9 @@ namespace TaskServices.Infrastructure.Extensions
 
         private static void AddServices(this IServiceCollection services)
         {
-            services.AddTransient<IMediator, Mediator>()
-                    .AddTransient<IDomainEventDispatcher, DomainEventDispatcher>();
+            services.AddScoped<IMediator, Mediator>()
+                    .AddScoped<IDomainEventDispatcher, DomainEventDispatcher>()
+                    .AddScoped<IFirebaseService, FireBaseService>();
         }
     }
 }

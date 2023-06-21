@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using TaskServices.Application.DTOs;
 using TaskServices.Application.Features.Queries.Notes;
 using TaskServices.Application.Interfaces;
+using TaskServices.Application.Interfaces.IServices;
 
 namespace TaskServices.Application.Features.Handlers.Notes
 {

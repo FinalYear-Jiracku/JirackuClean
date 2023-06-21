@@ -30,7 +30,7 @@ namespace TaskServices.Persistence.Repositories
         #region Check Services
         public async Task<bool> CheckSprintName(CheckSprintNameQuery sprint)
         {
-            var findSprint = await _connection.QueryFirstOrDefaultAsync<Sprint>("SELECT * FROM \"Sprints\" WHERE \"IsDeleted\" = false AND \"Id\" <> @Id AND \"Name\" = @Name", new { Id = sprint.Id, Name = sprint.Name });
+            var findSprint = await _connection.QueryFirstOrDefaultAsync<Sprint>("SELECT * FROM \"Sprints\" WHERE \"IsDeleted\" = false AND \"Id\" <> @Id AND \"ProjectId\" = @ProjectId AND \"Name\" = @Name", new { Id = sprint.Id, Name = sprint.Name, ProjectId = sprint.ProjectId });
             return findSprint == null ? false : true;
         }
 
@@ -55,7 +55,7 @@ namespace TaskServices.Persistence.Repositories
             return sprint == null ? null : sprint;
         }
 
-        public async Task<List<Sprint>> GetSprintListByProjectId(int projectId)
+        public async Task<List<Sprint>> GetSprintListByProjectId(int? projectId)
         {
             return await _dbContext.Sprints.Where(x => x.IsDeleted == false && x.ProjectId == projectId).ToListAsync();
         }

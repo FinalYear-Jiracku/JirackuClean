@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using TaskServices.Application.DTOs;
 using TaskServices.Application.Features.Queries.Sprints;
 using TaskServices.Application.Interfaces;
+using TaskServices.Application.Interfaces.IServices;
 using TaskServices.Shared.Pagination.Filter;
 
 namespace TaskServices.Application.Features.Handlers.Sprints
@@ -27,26 +28,26 @@ namespace TaskServices.Application.Features.Handlers.Sprints
         public async Task<(List<SprintDTO>, PaginationFilter, int)> Handle(GetSprintListQuery query, CancellationToken cancellationToken)
         {
             var validFilter = new PaginationFilter(query.Filter.PageNumber, query.Filter.PageSize, query.Filter.Search, query.Filter.Type, query.Filter.Priority, query.Filter.StatusId, query.Filter.UserId);
-            var cacheData = _cacheService.GetData<List<SprintDTO>>($"SprintDTO{query.Id}");
-            if (cacheData != null && cacheData.Count() > 0)
-            {
-                return (cacheData, validFilter, cacheData.Count());
-            }
+            var cacheData = _cacheService.GetData<List<SprintDTO>>($"SprintDTO?projectId={query.Id}&pageNumber={query.Filter.PageNumber}&search={query.Filter.Search}");
             var sprints = await _unitOfWork.SprintRepository.GetSprintListByProjectId(query.Id);
             var sprintsDto = _mapper.Map<List<SprintDTO>>(sprints);
+            if (cacheData != null && cacheData.Count() > 0)
+            {
+                return (cacheData, validFilter, sprints.Count());
+            }
             if (!String.IsNullOrEmpty(query.Filter.Search))
             {
-                sprintsDto = _mapper.Map<List<SprintDTO>>(sprints).Where(x => x.Name.Equals(query.Filter.Search))
+                sprintsDto = _mapper.Map<List<SprintDTO>>(sprints).Where(x => x.Name.Contains(query.Filter.Search)).OrderByDescending(x => x.Id)
                                   .Skip((validFilter.PageNumber - 1) * validFilter.PageSize)
                                   .Take(validFilter.PageSize).ToList();
-                return (sprintsDto, validFilter, sprintsDto.Count());
+                return (sprintsDto, validFilter, _mapper.Map<List<SprintDTO>>(sprints).Count());
             }
-            sprintsDto = _mapper.Map<List<SprintDTO>>(sprints)
+            sprintsDto = _mapper.Map<List<SprintDTO>>(sprints).OrderByDescending(x => x.Id)
                               .Skip((validFilter.PageNumber - 1) * validFilter.PageSize)
                               .Take(validFilter.PageSize).ToList();
             var expireTime = DateTimeOffset.Now.AddSeconds(30);
-            _cacheService.SetData<List<SprintDTO>>($"SprintDTO{query.Id}", sprintsDto, expireTime);
-            return (sprintsDto, validFilter, sprintsDto.Count());
+            _cacheService.SetData<List<SprintDTO>>($"SprintDTO?projectId={query.Id}&pageNumber={query.Filter.PageNumber}&search={query.Filter.Search}", sprintsDto, expireTime);
+            return (sprintsDto, validFilter, sprints.Count());
         }
     }
 }

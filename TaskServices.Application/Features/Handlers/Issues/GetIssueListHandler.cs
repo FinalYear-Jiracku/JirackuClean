@@ -12,6 +12,7 @@ using TaskServices.Application.Interfaces;
 using TaskServices.Domain.Entities.Enums;
 using TaskServices.Domain.Entities;
 using TaskServices.Shared.Pagination.Filter;
+using TaskServices.Application.Interfaces.IServices;
 
 namespace TaskServices.Application.Features.Handlers.Issues
 {
@@ -44,53 +45,53 @@ namespace TaskServices.Application.Features.Handlers.Issues
                 {
                     issueDto = _mapper.Map<List<IssueDTO>>(issue).Where(dto => dto.Name.Contains(query.Filter.Search) && 
                                                                         dto.Type.Equals(query.Filter.Type)).ToList();
-                    return (issueDto, validFilter, issueDto.Count());
+                    return (issueDto, validFilter, _mapper.Map<List<IssueDTO>>(issue).Count());
                 }
                 if (query.Filter.Priority == IssuePriority.Low || query.Filter.Priority == IssuePriority.Normal ||
                     query.Filter.Priority == IssuePriority.High || query.Filter.Priority == IssuePriority.Urgent)
                 {
                     issueDto = _mapper.Map<List<IssueDTO>>(issue).Where(dto => dto.Name.Contains(query.Filter.Search) && 
                                                                         dto.Priority.Equals(query.Filter.Priority)).ToList();
-                    return (issueDto, validFilter, issueDto.Count());
+                    return (issueDto, validFilter, _mapper.Map<List<IssueDTO>>(issue).Count());
                 }
                 if (query.Filter.StatusId != null)
                 {
                     issueDto = _mapper.Map<List<IssueDTO>>(issue).Where(dto => dto.Name.Contains(query.Filter.Search) && 
                                                                         dto.Status.Id.Equals(query.Filter.StatusId)).ToList();
-                    return (issueDto, validFilter, issueDto.Count());
+                    return (issueDto, validFilter, _mapper.Map<List<IssueDTO>>(issue).Count());
                 }
                 if (query.Filter.UserId != null)
                 {
                     issueDto = _mapper.Map<List<IssueDTO>>(issue).Where(dto => dto.Name.Contains(query.Filter.Search) && 
                                                                         dto.UserIssues.Equals(query.Filter.UserId)).ToList();
-                    return (issueDto, validFilter, issueDto.Count());
+                    return (issueDto, validFilter, _mapper.Map<List<IssueDTO>>(issue).Count());
                 }
-                return (issueDto, validFilter, issueDto.Count());
+                return (issueDto, validFilter, _mapper.Map<List<IssueDTO>>(issue).Count());
             }
             if (query.Filter.Type == IssueType.Bug || query.Filter.Type == IssueType.Task)
             {
                 issueDto = _mapper.Map<List<IssueDTO>>(issue).Where(dto => dto.Type.Equals(query.Filter.Type)).ToList();
-                return (issueDto, validFilter, issueDto.Count());
+                return (issueDto, validFilter, _mapper.Map<List<IssueDTO>>(issue).Count());
             }
             if (query.Filter.Priority == IssuePriority.Low || query.Filter.Priority == IssuePriority.Normal ||
                 query.Filter.Priority == IssuePriority.High || query.Filter.Priority == IssuePriority.Urgent)
             {
                 issueDto = _mapper.Map<List<IssueDTO>>(issue).Where(dto => dto.Priority.Equals(query.Filter.Priority)).ToList();
-                return (issueDto, validFilter, issueDto.Count());
+                return (issueDto, validFilter, _mapper.Map<List<IssueDTO>>(issue).Count());
             }
             if (query.Filter.StatusId != null)
             {
                 issueDto = _mapper.Map<List<IssueDTO>>(issue).Where(dto => dto.Status.Id.Equals(query.Filter.StatusId)).ToList();
-                return (issueDto, validFilter, issueDto.Count());
+                return (issueDto, validFilter, _mapper.Map<List<IssueDTO>>(issue).Count());
             }
             if (query.Filter.UserId != null)
             {
                 issueDto = _mapper.Map<List<IssueDTO>>(issue).Where(dto => dto.UserIssues.Equals(query.Filter.UserId)).ToList();
-                return (issueDto, validFilter, issueDto.Count());
+                return (issueDto, validFilter, _mapper.Map<List<IssueDTO>>(issue).Count());
             }
             var expireTime = DateTimeOffset.Now.AddSeconds(30);
             _cacheService.SetData<List<IssueDTO>>($"IssueDTO{query.Id}", issueDto, expireTime);
-            return (issueDto, validFilter, issueDto.Count());
+            return (issueDto, validFilter, _mapper.Map<List<IssueDTO>>(issue).Count());
         }
     }
 }

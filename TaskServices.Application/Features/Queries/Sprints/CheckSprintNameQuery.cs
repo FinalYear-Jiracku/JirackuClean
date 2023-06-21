@@ -11,14 +11,17 @@ namespace TaskServices.Application.Features.Queries.Sprints
     {
         public int Id { get; set; }
         public string? Name { get; set; }
-        public CheckSprintNameQuery(string? name)
+        public int? ProjectId { get; set; }
+        public CheckSprintNameQuery(string? name, int? projectId)
         {
             Name = name;
+            ProjectId = projectId;
         }
-        public CheckSprintNameQuery(int id, string? name)
+        public CheckSprintNameQuery(int id, string? name, int? projectId)
         {
             Id = id;
             Name = name;
+            ProjectId = projectId;
         }
     }
 }

@@ -35,9 +35,11 @@ namespace TaskServices.WebAPI.Controllers
                 return StatusCode(400, "Project Does Not Exist");
             }
             var route = Request.Path.Value;
-            var sprintList = await _mediator.Send(new GetSprintListQuery(filter,id));
+            var sprintList = await _mediator.Send(new GetSprintListQuery(filter, id));
+            var projectName = await _mediator.Send(new GetProjectByIdQuery(id));
             var pagedResponse = PaginationHelper.CreatePagedReponse<SprintDTO>(sprintList.Item1, sprintList.Item2, sprintList.Item3, _uriService, route);
-            return Ok(pagedResponse);
+            var result = new { projectName.Name, Sprints = pagedResponse };
+            return Ok(result);
         }
 
         [HttpGet]
@@ -69,10 +71,10 @@ namespace TaskServices.WebAPI.Controllers
         [HttpPost]
         public async Task<IActionResult> CreateSprint([FromBody] CreateSprintCommand sprintCommand)
         {
-            var checkSprintName = await _mediator.Send(new CheckSprintNameQuery(sprintCommand.Name));
+            var checkSprintName = await _mediator.Send(new CheckSprintNameQuery(sprintCommand.Name,sprintCommand.ProjectId));
             if (checkSprintName)
             {
-                return StatusCode(400, "Project Name already Exist");
+                return StatusCode(400, "Sprint Name already Exist");
             }
             await _mediator.Send(sprintCommand);
             return Ok();
@@ -83,7 +85,7 @@ namespace TaskServices.WebAPI.Controllers
         [HttpPut]
         public async Task<IActionResult> UpdateSprint([FromBody] UpdateSprintCommand sprintCommand)
         {
-            var checkSprintName = await _mediator.Send(new CheckSprintNameQuery(sprintCommand.Id, sprintCommand.Name));
+            var checkSprintName = await _mediator.Send(new CheckSprintNameQuery(sprintCommand.Id, sprintCommand.Name, sprintCommand.ProjectId));
             if (checkSprintName)
             {
                 return StatusCode(400, "Sprint Name already Exist");
@@ -95,14 +97,14 @@ namespace TaskServices.WebAPI.Controllers
 
         #region DELETE API
         [HttpPatch("{id}")]
-        public async Task<IActionResult> DeleteSprint(int id)
+        public async Task<IActionResult> DeleteSprint([FromQuery] int projectId, int id)
         {
             var findSprint = await _mediator.Send(new GetSprintByIdQuery(id));
             if (findSprint == null)
             {
                 return StatusCode(400, "Sprint Does Not Exist");
             }
-            await _mediator.Send(new DeleteSprintCommand(id));
+            await _mediator.Send(new DeleteSprintCommand(id, projectId));
             return Ok();
         }
         #endregion

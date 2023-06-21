@@ -6,18 +6,25 @@ using System.Linq;
 using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
+using TaskServices.Application.DTOs;
 using TaskServices.Application.Features.Commands.Projects;
 using TaskServices.Application.Interfaces;
+using TaskServices.Application.Interfaces.IServices;
 using TaskServices.Domain.Entities;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 namespace TaskServices.Application.Features.Handlers.Projects
 {
     public class CreateProjectHandler : IRequestHandler<CreateProjectCommand, Project>
     {
         private readonly IUnitOfWork _unitOfWork;
-        public CreateProjectHandler(IUnitOfWork unitOfWork)
+        private readonly IMapper _mapper;
+        private readonly ICacheService _cacheService;
+        public CreateProjectHandler(IUnitOfWork unitOfWork, ICacheService cacheService, IMapper mapper)
         {
             _unitOfWork = unitOfWork;
+            _cacheService = cacheService;
+            _mapper = mapper;
         }
         public async Task<Project> Handle(CreateProjectCommand command, CancellationToken cancellationToken)
         {
@@ -29,6 +36,10 @@ namespace TaskServices.Application.Features.Handlers.Projects
             await _unitOfWork.Repository<Project>().AddAsync(newProject);
             newProject.AddDomainEvent(new ProjectCreatedEvent(newProject));
             await _unitOfWork.Save(cancellationToken);
+            var projects = await _unitOfWork.ProjectRepository.GetProjectList();
+            var projectsDto = _mapper.Map<List<ProjectDTO>>(projects).OrderByDescending(x => x.Id).Take(8).ToList();
+            var expireTime = DateTimeOffset.Now.AddSeconds(30);
+            _cacheService.SetData<List<ProjectDTO>>($"ProjectDTO?pageNumber=1&search=", projectsDto, expireTime);
             return newProject;
         }
     }
