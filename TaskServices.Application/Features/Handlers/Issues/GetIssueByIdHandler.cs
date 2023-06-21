@@ -9,6 +9,7 @@ using TaskServices.Application.DTOs;
 using TaskServices.Application.Features.Queries.Issues;
 using TaskServices.Application.Features.Queries.Projects;
 using TaskServices.Application.Interfaces;
+using TaskServices.Application.Interfaces.IServices;
 
 namespace TaskServices.Application.Features.Handlers.Issues
 {

@@ -10,7 +10,7 @@ namespace TaskServices.Application.Interfaces
 {
     public interface ISprintRepository
     {
-        Task<List<Sprint>> GetSprintListByProjectId(int projectId);
+        Task<List<Sprint>> GetSprintListByProjectId(int? projectId);
         Task<Sprint> GetSprintById(int id);
         Task<bool> CheckSprintName(CheckSprintNameQuery sprint);
         string GenerateUniqueSprintName(string baseName);

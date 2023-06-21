@@ -7,12 +7,26 @@ using TaskServices.Persistence.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
 
+// Add services to the container.
+
 builder.Services.AddApplicationLayer();
 builder.Services.AddInfrastructureLayer();
 builder.Services.AddPersistenceLayer(builder.Configuration);
 
-// Add services to the container.
-
+builder.Services.AddControllersWithViews()
+    .AddNewtonsoftJson(options =>
+                options.SerializerSettings.ReferenceLoopHandling = Newtonsoft
+                .Json.ReferenceLoopHandling.Ignore);
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy(name: "AllowOrigin",
+        builder =>
+        {
+            builder.WithOrigins("http://localhost:81", "http://localhost:3000")
+                                .AllowAnyHeader()
+                                .AllowAnyMethod();
+        });
+});
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
@@ -29,7 +43,10 @@ if (app.Environment.IsDevelopment())
 
 app.PersistenceErrorHandlerMiddleware();
 
-app.UseHttpsRedirection();
+
+app.UseRouting();
+
+app.UseCors("AllowOrigin");
 
 app.UseAuthorization();
 

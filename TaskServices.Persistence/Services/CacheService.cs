@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Hosting;
 using StackExchange.Redis;
 using System.Text.Json;
-using TaskServices.Application.Interfaces;
+using TaskServices.Application.Interfaces.IServices;
 using TaskServices.Domain.Entities;
 using TaskServices.Shared.Pagination.Filter;
 using TaskServices.Shared.Pagination.Helpers;
