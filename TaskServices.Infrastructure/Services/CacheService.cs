@@ -2,13 +2,8 @@
 using StackExchange.Redis;
 using System.Text.Json;
 using TaskServices.Application.Interfaces.IServices;
-using TaskServices.Domain.Entities;
-using TaskServices.Shared.Pagination.Filter;
-using TaskServices.Shared.Pagination.Helpers;
-using TaskServices.Shared.Pagination.Uris;
-using TaskServices.Shared.Pagination.Wrapper;
 
-namespace TaskServices.Persistence.Services
+namespace TaskServices.Infrastructure.Services
 {
     public class CacheService : ICacheService
     {

@@ -97,14 +97,14 @@ namespace TaskServices.WebAPI.Controllers
 
         #region DELETE API
         [HttpPatch("{id}")]
-        public async Task<IActionResult> DeleteSprint([FromQuery] int projectId, int id)
+        public async Task<IActionResult> DeleteSprint(int id)
         {
             var findSprint = await _mediator.Send(new GetSprintByIdQuery(id));
             if (findSprint == null)
             {
                 return StatusCode(400, "Sprint Does Not Exist");
             }
-            await _mediator.Send(new DeleteSprintCommand(id, projectId));
+            await _mediator.Send(new DeleteSprintCommand(id));
             return Ok();
         }
         #endregion

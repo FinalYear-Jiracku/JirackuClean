@@ -13,7 +13,6 @@ using TaskServices.Application.Interfaces;
 using TaskServices.Application.Interfaces.IServices;
 using TaskServices.Persistence.Contexts;
 using TaskServices.Persistence.Repositories;
-using TaskServices.Persistence.Services;
 using TaskServices.Shared.Middleware;
 
 namespace TaskServices.Persistence.Extensions
@@ -43,7 +42,6 @@ namespace TaskServices.Persistence.Extensions
         {
             services.AddScoped(typeof(IUnitOfWork), typeof(UnitOfWork))
                     .AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>))
-                    .AddScoped<ICacheService, CacheService>()
                     .AddScoped<IProjectRepository, ProjectRepository>()
                     .AddScoped<ISprintRepository, SprintRepository>()
                     .AddScoped<IStatusRepository, StatusRepository>()

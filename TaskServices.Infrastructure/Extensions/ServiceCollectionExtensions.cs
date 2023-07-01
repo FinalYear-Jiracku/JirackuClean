@@ -22,6 +22,7 @@ namespace TaskServices.Infrastructure.Extensions
         private static void AddServices(this IServiceCollection services)
         {
             services.AddScoped<IMediator, Mediator>()
+                    .AddScoped<ICacheService, CacheService>()
                     .AddScoped<IDomainEventDispatcher, DomainEventDispatcher>()
                     .AddScoped<IFirebaseService, FireBaseService>();
         }

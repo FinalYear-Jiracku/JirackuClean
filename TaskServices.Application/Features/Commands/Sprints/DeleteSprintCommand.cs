@@ -12,11 +12,9 @@ namespace TaskServices.Application.Features.Commands.Sprints
     public class DeleteSprintCommand : IRequest<int>
     {
         public int Id { get; set; }
-        public int ProjectId { get; set; }
-        public DeleteSprintCommand(int id, int projectId)
+        public DeleteSprintCommand(int id)
         {
             Id = id;
-            ProjectId = projectId;
         }
     }
     public class SprintDeletedEvent : BaseEvent

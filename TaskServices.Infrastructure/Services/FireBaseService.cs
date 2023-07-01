@@ -23,7 +23,7 @@ namespace TaskServices.Infrastructure.Services
             {
                 return default;
             }
-            var name = DateTime.Now.ToFileTime() + file.FileName;
+            var name = file.FileName;
             var fileType = GetFileType(file.FileName);
             var fileStream = file.OpenReadStream();
             string document = "";
@@ -78,7 +78,7 @@ namespace TaskServices.Infrastructure.Services
         private bool IsValidFileType(string fileName)
         {
             string fileExtension = Path.GetExtension(fileName).ToLower();
-            List<string> validExtensions = new List<string> { ".pdf", ".xlsx", ".png", ".mp4", ".docx", ".doc", ".csv" };
+            List<string> validExtensions = new List<string> { ".pdf", ".xlsx", ".png", ".mp4", ".docx", ".doc", ".csv", ".jpg", ".jpge" };
             return validExtensions.Contains(fileExtension);
         }
     }

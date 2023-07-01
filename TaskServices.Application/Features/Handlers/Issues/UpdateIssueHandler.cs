@@ -1,4 +1,5 @@
-﻿using Firebase.Auth;
+﻿using AutoMapper;
+using Firebase.Auth;
 using Firebase.Storage;
 using MediatR;
 using Microsoft.AspNetCore.Http;
@@ -7,6 +8,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TaskServices.Application.DTOs;
 using TaskServices.Application.Features.Commands.Issues;
 using TaskServices.Application.Interfaces;
 using TaskServices.Application.Interfaces.IServices;
@@ -19,10 +21,14 @@ namespace TaskServices.Application.Features.Handlers.Issues
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IFirebaseService _firebaseService;
-        public UpdateIssueHandler(IUnitOfWork unitOfWork, IFirebaseService firebaseService)
+        private readonly IMapper _mapper;
+        private readonly ICacheService _cacheService;
+        public UpdateIssueHandler(IUnitOfWork unitOfWork, IFirebaseService firebaseService, IMapper mapper, ICacheService cacheService)
         {
             _unitOfWork = unitOfWork;
             _firebaseService = firebaseService;
+            _mapper = mapper;
+            _cacheService = cacheService;
         }
         public async Task<int> Handle(UpdateIssueCommand command, CancellationToken cancellationToken)
         {
@@ -33,15 +39,52 @@ namespace TaskServices.Application.Features.Handlers.Issues
             }
             var newAttachments = new List<Attachment>();
             var existingAttachments = issue.Attachments.ToList();
+            var expireTime = DateTimeOffset.Now.AddSeconds(30);
             if (issue.SprintId != command.SprintId)
             {
                 var statusToDo = await _unitOfWork.StatusRepository.GetStatusToDo(command.SprintId);
+                if(command.Files == null)
+                {
+                    issue.Name = command.Name;
+                    issue.Description = command.Description;
+                    issue.Type = command.Type;
+                    issue.Priority = command.Priority;
+                    issue.StoryPoint = command.StoryPoint;
+                    issue.StartDate = command.StartDate;
+                    issue.DueDate = command.DueDate;
+                    issue.StatusId = statusToDo.Id;
+                    issue.SprintId = command.SprintId;
+                    issue.UpdatedBy = command.UpdatedBy;
+                    issue.UpdatedAt = DateTimeOffset.Now;
+
+                    var attachmentsToAdd1FileNull = newAttachments.Where(newAttachment => !existingAttachments.Any(existingAttachment => existingAttachment.FileName == newAttachment.FileName && existingAttachment.FileType == newAttachment.FileType)).ToList();
+                    var attachmentsToRemove1FileNull = existingAttachments.Where(existingAttachment => !newAttachments.Any(newAttachment => newAttachment.FileName == existingAttachment.FileName && newAttachment.FileType == existingAttachment.FileType)).ToList();
+
+                    foreach (var attachment in attachmentsToAdd1FileNull)
+                    {
+                        await _unitOfWork.Repository<Attachment>().AddAsync(attachment);
+                    }
+                    foreach (var attachment in attachmentsToRemove1FileNull)
+                    {
+                        await _unitOfWork.Repository<Attachment>().DeleteAsync(attachment);
+                    }
+
+                    await _unitOfWork.Repository<Issue>().UpdateAsync(issue);
+                    issue.AddDomainEvent(new IssueUpdatedEvent(issue));
+                    await _unitOfWork.Save(cancellationToken);
+                    var issuesFileNull = await _unitOfWork.IssueRepository.GetIssueListBySprintId(command.SprintId);
+                    var issuesDtoFileNull = _mapper.Map<List<SprintDTO>>(issuesFileNull).OrderByDescending(x => x.Id).Take(8).ToList();
+                    _cacheService.SetData<List<SprintDTO>>($"IssueDTO?sprintId={command.SprintId}&pageNumber=1&search=", issuesDtoFileNull, expireTime);
+                    return await Task.FromResult(0);
+                }
                 foreach (var file in command.Files)
                 {
                     var document = await _firebaseService.CreateImage(file);
+                    var fileType = GetFileType(file.FileName);
                     var attachment = new Attachment
                     {
                         FileName = document,
+                        FileType = fileType,
                         Issue = issue
                     };
                     newAttachments.Add(attachment);
@@ -72,15 +115,56 @@ namespace TaskServices.Application.Features.Handlers.Issues
                 }
                 await _unitOfWork.Repository<Issue>().UpdateAsync(issue);
                 issue.AddDomainEvent(new IssueUpdatedEvent(issue));
-                return await _unitOfWork.Save(cancellationToken);
+                await _unitOfWork.Save(cancellationToken);
+                var issues = await _unitOfWork.IssueRepository.GetIssueListBySprintId(command.SprintId);
+                var issuesDto = _mapper.Map<List<SprintDTO>>(issues).OrderByDescending(x => x.Id).Take(8).ToList();
+                _cacheService.SetData<List<SprintDTO>>($"IssueDTO?sprintId={command.SprintId}&pageNumber=1&search=", issuesDto, expireTime);
+                return await Task.FromResult(0);
+            }
+
+            if (command.Files == null)
+            {
+                issue.Name = command.Name;
+                issue.Description = command.Description;
+                issue.Type = command.Type;
+                issue.Priority = command.Priority;
+                issue.StoryPoint = command.StoryPoint;
+                issue.StartDate = command.StartDate;
+                issue.DueDate = command.DueDate;
+                issue.StatusId = command.StatusId;
+                issue.UpdatedBy = command.UpdatedBy;
+                issue.UpdatedAt = DateTimeOffset.Now;
+
+                var attachmentsToAddFileNull = newAttachments.Where(newAttachment => !existingAttachments.Any(existingAttachment => existingAttachment.FileName == newAttachment.FileName && existingAttachment.FileType == newAttachment.FileType)).ToList();
+                var attachmentsToRemoveFileNull = existingAttachments.Where(existingAttachment => !newAttachments.Any(newAttachment => newAttachment.FileName == existingAttachment.FileName && newAttachment.FileType == existingAttachment.FileType)).ToList();
+
+                foreach (var attachment in attachmentsToAddFileNull)
+                {
+                    await _unitOfWork.Repository<Attachment>().AddAsync(attachment);
+                }
+
+                foreach (var attachment in attachmentsToRemoveFileNull)
+                {
+                    await _unitOfWork.Repository<Attachment>().DeleteAsync(attachment);
+                }
+
+                await _unitOfWork.Repository<Issue>().UpdateAsync(issue);
+                issue.AddDomainEvent(new IssueUpdatedEvent(issue));
+                await _unitOfWork.Save(cancellationToken);
+                var issuesFileNull = await _unitOfWork.IssueRepository.GetIssueListBySprintId(command.SprintId);
+                var issuesDtoFileNull = _mapper.Map<List<IssueDTO>>(issuesFileNull).OrderByDescending(x => x.Id).Take(8).ToList();
+                _cacheService.SetData<List<IssueDTO>>($"IssueDTO?sprintId={command.SprintId}&pageNumber=1&search=", issuesDtoFileNull, expireTime);
+                return await Task.FromResult(0);
             }
 
             foreach (var file in command.Files)
             {
                 var document = await _firebaseService.CreateImage(file);
+                var fileType = GetFileType(file.FileName);
                 var attachment = new Attachment
                 {
                     FileName = document,
+                    FileType = fileType,
                     Issue = issue
                 };
                 newAttachments.Add(attachment);
@@ -110,7 +194,40 @@ namespace TaskServices.Application.Features.Handlers.Issues
             }
             await _unitOfWork.Repository<Issue>().UpdateAsync(issue);
             issue.AddDomainEvent(new IssueUpdatedEvent(issue));
-            return await _unitOfWork.Save(cancellationToken);
+            await _unitOfWork.Save(cancellationToken);
+            var issueList = await _unitOfWork.IssueRepository.GetIssueListBySprintId(command.SprintId);
+            var issueDtoList = _mapper.Map<List<IssueDTO>>(issueList).OrderByDescending(x => x.Id).ToList();
+            _cacheService.SetData<List<IssueDTO>>($"IssueDTO?sprintId={command.SprintId}&pageNumber=1&search=", issueDtoList, expireTime);
+            return await Task.FromResult(0);
+        }
+
+        private string GetFileType(string fileName)
+        {
+            string fileExtension = Path.GetExtension(fileName).ToLower();
+
+            switch (fileExtension)
+            {
+                case ".pdf":
+                    return "PDF";
+                case ".xlsx":
+                    return "XSLX";
+                case ".png":
+                    return "PNG";
+                case ".jpeg":
+                    return "JPEG";
+                 case ".jpg":
+                    return "JPG";
+                case ".mp4":
+                    return "MP4";
+                case ".docx":
+                    return "DOCX";
+                case ".doc":
+                    return "DOC";
+                case ".csv":
+                    return "CSV";
+                default:
+                    return "Unknown";
+            }
         }
     }
 }

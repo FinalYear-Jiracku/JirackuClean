@@ -8,7 +8,6 @@ using TaskServices.Application.DTOs;
 using TaskServices.Application.Interfaces;
 using TaskServices.Domain.Common;
 using TaskServices.Persistence.Contexts;
-using TaskServices.Persistence.Services;
 
 namespace TaskServices.Persistence.Repositories
 {
