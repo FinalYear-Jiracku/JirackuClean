@@ -35,8 +35,10 @@ namespace TaskServices.WebAPI.Controllers
             }
             var route = Request.Path.Value;
             var issueList = await _mediator.Send(new GetIssueListQuery(id,filter));
+            var sprintName = await _mediator.Send(new GetSprintByIdQuery(id));
             var pagedResponse = PaginationHelper.CreatePagedReponse<IssueDTO>(issueList.Item1, issueList.Item2, issueList.Item3, _uriService, route);
-            return Ok(pagedResponse);
+            var result = new { sprintName.Name, Issues = pagedResponse };
+            return Ok(result);
         }
 
         [HttpGet]

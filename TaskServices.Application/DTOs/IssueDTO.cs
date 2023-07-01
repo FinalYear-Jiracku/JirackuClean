@@ -17,7 +17,7 @@ namespace TaskServices.Application.DTOs
         public int? StoryPoint { get; set; }
         public StatusDTO? Status { get; set; }
         public int? SubIssues { get; set; }
-        public string? Sprint { get; set; }
+        public SprintDTO? Sprint { get; set; }
         public ICollection<UserIssue>? UserIssues { get; set; }
         public DateTimeOffset? StartDate { get; set; }
         public DateTimeOffset? DueDate { get; set; }

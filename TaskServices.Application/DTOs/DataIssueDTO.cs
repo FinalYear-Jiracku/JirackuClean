@@ -16,7 +16,7 @@ namespace TaskServices.Application.DTOs
         public IssueType? Type { get; set; }
         public IssuePriority? Priority { get; set; }
         public int? StoryPoint { get; set; }
-        public string? Sprint { get; set; }
+        public SprintDTO? Sprint { get; set; }
         public StatusDTO? Status { get; set; }
         public DateTimeOffset? StartDate { get; set; }
         public DateTimeOffset? DueDate { get; set; }

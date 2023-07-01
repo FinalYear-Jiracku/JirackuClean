@@ -15,12 +15,12 @@ namespace TaskServices.Application.Common.Mappings
             CreateMap<Status, StatusDTO>().ReverseMap();
             CreateMap<Status, DataStatusDTO>().ForMember(dest => dest.Issues, opt => opt.MapFrom(src => src.Issues)).ReverseMap();
             CreateMap<Issue, IssueDTO>().ForMember(dest => dest.Status, opt => opt.MapFrom(src => src.Status))
-                                        .ForMember(dest => dest.Sprint, opt => opt.MapFrom(src => src.Sprint.Name))
+                                        .ForMember(dest => dest.Sprint, opt => opt.MapFrom(src => src.Sprint))
                                         .ForMember(dest => dest.SubIssues, opt => opt.MapFrom(src => src.SubIssues.Count()))
                                         .ForMember(dest => dest.UserIssues, opt => opt.MapFrom(src => src.UserIssues))
                                         .ReverseMap();
             CreateMap<Issue, DataIssueDTO>().ForMember(dest => dest.Status, opt => opt.MapFrom(src => src.Status))
-                                            .ForMember(dest => dest.Sprint, opt => opt.MapFrom(src => src.Sprint.Name))
+                                            .ForMember(dest => dest.Sprint, opt => opt.MapFrom(src => src.Sprint))
                                             .ForMember(dest => dest.Attachments, opt => opt.MapFrom(src => src.Attachments))
                                             .ForMember(dest => dest.SubIssues, opt => opt.MapFrom(src => src.SubIssues))
                                             .ForMember(dest => dest.Comments, opt => opt.MapFrom(src => src.Comments))

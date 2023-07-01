@@ -111,7 +111,7 @@ namespace TaskServices.Persistence.Repositories
             return  issue == null ? null : issue;
         }
 
-        public async Task<List<Issue>> GetIssueListBySprintId(int sprintId)
+        public async Task<List<Issue>> GetIssueListBySprintId(int? sprintId)
         {
             return await _dbContext.Issues.Where(x => x.IsDeleted == false && x.SprintId == sprintId).Include(x=>x.Sprint).Include(x=>x.Status).Include(x => x.SubIssues.Where(x => x.IsDeleted == false)).ToListAsync();
         }

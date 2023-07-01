@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using MediatR;
+using Microsoft.AspNetCore.Http;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -34,6 +35,7 @@ namespace TaskServices.Application.Features.Handlers.Issues
             }
             var issue = await _unitOfWork.IssueRepository.GetIssueById(query.Id);
             var issueDto = _mapper.Map<DataIssueDTO>(issue);
+
             if (issueDto == null)
             {
                 return null;

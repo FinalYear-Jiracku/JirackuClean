@@ -41,9 +41,9 @@ namespace TaskServices.Application.Features.Handlers.Sprints
             sprint.AddDomainEvent(new SprintUpdatedEvent(sprint));
             await _unitOfWork.Save(cancellationToken);
             var sprints = await _unitOfWork.SprintRepository.GetSprintListByProjectId(command.ProjectId);
-            var sprintsDto = _mapper.Map<List<SprintDTO>>(sprints).OrderByDescending(x => x.Id).Take(8).ToList();
+            var sprintsDto = _mapper.Map<List<SprintDTO>>(sprints);
             var expireTime = DateTimeOffset.Now.AddSeconds(30);
-            _cacheService.SetData<List<SprintDTO>>($"SprintDTO?projectId={command.ProjectId}&pageNumber=1&search=", sprintsDto, expireTime);
+            _cacheService.SetData<List<SprintDTO>>($"SprintDTO?projectId={command.ProjectId}", sprintsDto, expireTime);
             return await Task.FromResult(0);
         }
     }

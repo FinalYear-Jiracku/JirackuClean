@@ -35,9 +35,9 @@ namespace TaskServices.Application.Features.Handlers.Projects
             await _unitOfWork.Repository<Project>().UpdateAsync(project);
             await _unitOfWork.Save(cancellationToken);
             var projects = await _unitOfWork.ProjectRepository.GetProjectList();
-            var projectsDto = _mapper.Map<List<ProjectDTO>>(projects).OrderByDescending(x => x.Id).Take(8).ToList();
+            var projectsDto = _mapper.Map<List<ProjectDTO>>(projects).ToList();
             var expireTime = DateTimeOffset.Now.AddSeconds(30);
-            _cacheService.SetData<List<ProjectDTO>>($"ProjectDTO?pageNumber=1&search=", projectsDto, expireTime);
+            _cacheService.SetData<List<ProjectDTO>>($"ProjectDTO", projectsDto, expireTime);
             return await Task.FromResult(0);
         }
     }

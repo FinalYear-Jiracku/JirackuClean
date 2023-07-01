@@ -15,7 +15,7 @@ namespace TaskServices.Application.Interfaces
         Task<List<Issue>> DndIssue(DndIssueCommand command);
         Task<int> CountIssueNotCompleted(int? sprintId);
         Task<List<Issue>> IssueNotCompleted(int? sprintId);
-        Task<List<Issue>> GetIssueListBySprintId(int sprintId);
+        Task<List<Issue>> GetIssueListBySprintId(int? sprintId);
         Task<Issue> GetIssueById(int id);
     }
 }
