@@ -12,7 +12,7 @@ namespace TaskServices.Domain.Configurations
             builder.HasKey(x => new { x.ProjectId, x.UserId });
             builder.HasOne(x => x.Project).WithMany(x => x.UserProjects).HasForeignKey(x => x.ProjectId).OnDelete(DeleteBehavior.Cascade);
             builder.Property(x => x.UserId).IsRequired(true);
-            builder.Property(x => x.JoinDate).IsRequired(true);
+            builder.Property(x => x.JoinDate).IsRequired(false);
         }
     }
 }

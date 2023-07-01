@@ -15,6 +15,7 @@ namespace TaskServices.Application.Interfaces
         Task<List<T>> GetAllAsync();
         Task<T> AddAsync(T entity);
         Task UpdateAsync(T entity);
+        Task UpdateRangeAsync(List<T> entity);
         Task DeleteAsync(T entity);
     }
 }

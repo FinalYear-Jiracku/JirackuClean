@@ -1,0 +1,295 @@
+{
+  "Routes": [
+    {
+      "DownstreamPathTemplate": "/api/projects",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "taskservices.webapi",
+          "Port": 80
+        }
+      ],
+      "UpstreamPathTemplate": "/api/projects",
+      "UpstreamHttpMethod": [ "GET", "POST", "PUT", "OPTIONS" ],
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "",
+        "AllowedScopes": [ "" ]
+      }
+    },
+    {
+      "DownstreamPathTemplate": "/api/projects/{id}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "taskservices.webapi",
+          "Port": 80
+        }
+      ],
+      "UpstreamPathTemplate": "/api/projects/{id}",
+      "UpstreamHttpMethod": [ "GET", "PUT", "DELETE", "PATCH", "OPTIONS" ],
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "",
+        "AllowedScopes": [ "" ]
+      }
+    },
+    {
+      "DownstreamPathTemplate": "/api/sprints",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "taskservices.webapi",
+          "Port": 80
+        }
+      ],
+      "UpstreamPathTemplate": "/api/sprints",
+      "UpstreamHttpMethod": [ "GET", "POST", "PUT", "OPTIONS" ],
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "",
+        "AllowedScopes": [ "" ]
+      }
+    },
+    {
+      "DownstreamPathTemplate": "/api/sprints/{id}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "taskservices.webapi",
+          "Port": 80
+        }
+      ],
+      "UpstreamPathTemplate": "/api/sprints/{id}",
+      "UpstreamHttpMethod": [ "GET", "PUT", "DELETE", "PATCH", "OPTIONS" ],
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "",
+        "AllowedScopes": [ "" ]
+      }
+    },
+    {
+      "DownstreamPathTemplate": "/api/statuses",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "taskservices.webapi",
+          "Port": 80
+        }
+      ],
+      "UpstreamPathTemplate": "/api/statuses",
+      "UpstreamHttpMethod": [ "GET", "POST", "PUT", "OPTIONS" ],
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "",
+        "AllowedScopes": [ "" ]
+      }
+    },
+    {
+      "DownstreamPathTemplate": "/api/statuses/{id}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "taskservices.webapi",
+          "Port": 80
+        }
+      ],
+      "UpstreamPathTemplate": "/api/statuses/{id}",
+      "UpstreamHttpMethod": [ "GET", "PUT", "DELETE", "PATCH", "OPTIONS" ],
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "",
+        "AllowedScopes": [ "" ]
+      }
+    },
+    {
+      "DownstreamPathTemplate": "/api/issues",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "taskservices.webapi",
+          "Port": 80
+        }
+      ],
+      "UpstreamPathTemplate": "/api/issues",
+      "UpstreamHttpMethod": [ "GET", "POST", "PUT", "OPTIONS" ],
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "",
+        "AllowedScopes": [ "" ]
+      }
+    },
+    {
+      "DownstreamPathTemplate": "/api/issues/{id}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "taskservices.webapi",
+          "Port": 80
+        }
+      ],
+      "UpstreamPathTemplate": "/api/issues/{id}",
+      "UpstreamHttpMethod": [ "GET", "PUT", "DELETE", "PATCH", "OPTIONS" ],
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "",
+        "AllowedScopes": [ "" ]
+      }
+    },
+    {
+      "DownstreamPathTemplate": "/api/subIssues",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "taskservices.webapi",
+          "Port": 80
+        }
+      ],
+      "UpstreamPathTemplate": "/api/subIssues",
+      "UpstreamHttpMethod": [ "GET", "POST", "PUT", "OPTIONS" ],
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "",
+        "AllowedScopes": [ "" ]
+      }
+    },
+    {
+      "DownstreamPathTemplate": "/api/subIssues/{id}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "taskservices.webapi",
+          "Port": 80
+        }
+      ],
+      "UpstreamPathTemplate": "/api/subIssues/{id}",
+      "UpstreamHttpMethod": [ "GET", "PUT", "DELETE", "PATCH", "OPTIONS" ],
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "",
+        "AllowedScopes": [ "" ]
+      }
+    },
+    {
+      "DownstreamPathTemplate": "/api/columns",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "taskservices.webapi",
+          "Port": 80
+        }
+      ],
+      "UpstreamPathTemplate": "/api/columns",
+      "UpstreamHttpMethod": [ "GET", "POST", "PUT", "OPTIONS" ],
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "",
+        "AllowedScopes": [ "" ]
+      }
+    },
+    {
+      "DownstreamPathTemplate": "/api/columns/{id}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "taskservices.webapi",
+          "Port": 80
+        }
+      ],
+      "UpstreamPathTemplate": "/api/columns/{id}",
+      "UpstreamHttpMethod": [ "GET", "PUT", "DELETE", "PATCH", "OPTIONS" ],
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "",
+        "AllowedScopes": [ "" ]
+      }
+    },
+    {
+      "DownstreamPathTemplate": "/api/notes",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "taskservices.webapi",
+          "Port": 80
+        }
+      ],
+      "UpstreamPathTemplate": "/api/notes",
+      "UpstreamHttpMethod": [ "GET", "POST", "PUT", "OPTIONS" ],
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "",
+        "AllowedScopes": [ "" ]
+      }
+    },
+    {
+      "DownstreamPathTemplate": "/api/notes/{id}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "taskservices.webapi",
+          "Port": 80
+        }
+      ],
+      "UpstreamPathTemplate": "/api/notes/{id}",
+      "UpstreamHttpMethod": [ "GET", "PUT", "DELETE", "PATCH", "OPTIONS" ],
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "",
+        "AllowedScopes": [ "" ]
+      }
+    },
+    {
+      "DownstreamPathTemplate": "/api/comments",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "taskservices.webapi",
+          "Port": 80
+        }
+      ],
+      "UpstreamPathTemplate": "/api/comments",
+      "UpstreamHttpMethod": [ "GET", "POST", "PUT", "OPTIONS" ],
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "",
+        "AllowedScopes": [ "" ]
+      }
+    },
+    {
+      "DownstreamPathTemplate": "/api/comments/{id}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "taskservices.webapi",
+          "Port": 80
+        }
+      ],
+      "UpstreamPathTemplate": "/api/comments/{id}",
+      "UpstreamHttpMethod": [ "GET", "PUT", "DELETE", "PATCH", "OPTIONS" ],
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "",
+        "AllowedScopes": [ "" ]
+      }
+    },
+    {
+      "DownstreamPathTemplate": "/api/pages",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "taskservices.webapi",
+          "Port": 80
+        }
+      ],
+      "UpstreamPathTemplate": "/api/pages",
+      "UpstreamHttpMethod": [ "GET", "POST", "PUT", "OPTIONS" ],
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "",
+        "AllowedScopes": [ "" ]
+      }
+    },
+    {
+      "DownstreamPathTemplate": "/api/pages/{id}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "taskservices.webapi",
+          "Port": 80
+        }
+      ],
+      "UpstreamPathTemplate": "/api/pages/{id}",
+      "UpstreamHttpMethod": [ "GET", "PUT", "DELETE", "PATCH", "OPTIONS" ],
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "",
+        "AllowedScopes": [ "" ]
+      }
+    }
+  ],
+  "GlobalConfiguration": {
+    "BaseUrl": "http://localhost:4206"
+  }
+}

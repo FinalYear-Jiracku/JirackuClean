@@ -12,11 +12,12 @@ namespace TaskServices.Domain.Configurations
             builder.HasKey(x => x.Id);
             builder.Property(x => x.Id).UseIdentityColumn();
             builder.Property(x => x.Name).IsRequired(false).HasMaxLength(100);
-            builder.Property(x => x.Lead).IsRequired(false).HasMaxLength(100);
             builder.Property(x => x.IsUpgraded).IsRequired(false);
             builder.Property(x => x.IsDeleted).IsRequired(false);
             builder.Property(x => x.CreatedBy).IsRequired(false).HasMaxLength(100);
-            builder.Property(x => x.CreatedAt).IsRequired(true);
+            builder.Property(x => x.CreatedAt).IsRequired(false);
+            builder.Property(x => x.UpdatedBy).IsRequired(false).HasMaxLength(100);
+            builder.Property(x => x.UpdatedAt).IsRequired(false);
         }
     }
 }

@@ -6,4 +6,14 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <PackageReference Include="MediatR" Version="12.0.1" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="7.0.0" />
+    <PackageReference Include="StackExchange.Redis" Version="2.6.116" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\TaskServices.Application\TaskServices.Application.csproj" />
+  </ItemGroup>
+
 </Project>
