@@ -6,6 +6,6 @@
         public int UserId { get; set; }
         public DateTimeOffset? JoinDate { get; set; } = DateTimeOffset.Now;
         public Project? Project { get; set; }
-
+        public User? User { get; set; }
     }
 }

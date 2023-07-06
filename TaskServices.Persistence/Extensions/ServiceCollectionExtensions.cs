@@ -42,6 +42,7 @@ namespace TaskServices.Persistence.Extensions
         {
             services.AddScoped(typeof(IUnitOfWork), typeof(UnitOfWork))
                     .AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>))
+                    .AddScoped<IUserRepository, UserRepository>()
                     .AddScoped<IProjectRepository, ProjectRepository>()
                     .AddScoped<ISprintRepository, SprintRepository>()
                     .AddScoped<IStatusRepository, StatusRepository>()

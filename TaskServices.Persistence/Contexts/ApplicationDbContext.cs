@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Components;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,9 +15,12 @@ namespace TaskServices.Persistence.Contexts
     public class ApplicationDbContext : DbContext
     {
         private readonly IDomainEventDispatcher? _dispatcher;
-        public ApplicationDbContext(DbContextOptions options, IDomainEventDispatcher dispatcher) : base(options)
+        public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options, IDomainEventDispatcher dispatcher) : base(options)
         {
             _dispatcher = dispatcher;
+        }
+        public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
+        {
         }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -46,6 +48,7 @@ namespace TaskServices.Persistence.Contexts
         public DbSet<Sprint> Sprints { get; set; }
         public DbSet<Status> Statuses { get; set; }
         public DbSet<SubIssue> SubIssues { get; set; }
+        public DbSet<User> Users { get; set; }
         public DbSet<UserProject> UserProjects { get; set; }
         public DbSet<UserIssue> UserIssues { get; set; }
         public DbSet<UserSubIssue> UserSubIssues { get; set; }

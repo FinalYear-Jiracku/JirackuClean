@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using TaskServices.Domain.Entities;
+﻿using TaskServices.Domain.Entities;
 using TaskServices.Domain.Entities.Enums;
 
 namespace TaskServices.Application.DTOs

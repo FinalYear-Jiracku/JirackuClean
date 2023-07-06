@@ -1,9 +1,13 @@
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 using System;
+using System.Text;
 using TaskServices.Application.Extensions;
 using TaskServices.Infrastructure.Extensions;
 using TaskServices.Persistence.Contexts;
 using TaskServices.Persistence.Extensions;
+using TaskServices.Shared.Middleware;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -13,10 +17,6 @@ builder.Services.AddApplicationLayer();
 builder.Services.AddInfrastructureLayer();
 builder.Services.AddPersistenceLayer(builder.Configuration);
 
-builder.Services.AddControllersWithViews()
-    .AddNewtonsoftJson(options =>
-                options.SerializerSettings.ReferenceLoopHandling = Newtonsoft
-                .Json.ReferenceLoopHandling.Ignore);
 builder.Services.AddCors(options =>
 {
     options.AddPolicy(name: "AllowOrigin",
@@ -27,6 +27,23 @@ builder.Services.AddCors(options =>
                                 .AllowAnyMethod();
         });
 });
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddGoogle(googleOptions =>
+{
+    googleOptions.ClientId = builder.Configuration["AppSettings:GoogleClientId"];
+    googleOptions.ClientSecret = builder.Configuration["AppSettings:GoogleClientSecret"];
+})
+                .AddJwtBearer(options => {
+                    options.TokenValidationParameters = new TokenValidationParameters
+                    {
+                        ValidateIssuer = true,
+                        ValidateAudience = true,
+                        ValidateLifetime = true,
+                        ValidateIssuerSigningKey = true,
+                        ValidIssuer = builder.Configuration["Jwt:Issuer"],
+                        ValidAudience = builder.Configuration["Jwt:Audience"],
+                        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"]))
+                    };
+                });
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
@@ -43,10 +60,13 @@ if (app.Environment.IsDevelopment())
 
 app.PersistenceErrorHandlerMiddleware();
 
-
 app.UseRouting();
 
 app.UseCors("AllowOrigin");
+
+app.UseAuthentication();
+
+app.UseMiddleware<TokenExpirationMiddleware>();
 
 app.UseAuthorization();
 

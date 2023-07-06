@@ -10,5 +10,6 @@ namespace TaskServices.Domain.Entities
         public int? UserId { get; set; }
         public int? SprintId { get; set; }
         public Sprint? Sprint { get; set; }
+        public User? User { get; set; }
     }
 }

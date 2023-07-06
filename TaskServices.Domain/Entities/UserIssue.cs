@@ -11,6 +11,7 @@ namespace TaskServices.Domain.Entities
         public int IssueId { get; set; }
         public int UserId { get; set; }
         public DateTimeOffset? JoinDate { get; set; } = DateTimeOffset.Now;
+        public User? User { get; set; }
         public Issue? Issue { get; set; }
     }
 }

@@ -16,6 +16,7 @@ namespace TaskServices.Persistence.Repositories
         private readonly ApplicationDbContext _dbContext;
         private Hashtable _repositories;
         private bool disposed;
+        public IUserRepository UserRepository { get; }
         public IProjectRepository ProjectRepository { get; }
         public ISprintRepository SprintRepository { get; }
         public IStatusRepository StatusRepository { get; }
@@ -26,7 +27,8 @@ namespace TaskServices.Persistence.Repositories
         public ICommentRepository CommentRepository { get; }
         public IPageRepository PageRepository { get; }
         public UnitOfWork(ApplicationDbContext dbContext, 
-                          IProjectRepository projectRepository, 
+                          IUserRepository userRepository, 
+                          IProjectRepository projectRepository,
                           ISprintRepository sprintRepository, 
                           IStatusRepository statusRepository,
                           IIssueRepository issueRepository,
@@ -37,6 +39,7 @@ namespace TaskServices.Persistence.Repositories
                           IPageRepository pageRepository)
         {
             _dbContext = dbContext;
+            UserRepository = userRepository;
             ProjectRepository = projectRepository;
             SprintRepository = sprintRepository;
             StatusRepository = statusRepository;

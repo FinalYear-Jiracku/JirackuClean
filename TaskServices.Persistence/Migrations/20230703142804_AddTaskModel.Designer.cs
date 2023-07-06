@@ -12,8 +12,8 @@ using TaskServices.Persistence.Contexts;
 namespace TaskServices.Persistence.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20230603074223_addModel")]
-    partial class addModel
+    [Migration("20230703142804_AddTaskModel")]
+    partial class AddTaskModel
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -40,7 +40,15 @@ namespace TaskServices.Persistence.Migrations
                         .HasMaxLength(100)
                         .HasColumnType("character varying(100)");
 
+                    b.Property<byte[]>("FileData")
+                        .HasMaxLength(1000)
+                        .HasColumnType("bytea");
+
                     b.Property<string>("FileName")
+                        .HasMaxLength(1000)
+                        .HasColumnType("character varying(1000)");
+
+                    b.Property<string>("FileType")
                         .HasMaxLength(200)
                         .HasColumnType("character varying(200)");
 
@@ -269,6 +277,8 @@ namespace TaskServices.Persistence.Migrations
 
                     b.HasIndex("ColumnId");
 
+                    b.HasIndex("UserId");
+
                     b.ToTable("Notes", (string)null);
                 });
 
@@ -317,6 +327,8 @@ namespace TaskServices.Persistence.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("SprintId");
+
+                    b.HasIndex("UserId");
 
                     b.ToTable("Pages", (string)null);
                 });
@@ -515,6 +527,28 @@ namespace TaskServices.Persistence.Migrations
                     b.ToTable("SubIssues", (string)null);
                 });
 
+            modelBuilder.Entity("TaskServices.Domain.Entities.User", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Email")
+                        .HasColumnType("text");
+
+                    b.Property<string>("Image")
+                        .HasColumnType("text");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Users");
+                });
+
             modelBuilder.Entity("TaskServices.Domain.Entities.UserIssue", b =>
                 {
                     b.Property<int>("IssueId")
@@ -527,6 +561,8 @@ namespace TaskServices.Persistence.Migrations
                         .HasColumnType("timestamp with time zone");
 
                     b.HasKey("IssueId", "UserId");
+
+                    b.HasIndex("UserId");
 
                     b.ToTable("UserIssue", (string)null);
                 });
@@ -544,6 +580,8 @@ namespace TaskServices.Persistence.Migrations
 
                     b.HasKey("ProjectId", "UserId");
 
+                    b.HasIndex("UserId");
+
                     b.ToTable("UserProject", (string)null);
                 });
 
@@ -559,6 +597,8 @@ namespace TaskServices.Persistence.Migrations
                         .HasColumnType("timestamp with time zone");
 
                     b.HasKey("SubIssueId", "UserId");
+
+                    b.HasIndex("UserId");
 
                     b.ToTable("UserSubIssue", (string)null);
                 });
@@ -638,7 +678,14 @@ namespace TaskServices.Persistence.Migrations
                         .HasForeignKey("ColumnId")
                         .OnDelete(DeleteBehavior.Cascade);
 
+                    b.HasOne("TaskServices.Domain.Entities.User", "User")
+                        .WithMany("Notes")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
                     b.Navigation("Column");
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("TaskServices.Domain.Entities.Page", b =>
@@ -648,7 +695,14 @@ namespace TaskServices.Persistence.Migrations
                         .HasForeignKey("SprintId")
                         .OnDelete(DeleteBehavior.Cascade);
 
+                    b.HasOne("TaskServices.Domain.Entities.User", "User")
+                        .WithMany("Pages")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
                     b.Navigation("Sprint");
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("TaskServices.Domain.Entities.Sprint", b =>
@@ -696,7 +750,15 @@ namespace TaskServices.Persistence.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("TaskServices.Domain.Entities.User", "User")
+                        .WithMany("UserIssues")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.Navigation("Issue");
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("TaskServices.Domain.Entities.UserProject", b =>
@@ -707,7 +769,15 @@ namespace TaskServices.Persistence.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("TaskServices.Domain.Entities.User", "User")
+                        .WithMany("UserProjects")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.Navigation("Project");
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("TaskServices.Domain.Entities.UserSubIssue", b =>
@@ -718,7 +788,15 @@ namespace TaskServices.Persistence.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("TaskServices.Domain.Entities.User", "User")
+                        .WithMany("UserSubIssues")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.Navigation("SubIssue");
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("TaskServices.Domain.Entities.Column", b =>
@@ -772,6 +850,19 @@ namespace TaskServices.Persistence.Migrations
                     b.Navigation("Attachments");
 
                     b.Navigation("Comments");
+
+                    b.Navigation("UserSubIssues");
+                });
+
+            modelBuilder.Entity("TaskServices.Domain.Entities.User", b =>
+                {
+                    b.Navigation("Notes");
+
+                    b.Navigation("Pages");
+
+                    b.Navigation("UserIssues");
+
+                    b.Navigation("UserProjects");
 
                     b.Navigation("UserSubIssues");
                 });

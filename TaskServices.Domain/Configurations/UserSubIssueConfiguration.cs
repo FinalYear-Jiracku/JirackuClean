@@ -16,7 +16,7 @@ namespace TaskServices.Domain.Configurations
             builder.ToTable("UserSubIssue");
             builder.HasKey(x => new { x.SubIssueId, x.UserId });
             builder.HasOne(x => x.SubIssue).WithMany(x => x.UserSubIssues).HasForeignKey(x => x.SubIssueId).OnDelete(DeleteBehavior.Cascade);
-            builder.Property(x => x.UserId).IsRequired(true);
+            builder.HasOne(x => x.User).WithMany(x => x.UserSubIssues).HasForeignKey(x => x.UserId).OnDelete(DeleteBehavior.Cascade);
             builder.Property(x => x.JoinDate).IsRequired(false);
         }
     }

@@ -24,3 +24,8 @@ services:
     build:
       context: .
       dockerfile: TaskServices.WebAPI/Dockerfile
+  userservices.webapi:
+    image: ${DOCKER_REGISTRY-}userserviceswebapi
+    build:
+      context: .
+      dockerfile: UserServices.WebAPI/Dockerfile

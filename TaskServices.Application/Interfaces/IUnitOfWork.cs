@@ -10,6 +10,7 @@ namespace TaskServices.Application.Interfaces
     public interface IUnitOfWork : IDisposable
     {
         IGenericRepository<T> Repository<T>() where T : BaseAuditableEntity;
+        IUserRepository UserRepository { get; }
         IProjectRepository ProjectRepository { get; }
         ISprintRepository SprintRepository { get; }
         IStatusRepository StatusRepository { get; }

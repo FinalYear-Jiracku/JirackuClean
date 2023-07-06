@@ -24,7 +24,9 @@ namespace TaskServices.Infrastructure.Extensions
             services.AddScoped<IMediator, Mediator>()
                     .AddScoped<ICacheService, CacheService>()
                     .AddScoped<IDomainEventDispatcher, DomainEventDispatcher>()
-                    .AddScoped<IFirebaseService, FireBaseService>();
+                    .AddScoped<IFirebaseService, FireBaseService>()
+                    .AddScoped<IUserEventSubscriber, UserEventSubscriber>()
+                    .AddSingleton<IRabbitMQManager, RabbitMQManager>();
         }
     }
 }

@@ -7,7 +7,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace TaskServices.Persistence.Migrations
 {
     /// <inheritdoc />
-    public partial class addModel : Migration
+    public partial class AddTaskModel : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -29,6 +29,21 @@ namespace TaskServices.Persistence.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Projects", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Users",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    Name = table.Column<string>(type: "text", nullable: true),
+                    Email = table.Column<string>(type: "text", nullable: true),
+                    Image = table.Column<string>(type: "text", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Users", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -74,6 +89,12 @@ namespace TaskServices.Persistence.Migrations
                         name: "FK_UserProject_Projects_ProjectId",
                         column: x => x.ProjectId,
                         principalTable: "Projects",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_UserProject_Users_UserId",
+                        column: x => x.UserId,
+                        principalTable: "Users",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -130,6 +151,12 @@ namespace TaskServices.Persistence.Migrations
                         principalTable: "Sprints",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Pages_Users_UserId",
+                        column: x => x.UserId,
+                        principalTable: "Users",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -181,6 +208,12 @@ namespace TaskServices.Persistence.Migrations
                         name: "FK_Notes_Columns_ColumnId",
                         column: x => x.ColumnId,
                         principalTable: "Columns",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Notes_Users_UserId",
+                        column: x => x.UserId,
+                        principalTable: "Users",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -280,6 +313,12 @@ namespace TaskServices.Persistence.Migrations
                         principalTable: "Issues",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_UserIssue_Users_UserId",
+                        column: x => x.UserId,
+                        principalTable: "Users",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -288,7 +327,9 @@ namespace TaskServices.Persistence.Migrations
                 {
                     Id = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    FileName = table.Column<string>(type: "character varying(200)", maxLength: 200, nullable: true),
+                    FileName = table.Column<string>(type: "character varying(1000)", maxLength: 1000, nullable: true),
+                    FileType = table.Column<string>(type: "character varying(200)", maxLength: 200, nullable: true),
+                    FileData = table.Column<byte[]>(type: "bytea", maxLength: 1000, nullable: true),
                     IssueId = table.Column<int>(type: "integer", nullable: true),
                     SubIssueId = table.Column<int>(type: "integer", nullable: true),
                     IsDeleted = table.Column<bool>(type: "boolean", nullable: true),
@@ -370,6 +411,12 @@ namespace TaskServices.Persistence.Migrations
                         principalTable: "SubIssues",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_UserSubIssue_Users_UserId",
+                        column: x => x.UserId,
+                        principalTable: "Users",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateIndex(
@@ -418,9 +465,19 @@ namespace TaskServices.Persistence.Migrations
                 column: "ColumnId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Notes_UserId",
+                table: "Notes",
+                column: "UserId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Pages_SprintId",
                 table: "Pages",
                 column: "SprintId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Pages_UserId",
+                table: "Pages",
+                column: "UserId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Sprints_ProjectId",
@@ -441,6 +498,21 @@ namespace TaskServices.Persistence.Migrations
                 name: "IX_SubIssues_StatusId",
                 table: "SubIssues",
                 column: "StatusId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_UserIssue_UserId",
+                table: "UserIssue",
+                column: "UserId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_UserProject_UserId",
+                table: "UserProject",
+                column: "UserId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_UserSubIssue_UserId",
+                table: "UserSubIssue",
+                column: "UserId");
         }
 
         /// <inheritdoc />
@@ -472,6 +544,9 @@ namespace TaskServices.Persistence.Migrations
 
             migrationBuilder.DropTable(
                 name: "Columns");
+
+            migrationBuilder.DropTable(
+                name: "Users");
 
             migrationBuilder.DropTable(
                 name: "Issues");
