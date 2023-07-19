@@ -78,7 +78,7 @@ namespace TaskServices.Application.Features.Handlers.Statuses
                 {
                     statusDto = _mapper.Map<List<DataStatusDTO>>(status).Select(dto =>
                     {
-                        dto.Issues = dto.Issues.Where(issue => issue.UserIssues.Equals(query.Filter.UserId) &&
+                        dto.Issues = dto.Issues.Where(issue => issue.User.Equals(query.Filter.UserId) &&
                                                       issue.Name.Contains(query.Filter.Search)).ToList();
                         return dto;
                     }).Where(dto => dto.Issues != null && dto.Issues.Any()).ToList();
@@ -114,7 +114,7 @@ namespace TaskServices.Application.Features.Handlers.Statuses
             {
                 statusDto = _mapper.Map<List<DataStatusDTO>>(status).Select(dto =>
                 {
-                    dto.Issues = dto.Issues.Where(issue => issue.UserIssues.Equals(query.Filter.UserId)).ToList();
+                    dto.Issues = dto.Issues.Where(issue => issue.User.Equals(query.Filter.UserId)).ToList();
                     return dto;
                 }).Where(dto => dto.Issues != null && dto.Issues.Any()).ToList();
                 return (statusDto, validFilter, _mapper.Map<List<DataStatusDTO>>(status).Count());

@@ -36,8 +36,13 @@ namespace TaskServices.Persistence.Repositories
         #region Get Services
         public async Task<SubIssue> GetSubIssueById(int id)
         {
-            var subIssue = await _dbContext.SubIssues.Include(x => x.Issue).Include(x => x.Status).Include(x => x.Comments.Where(x => x.IsDeleted == false)).FirstOrDefaultAsync(x => x.IsDeleted == false && x.Id == id);
+            var subIssue = await _dbContext.SubIssues.Include(x=>x.User).Include(x => x.Issue).Include(x => x.Status).Include(x => x.Comments.Where(x => x.IsDeleted == false)).Include(x=>x.Attachments).FirstOrDefaultAsync(x => x.IsDeleted == false && x.Id == id);
             return subIssue == null ? null : subIssue;
+        }
+
+        public async Task<List<SubIssue>> GetSubIssueListByIssueId(int? issueId)
+        {
+            return await _dbContext.SubIssues.Where(x => x.IsDeleted == false && x.IssueId == issueId).Include(x => x.Issue).Include(x => x.Status).ToListAsync();
         }
 
         public async Task<List<SubIssue>> SubIssueNotCompleted(int? issueId)

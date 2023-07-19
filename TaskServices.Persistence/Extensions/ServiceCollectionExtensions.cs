@@ -25,11 +25,6 @@ namespace TaskServices.Persistence.Extensions
             services.AddRepositories();
         }
 
-        public static void PersistenceErrorHandlerMiddleware(this IApplicationBuilder app)
-        {
-            app.UseMiddleware<ErrorHandlerMiddleware>();
-        }
-
         public static void AddDbContext(this IServiceCollection services, IConfiguration configuration)
         {
             var connectionString = configuration.GetConnectionString("DefaultConnection");
@@ -42,6 +37,7 @@ namespace TaskServices.Persistence.Extensions
         {
             services.AddScoped(typeof(IUnitOfWork), typeof(UnitOfWork))
                     .AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>))
+                    .AddScoped<IUserRepository, UserRepository>()
                     .AddScoped<IProjectRepository, ProjectRepository>()
                     .AddScoped<ISprintRepository, SprintRepository>()
                     .AddScoped<IStatusRepository, StatusRepository>()

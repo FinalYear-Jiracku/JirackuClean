@@ -13,6 +13,10 @@ namespace TaskServices.Application.Features.Commands.Comments
     {
         public int Id { get; set; }
         public string? Content { get; set; }
+        public int IssueId { get; set; }
+        public int SubIssueId { get; set; }
+        public int NoteId { get; set; }
+        public int UserId { get; set; }
         public string? UpdatedBy { get; set; }
     }
     public class CommentUpdatedEvent : BaseEvent

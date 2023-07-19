@@ -63,7 +63,7 @@ namespace TaskServices.Application.Features.Handlers.Issues
                 if (query.Filter.UserId != null)
                 {
                     issueDto = _mapper.Map<List<IssueDTO>>(issue).Where(dto => dto.Name.Contains(query.Filter.Search) && 
-                                                                        dto.UserIssues.Equals(query.Filter.UserId)).OrderByDescending(x => x.Id).ToList();
+                                                                        dto.User.Equals(query.Filter.UserId)).OrderByDescending(x => x.Id).ToList();
                     return (issueDto, validFilter, issue.Count());
                 }
                 return (issueDto, validFilter, issue.Count());
@@ -86,7 +86,7 @@ namespace TaskServices.Application.Features.Handlers.Issues
             }
             if (query.Filter.UserId != null)
             {
-                issueDto = _mapper.Map<List<IssueDTO>>(issue).Where(dto => dto.UserIssues.Equals(query.Filter.UserId)).OrderByDescending(x => x.Id).ToList();
+                issueDto = _mapper.Map<List<IssueDTO>>(issue).Where(dto => dto.User.Equals(query.Filter.UserId)).OrderByDescending(x => x.Id).ToList();
                 return (issueDto, validFilter, issue.Count());
             }
             var expireTime = DateTimeOffset.Now.AddSeconds(30);

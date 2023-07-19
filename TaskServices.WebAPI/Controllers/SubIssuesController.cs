@@ -39,7 +39,7 @@ namespace TaskServices.WebAPI.Controllers
 
         #region PUT API
         [HttpPut]
-        public async Task<IActionResult> UpdateSubIssue([FromBody] UpdateSubIssueCommand subIssueCommand)
+        public async Task<IActionResult> UpdateSubIssue([FromForm] UpdateSubIssueCommand subIssueCommand)
         {
             await _mediator.Send(subIssueCommand);
             return Ok();

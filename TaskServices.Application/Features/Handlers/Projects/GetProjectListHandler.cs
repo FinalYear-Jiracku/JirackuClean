@@ -12,6 +12,7 @@ using TaskServices.Application.DTOs;
 using TaskServices.Application.Features.Queries.Projects;
 using TaskServices.Application.Interfaces;
 using TaskServices.Application.Interfaces.IServices;
+using TaskServices.Domain.Common.Interfaces;
 using TaskServices.Shared.Pagination.Filter;
 
 namespace TaskServices.Application.Features.Handlers.Projects
@@ -21,21 +22,26 @@ namespace TaskServices.Application.Features.Handlers.Projects
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
         private readonly ICacheService _cacheService;
+        private readonly IUserEventSubscriber _userEventSubscriber;
+        
 
-        public GetProjectListHandler(IUnitOfWork unitOfWork, IMapper mapper, ICacheService cacheService)
+        public GetProjectListHandler(IUnitOfWork unitOfWork, IMapper mapper, ICacheService cacheService, IUserEventSubscriber userEventSubscriber)
         {
             _unitOfWork = unitOfWork;
             _mapper = mapper;
             _cacheService = cacheService;
+            _userEventSubscriber = userEventSubscriber;
         }
         public async Task<(List<ProjectDTO>, PaginationFilter, int)> Handle(GetProjectListQuery query, CancellationToken cancellationToken)
         {
+            await _userEventSubscriber.ReceiveMessage();
+            var findUser = await _unitOfWork.UserRepository.FindUserByEmail(query.Email);
             var validFilter = new PaginationFilter(query.Filter.PageNumber, query.Filter.PageSize, query.Filter.Search, query.Filter.Type, query.Filter.Priority, query.Filter.StatusId, query.Filter.UserId);
             
             var cacheData = _cacheService.GetData<List<ProjectDTO>>($"ProjectDTO");
             if(cacheData == null)
             {
-                var projects = await _unitOfWork.ProjectRepository.GetProjectList();
+                var projects = await _unitOfWork.ProjectRepository.GetProjectList(findUser.Id);
                 cacheData = _mapper.Map<List<ProjectDTO>>(projects);
                 var expireTime = DateTimeOffset.Now.AddSeconds(30);
                 _cacheService.SetData<List<ProjectDTO>>($"ProjectDTO", cacheData, expireTime);

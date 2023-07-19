@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using TaskServices.Domain.Entities;
+﻿using TaskServices.Domain.Entities;
 using TaskServices.Domain.Entities.Enums;
 
 namespace TaskServices.Application.DTOs
@@ -18,7 +13,7 @@ namespace TaskServices.Application.DTOs
         public StatusDTO? Status { get; set; }
         public int? SubIssues { get; set; }
         public SprintDTO? Sprint { get; set; }
-        public ICollection<UserIssue>? UserIssues { get; set; }
+        public UserDTO? User { get; set; }
         public DateTimeOffset? StartDate { get; set; }
         public DateTimeOffset? DueDate { get; set; }
     }

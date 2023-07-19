@@ -15,6 +15,7 @@ namespace TaskServices.Application.Features.Commands.Comments
         public int IssueId { get; set; }
         public int SubIssueId { get; set; }
         public int NoteId { get; set; }
+        public int UserId { get; set; }
         public string? CreatedBy { get; set; }
     }
     public class CommentCreatedEvent : BaseEvent

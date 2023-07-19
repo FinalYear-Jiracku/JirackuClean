@@ -25,7 +25,23 @@ namespace TaskServices.Application.Features.Handlers.Comments
             {
                 return default;
             }
+            if (command.IssueId != 0)
+            {
+                var issue = await _unitOfWork.IssueRepository.GetIssueById(command.IssueId);
+                comment.Issue = issue;
+            }
+            if (command.SubIssueId != 0)
+            {
+                var subIssue = await _unitOfWork.SubIssueRepository.GetSubIssueById(command.SubIssueId);
+                comment.SubIssue = subIssue;
+            }
+            if (command.NoteId != 0)
+            {
+                var note = await _unitOfWork.NoteRepository.GetNoteById(command.NoteId);
+                comment.Note = note;
+            }
             comment.Content = command.Content;
+            comment.UserId = command.UserId;
             comment.UpdatedBy = command.UpdatedBy;
             comment.UpdatedAt = DateTimeOffset.Now;
             await _unitOfWork.Repository<Comment>().UpdateAsync(comment);

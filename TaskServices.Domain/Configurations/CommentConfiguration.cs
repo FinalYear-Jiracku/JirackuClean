@@ -21,6 +21,7 @@ namespace TaskServices.Domain.Configurations
             builder.HasOne(x => x.Issue).WithMany(x => x.Comments).OnDelete(DeleteBehavior.SetNull);
             builder.HasOne(x => x.SubIssue).WithMany(x => x.Comments).OnDelete(DeleteBehavior.SetNull);
             builder.HasOne(x => x.Note).WithMany(x => x.Comments).OnDelete(DeleteBehavior.SetNull);
+            builder.HasOne(x => x.User).WithMany(x => x.Comments).HasForeignKey(x => x.UserId).OnDelete(DeleteBehavior.Cascade);
         }
     }
 }

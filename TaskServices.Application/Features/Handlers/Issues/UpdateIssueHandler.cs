@@ -3,6 +3,7 @@ using Firebase.Auth;
 using Firebase.Storage;
 using MediatR;
 using Microsoft.AspNetCore.Http;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,7 +14,7 @@ using TaskServices.Application.Features.Commands.Issues;
 using TaskServices.Application.Interfaces;
 using TaskServices.Application.Interfaces.IServices;
 using TaskServices.Domain.Entities;
-using static System.Net.Mime.MediaTypeNames;
+using User = TaskServices.Domain.Entities.User;
 
 namespace TaskServices.Application.Features.Handlers.Issues
 {
@@ -33,6 +34,7 @@ namespace TaskServices.Application.Features.Handlers.Issues
         public async Task<int> Handle(UpdateIssueCommand command, CancellationToken cancellationToken)
         {
             var issue = await _unitOfWork.IssueRepository.GetIssueById(command.Id);
+            var user = await _unitOfWork.UserRepository.FindUserById(command.UserId);
             if (issue == null)
             {
                 return default;
@@ -56,6 +58,18 @@ namespace TaskServices.Application.Features.Handlers.Issues
                     issue.SprintId = command.SprintId;
                     issue.UpdatedBy = command.UpdatedBy;
                     issue.UpdatedAt = DateTimeOffset.Now;
+                    if (issue.User == null && command.UserId == 0)
+                    {
+                        issue.User = null;
+                    }
+                    if (issue.User != null && issue.User.Id != command.UserId)
+                    {
+                        issue.User = user;
+                    }
+                    if (issue.User == null && command.UserId != 0)
+                    {
+                        issue.User = user;
+                    }
 
                     var attachmentsToAdd1FileNull = newAttachments.Where(newAttachment => !existingAttachments.Any(existingAttachment => existingAttachment.FileName == newAttachment.FileName && existingAttachment.FileType == newAttachment.FileType)).ToList();
                     var attachmentsToRemove1FileNull = existingAttachments.Where(existingAttachment => !newAttachments.Any(newAttachment => newAttachment.FileName == existingAttachment.FileName && newAttachment.FileType == existingAttachment.FileType)).ToList();
@@ -73,8 +87,8 @@ namespace TaskServices.Application.Features.Handlers.Issues
                     issue.AddDomainEvent(new IssueUpdatedEvent(issue));
                     await _unitOfWork.Save(cancellationToken);
                     var issuesFileNull = await _unitOfWork.IssueRepository.GetIssueListBySprintId(command.SprintId);
-                    var issuesDtoFileNull = _mapper.Map<List<SprintDTO>>(issuesFileNull).OrderByDescending(x => x.Id).Take(8).ToList();
-                    _cacheService.SetData<List<SprintDTO>>($"IssueDTO?sprintId={command.SprintId}&pageNumber=1&search=", issuesDtoFileNull, expireTime);
+                    var issuesDtoFileNull = _mapper.Map<List<IssueDTO>>(issuesFileNull);
+                    _cacheService.SetData<List<IssueDTO>>($"IssueDTO?sprintId={command.SprintId}", issuesDtoFileNull, expireTime);
                     return await Task.FromResult(0);
                 }
                 foreach (var file in command.Files)
@@ -101,7 +115,19 @@ namespace TaskServices.Application.Features.Handlers.Issues
                 issue.SprintId = command.SprintId;
                 issue.UpdatedBy = command.UpdatedBy;
                 issue.UpdatedAt = DateTimeOffset.Now;
-               
+                if (issue.User == null && command.UserId == 0)
+                {
+                    issue.User = null;
+                }
+                if (issue.User != null && issue.User.Id != command.UserId)
+                {
+                    issue.User = user;
+                }
+                if (issue.User == null && command.UserId != 0)
+                {
+                    issue.User = user;
+                }
+
                 var attachmentsToAdd1 = newAttachments.Where(newAttachment => !existingAttachments.Any(existingAttachment => existingAttachment.FileName == newAttachment.FileName && existingAttachment.FileType == newAttachment.FileType)).ToList();
                 var attachmentsToRemove1 = existingAttachments.Where(existingAttachment => !newAttachments.Any(newAttachment => newAttachment.FileName == existingAttachment.FileName && newAttachment.FileType == existingAttachment.FileType)).ToList();
                 
@@ -117,8 +143,8 @@ namespace TaskServices.Application.Features.Handlers.Issues
                 issue.AddDomainEvent(new IssueUpdatedEvent(issue));
                 await _unitOfWork.Save(cancellationToken);
                 var issues = await _unitOfWork.IssueRepository.GetIssueListBySprintId(command.SprintId);
-                var issuesDto = _mapper.Map<List<SprintDTO>>(issues).OrderByDescending(x => x.Id).Take(8).ToList();
-                _cacheService.SetData<List<SprintDTO>>($"IssueDTO?sprintId={command.SprintId}&pageNumber=1&search=", issuesDto, expireTime);
+                var issuesDto = _mapper.Map<List<IssueDTO>>(issues);
+                _cacheService.SetData<List<IssueDTO>>($"IssueDTO?sprintId={command.SprintId}&pageNumber=1&search=", issuesDto, expireTime);
                 return await Task.FromResult(0);
             }
 
@@ -134,16 +160,27 @@ namespace TaskServices.Application.Features.Handlers.Issues
                 issue.StatusId = command.StatusId;
                 issue.UpdatedBy = command.UpdatedBy;
                 issue.UpdatedAt = DateTimeOffset.Now;
+                if(issue.User == null && command.UserId == 0)
+                {
+                    issue.User = null;
+                }
+                if(issue.User != null && issue.User.Id != command.UserId)
+                {
+                    issue.User = user;
+                }
+                if(issue.User == null && command.UserId != 0)
+                {
+                    issue.User = user;
+                }
 
-                var attachmentsToAddFileNull = newAttachments.Where(newAttachment => !existingAttachments.Any(existingAttachment => existingAttachment.FileName == newAttachment.FileName && existingAttachment.FileType == newAttachment.FileType)).ToList();
-                var attachmentsToRemoveFileNull = existingAttachments.Where(existingAttachment => !newAttachments.Any(newAttachment => newAttachment.FileName == existingAttachment.FileName && newAttachment.FileType == existingAttachment.FileType)).ToList();
+                var attachmentsToAdd1FileNull = newAttachments.Where(newAttachment => !existingAttachments.Any(existingAttachment => existingAttachment.FileName == newAttachment.FileName && existingAttachment.FileType == newAttachment.FileType)).ToList();
+                var attachmentsToRemove1FileNull = existingAttachments.Where(existingAttachment => !newAttachments.Any(newAttachment => newAttachment.FileName == existingAttachment.FileName && newAttachment.FileType == existingAttachment.FileType)).ToList();
 
-                foreach (var attachment in attachmentsToAddFileNull)
+                foreach (var attachment in attachmentsToAdd1FileNull)
                 {
                     await _unitOfWork.Repository<Attachment>().AddAsync(attachment);
                 }
-
-                foreach (var attachment in attachmentsToRemoveFileNull)
+                foreach (var attachment in attachmentsToRemove1FileNull)
                 {
                     await _unitOfWork.Repository<Attachment>().DeleteAsync(attachment);
                 }
@@ -152,8 +189,8 @@ namespace TaskServices.Application.Features.Handlers.Issues
                 issue.AddDomainEvent(new IssueUpdatedEvent(issue));
                 await _unitOfWork.Save(cancellationToken);
                 var issuesFileNull = await _unitOfWork.IssueRepository.GetIssueListBySprintId(command.SprintId);
-                var issuesDtoFileNull = _mapper.Map<List<IssueDTO>>(issuesFileNull).OrderByDescending(x => x.Id).Take(8).ToList();
-                _cacheService.SetData<List<IssueDTO>>($"IssueDTO?sprintId={command.SprintId}&pageNumber=1&search=", issuesDtoFileNull, expireTime);
+                var issuesDtoFileNull = _mapper.Map<List<IssueDTO>>(issuesFileNull);
+                _cacheService.SetData<List<IssueDTO>>($"IssueDTO?sprintId={command.SprintId}", issuesDtoFileNull, expireTime);
                 return await Task.FromResult(0);
             }
 
@@ -169,6 +206,7 @@ namespace TaskServices.Application.Features.Handlers.Issues
                 };
                 newAttachments.Add(attachment);
             }
+           
             issue.Name = command.Name;
             issue.Description = command.Description;
             issue.Type = command.Type;
@@ -179,6 +217,19 @@ namespace TaskServices.Application.Features.Handlers.Issues
             issue.StatusId = command.StatusId;
             issue.UpdatedBy = command.UpdatedBy;
             issue.UpdatedAt = DateTimeOffset.Now;
+
+            if (issue.User == null && command.UserId == 0)
+            {
+                issue.User = null;
+            }
+            if (issue.User != null && issue.User.Id != command.UserId)
+            {
+                issue.User = user;
+            }
+            if (issue.User == null && command.UserId != 0)
+            {
+                issue.User = user;
+            }
 
             var attachmentsToAdd = newAttachments.Where(newAttachment =>!existingAttachments.Any(existingAttachment => existingAttachment.FileName == newAttachment.FileName && existingAttachment.FileType == newAttachment.FileType)).ToList();
             var attachmentsToRemove = existingAttachments.Where(existingAttachment => !newAttachments.Any(newAttachment => newAttachment.FileName == existingAttachment.FileName && newAttachment.FileType == existingAttachment.FileType)).ToList();
@@ -196,8 +247,8 @@ namespace TaskServices.Application.Features.Handlers.Issues
             issue.AddDomainEvent(new IssueUpdatedEvent(issue));
             await _unitOfWork.Save(cancellationToken);
             var issueList = await _unitOfWork.IssueRepository.GetIssueListBySprintId(command.SprintId);
-            var issueDtoList = _mapper.Map<List<IssueDTO>>(issueList).OrderByDescending(x => x.Id).ToList();
-            _cacheService.SetData<List<IssueDTO>>($"IssueDTO?sprintId={command.SprintId}&pageNumber=1&search=", issueDtoList, expireTime);
+            var issueDtoList = _mapper.Map<List<IssueDTO>>(issueList);
+            _cacheService.SetData<List<IssueDTO>>($"IssueDTO?sprintId={command.SprintId}", issueDtoList, expireTime);
             return await Task.FromResult(0);
         }
 

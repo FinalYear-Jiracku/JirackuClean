@@ -1,6 +1,118 @@
 {
   "Routes": [
     {
+      "DownstreamPathTemplate": "/api/users/login",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "userservices.webapi",
+          "Port": 80
+        }
+      ],
+      "UpstreamPathTemplate": "/api/users/login",
+      "UpstreamHttpMethod": [ "POST", "OPTIONS" ],
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "",
+        "AllowedScopes": []
+      }
+    },
+    {
+      "DownstreamPathTemplate": "/api/users/refresh",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "userservices.webapi",
+          "Port": 80
+        }
+      ],
+      "UpstreamPathTemplate": "/api/users/refresh",
+      "UpstreamHttpMethod": [ "POST", "OPTIONS" ],
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "",
+        "AllowedScopes": []
+      }
+    },
+    {
+      "DownstreamPathTemplate": "/api/users/me",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "userservices.webapi",
+          "Port": 80
+        }
+      ],
+      "UpstreamPathTemplate": "/api/users/me",
+      "UpstreamHttpMethod": [ "GET", "OPTIONS" ],
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "Bearer",
+        "AllowedScopes": []
+      }
+    },
+    {
+      "DownstreamPathTemplate": "/api/users",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "userservices.webapi",
+          "Port": 80
+        }
+      ],
+      "UpstreamPathTemplate": "/api/users",
+      "UpstreamHttpMethod": [ "PUT", "OPTIONS" ],
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "Bearer",
+        "AllowedScopes": []
+      }
+    },
+    {
+      "DownstreamPathTemplate": "/api/notifications",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "notificationservices.webapi",
+          "Port": 80
+        }
+      ],
+      "UpstreamPathTemplate": "/api/notifications",
+      "UpstreamHttpMethod": [ "POST", "OPTIONS" ],
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "Bearer",
+        "AllowedScopes": []
+      }
+    },
+    {
+      "DownstreamPathTemplate": "/api/users/accept/{inviteToken}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "taskservices.webapi",
+          "Port": 80
+        }
+      ],
+      "UpstreamPathTemplate": "/api/users/accept/{inviteToken}",
+      "UpstreamHttpMethod": [ "GET", "OPTIONS" ],
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "",
+        "AllowedScopes": []
+      }
+    },
+    {
+      "DownstreamPathTemplate": "/api/users/projects/{id}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "taskservices.webapi",
+          "Port": 80
+        }
+      ],
+      "UpstreamPathTemplate": "/api/users/projects/{id}",
+      "UpstreamHttpMethod": [ "GET", "OPTIONS" ],
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "Bearer",
+        "AllowedScopes": []
+      }
+    },
+    {
       "DownstreamPathTemplate": "/api/projects",
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
@@ -12,8 +124,8 @@
       "UpstreamPathTemplate": "/api/projects",
       "UpstreamHttpMethod": [ "GET", "POST", "PUT", "OPTIONS" ],
       "AuthenticationOptions": {
-        "AuthenticationProviderKey": "",
-        "AllowedScopes": [ "" ]
+        "AuthenticationProviderKey": "Bearer",
+        "AllowedScopes": []
       }
     },
     {
@@ -28,8 +140,8 @@
       "UpstreamPathTemplate": "/api/projects/{id}",
       "UpstreamHttpMethod": [ "GET", "PUT", "DELETE", "PATCH", "OPTIONS" ],
       "AuthenticationOptions": {
-        "AuthenticationProviderKey": "",
-        "AllowedScopes": [ "" ]
+        "AuthenticationProviderKey": "Bearer",
+        "AllowedScopes": []
       }
     },
     {
@@ -44,8 +156,8 @@
       "UpstreamPathTemplate": "/api/sprints",
       "UpstreamHttpMethod": [ "GET", "POST", "PUT", "OPTIONS" ],
       "AuthenticationOptions": {
-        "AuthenticationProviderKey": "",
-        "AllowedScopes": [ "" ]
+        "AuthenticationProviderKey": "Bearer",
+        "AllowedScopes": []
       }
     },
     {
@@ -60,8 +172,8 @@
       "UpstreamPathTemplate": "/api/sprints/{id}",
       "UpstreamHttpMethod": [ "GET", "PUT", "DELETE", "PATCH", "OPTIONS" ],
       "AuthenticationOptions": {
-        "AuthenticationProviderKey": "",
-        "AllowedScopes": [ "" ]
+        "AuthenticationProviderKey": "Bearer",
+        "AllowedScopes": []
       }
     },
     {
@@ -76,8 +188,8 @@
       "UpstreamPathTemplate": "/api/statuses",
       "UpstreamHttpMethod": [ "GET", "POST", "PUT", "OPTIONS" ],
       "AuthenticationOptions": {
-        "AuthenticationProviderKey": "",
-        "AllowedScopes": [ "" ]
+        "AuthenticationProviderKey": "Bearer",
+        "AllowedScopes": []
       }
     },
     {
@@ -92,8 +204,8 @@
       "UpstreamPathTemplate": "/api/statuses/{id}",
       "UpstreamHttpMethod": [ "GET", "PUT", "DELETE", "PATCH", "OPTIONS" ],
       "AuthenticationOptions": {
-        "AuthenticationProviderKey": "",
-        "AllowedScopes": [ "" ]
+        "AuthenticationProviderKey": "Bearer",
+        "AllowedScopes": []
       }
     },
     {
@@ -108,8 +220,8 @@
       "UpstreamPathTemplate": "/api/issues",
       "UpstreamHttpMethod": [ "GET", "POST", "PUT", "OPTIONS" ],
       "AuthenticationOptions": {
-        "AuthenticationProviderKey": "",
-        "AllowedScopes": [ "" ]
+        "AuthenticationProviderKey": "Bearer",
+        "AllowedScopes": []
       }
     },
     {
@@ -124,8 +236,8 @@
       "UpstreamPathTemplate": "/api/issues/{id}",
       "UpstreamHttpMethod": [ "GET", "PUT", "DELETE", "PATCH", "OPTIONS" ],
       "AuthenticationOptions": {
-        "AuthenticationProviderKey": "",
-        "AllowedScopes": [ "" ]
+        "AuthenticationProviderKey": "Bearer",
+        "AllowedScopes": []
       }
     },
     {
@@ -140,8 +252,8 @@
       "UpstreamPathTemplate": "/api/subIssues",
       "UpstreamHttpMethod": [ "GET", "POST", "PUT", "OPTIONS" ],
       "AuthenticationOptions": {
-        "AuthenticationProviderKey": "",
-        "AllowedScopes": [ "" ]
+        "AuthenticationProviderKey": "Bearer",
+        "AllowedScopes": []
       }
     },
     {
@@ -156,8 +268,8 @@
       "UpstreamPathTemplate": "/api/subIssues/{id}",
       "UpstreamHttpMethod": [ "GET", "PUT", "DELETE", "PATCH", "OPTIONS" ],
       "AuthenticationOptions": {
-        "AuthenticationProviderKey": "",
-        "AllowedScopes": [ "" ]
+        "AuthenticationProviderKey": "Bearer",
+        "AllowedScopes": []
       }
     },
     {
@@ -172,8 +284,8 @@
       "UpstreamPathTemplate": "/api/columns",
       "UpstreamHttpMethod": [ "GET", "POST", "PUT", "OPTIONS" ],
       "AuthenticationOptions": {
-        "AuthenticationProviderKey": "",
-        "AllowedScopes": [ "" ]
+        "AuthenticationProviderKey": "Bearer",
+        "AllowedScopes": []
       }
     },
     {
@@ -188,8 +300,8 @@
       "UpstreamPathTemplate": "/api/columns/{id}",
       "UpstreamHttpMethod": [ "GET", "PUT", "DELETE", "PATCH", "OPTIONS" ],
       "AuthenticationOptions": {
-        "AuthenticationProviderKey": "",
-        "AllowedScopes": [ "" ]
+        "AuthenticationProviderKey": "Bearer",
+        "AllowedScopes": []
       }
     },
     {
@@ -204,8 +316,8 @@
       "UpstreamPathTemplate": "/api/notes",
       "UpstreamHttpMethod": [ "GET", "POST", "PUT", "OPTIONS" ],
       "AuthenticationOptions": {
-        "AuthenticationProviderKey": "",
-        "AllowedScopes": [ "" ]
+        "AuthenticationProviderKey": "Bearer",
+        "AllowedScopes": []
       }
     },
     {
@@ -220,8 +332,8 @@
       "UpstreamPathTemplate": "/api/notes/{id}",
       "UpstreamHttpMethod": [ "GET", "PUT", "DELETE", "PATCH", "OPTIONS" ],
       "AuthenticationOptions": {
-        "AuthenticationProviderKey": "",
-        "AllowedScopes": [ "" ]
+        "AuthenticationProviderKey": "Bearer",
+        "AllowedScopes": []
       }
     },
     {
@@ -236,8 +348,8 @@
       "UpstreamPathTemplate": "/api/comments",
       "UpstreamHttpMethod": [ "GET", "POST", "PUT", "OPTIONS" ],
       "AuthenticationOptions": {
-        "AuthenticationProviderKey": "",
-        "AllowedScopes": [ "" ]
+        "AuthenticationProviderKey": "Bearer",
+        "AllowedScopes": []
       }
     },
     {
@@ -252,8 +364,8 @@
       "UpstreamPathTemplate": "/api/comments/{id}",
       "UpstreamHttpMethod": [ "GET", "PUT", "DELETE", "PATCH", "OPTIONS" ],
       "AuthenticationOptions": {
-        "AuthenticationProviderKey": "",
-        "AllowedScopes": [ "" ]
+        "AuthenticationProviderKey": "Bearer",
+        "AllowedScopes": []
       }
     },
     {
@@ -268,8 +380,8 @@
       "UpstreamPathTemplate": "/api/pages",
       "UpstreamHttpMethod": [ "GET", "POST", "PUT", "OPTIONS" ],
       "AuthenticationOptions": {
-        "AuthenticationProviderKey": "",
-        "AllowedScopes": [ "" ]
+        "AuthenticationProviderKey": "Bearer",
+        "AllowedScopes": []
       }
     },
     {
@@ -284,8 +396,8 @@
       "UpstreamPathTemplate": "/api/pages/{id}",
       "UpstreamHttpMethod": [ "GET", "PUT", "DELETE", "PATCH", "OPTIONS" ],
       "AuthenticationOptions": {
-        "AuthenticationProviderKey": "",
-        "AllowedScopes": [ "" ]
+        "AuthenticationProviderKey": "Bearer",
+        "AllowedScopes": []
       }
     }
   ],

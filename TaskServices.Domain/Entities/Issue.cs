@@ -17,9 +17,9 @@ namespace TaskServices.Domain.Entities
         public int? SprintId { get; set; }
         public Status? Status { get; set; }
         public Sprint? Sprint { get; set; }
+        public User? User { get; set; }
         public ICollection<Attachment>? Attachments { get; set; }
         public ICollection<SubIssue>? SubIssues { get; set; }
         public ICollection<Comment>? Comments { get; set; }
-        public ICollection<UserIssue>? UserIssues { get; set; }
     }
 }

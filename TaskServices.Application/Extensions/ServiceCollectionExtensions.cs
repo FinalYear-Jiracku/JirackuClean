@@ -1,5 +1,4 @@
-﻿using Microsoft.Extensions.DependencyInjection;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
@@ -8,9 +7,9 @@ using System.Threading.Tasks;
 using MediatR;
 using Microsoft.AspNetCore.Http;
 using TaskServices.Shared.Pagination.Uris;
-using FluentValidation;
 using AutoMapper;
 using TaskServices.Application.Common.Mappings;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace TaskServices.Application.Extensions
 {

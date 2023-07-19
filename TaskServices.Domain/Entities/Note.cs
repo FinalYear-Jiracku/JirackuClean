@@ -10,6 +10,7 @@ namespace TaskServices.Domain.Entities
         public int? UserId { get; set; }
         public int? ColumnId { get; set; }
         public Column? Column { get; set; }
+        public User? User { get; set; }
         public ICollection<Comment>? Comments { get; set; }
     }
 }

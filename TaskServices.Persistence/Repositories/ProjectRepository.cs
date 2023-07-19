@@ -39,9 +39,14 @@ namespace TaskServices.Persistence.Repositories
             return project == null ? null : project;
         }
 
-        public async Task<List<Project>> GetProjectList()
+        public async Task<List<Project>> GetProjectList(int userId)
         {
-            return await _dbContext.Projects.Include(x => x.Sprints.Where(x => x.IsDeleted == false)).Where(x => x.IsDeleted == false).ToListAsync();
+            var projects = await (from p in _dbContext.Projects.Include(x => x.Sprints.Where(x => x.IsDeleted == false))
+                                  join up in _dbContext.UserProject on p.Id equals up.ProjectId
+                                  join u in _dbContext.Users on up.UserId equals u.Id
+                                  where up.UserId == userId
+                                  select p).ToListAsync();
+            return projects;
         }
         #endregion
 

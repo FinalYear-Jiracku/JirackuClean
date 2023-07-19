@@ -21,11 +21,11 @@ namespace TaskServices.Application.Features.Commands.SubIssues
         public int? StoryPoint { get; set; }
         public int? StatusId { get; set; }
         public int? IssueId { get; set; }
+        public int? UserId { get; set; }
         public DateTimeOffset? StartDate { get; set; }
         public DateTimeOffset? DueDate { get; set; }
         public List<IFormFile>? Files { get; set; }
         public ICollection<Attachment>? Attachments { get; set; }
-        public ICollection<UserIssue>? UserIssues { get; set; }
         public string? UpdatedBy { get; set; }
     }
     public class SubIssueUpdatedEvent : BaseEvent

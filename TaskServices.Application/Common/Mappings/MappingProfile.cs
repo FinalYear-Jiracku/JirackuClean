@@ -17,22 +17,22 @@ namespace TaskServices.Application.Common.Mappings
             CreateMap<Issue, IssueDTO>().ForMember(dest => dest.Status, opt => opt.MapFrom(src => src.Status))
                                         .ForMember(dest => dest.Sprint, opt => opt.MapFrom(src => src.Sprint))
                                         .ForMember(dest => dest.SubIssues, opt => opt.MapFrom(src => src.SubIssues.Count()))
-                                        .ForMember(dest => dest.UserIssues, opt => opt.MapFrom(src => src.UserIssues))
+                                        .ForMember(dest => dest.User, opt => opt.MapFrom(src => src.User))
                                         .ReverseMap();
             CreateMap<Issue, DataIssueDTO>().ForMember(dest => dest.Status, opt => opt.MapFrom(src => src.Status))
                                             .ForMember(dest => dest.Sprint, opt => opt.MapFrom(src => src.Sprint))
                                             .ForMember(dest => dest.Attachments, opt => opt.MapFrom(src => src.Attachments))
                                             .ForMember(dest => dest.SubIssues, opt => opt.MapFrom(src => src.SubIssues))
                                             .ForMember(dest => dest.Comments, opt => opt.MapFrom(src => src.Comments))
-                                            .ForMember(dest => dest.UserIssues, opt => opt.MapFrom(src => src.UserIssues))
+                                            .ForMember(dest => dest.User, opt => opt.MapFrom(src => src.User))
                                             .ReverseMap();
-            CreateMap<SubIssue, SubIssueDTO>().ForMember(dest => dest.Status, opt => opt.MapFrom(src => src.Status.Name))
-                                              .ForMember(dest => dest.UserSubIssues, opt => opt.MapFrom(src => src.UserSubIssues))
+            CreateMap<SubIssue, SubIssueDTO>().ForMember(dest => dest.Status, opt => opt.MapFrom(src => src.Status))
+                                              .ForMember(dest => dest.User, opt => opt.MapFrom(src => src.User))
                                               .ReverseMap();
-            CreateMap<SubIssue, DataSubIssueDTO>().ForMember(dest => dest.Status, opt => opt.MapFrom(src => src.Status.Name))
+            CreateMap<SubIssue, DataSubIssueDTO>().ForMember(dest => dest.Status, opt => opt.MapFrom(src => src.Status))
                                                   .ForMember(dest => dest.Attachments, opt => opt.MapFrom(src => src.Attachments))
                                                   .ForMember(dest => dest.Comments, opt => opt.MapFrom(src => src.Comments))
-                                                  .ForMember(dest => dest.UserSubIssues, opt => opt.MapFrom(src => src.UserSubIssues))
+                                                  .ForMember(dest => dest.User, opt => opt.MapFrom(src => src.User))
                                                   .ReverseMap();
             CreateMap<Column, ColumnDTO>().ReverseMap();
             CreateMap<Column, DataColumnDTO>().ForMember(dest => dest.Notes, opt => opt.MapFrom(src => src.Notes)).ReverseMap();
@@ -40,6 +40,7 @@ namespace TaskServices.Application.Common.Mappings
             CreateMap<Comment, CommentDTO>().ReverseMap();
             CreateMap<Page, PageDTO>().ReverseMap();
             CreateMap<Attachment, AttachmentDTO>().ReverseMap();
+            CreateMap<User, UserDTO>().ReverseMap();
         }
     }
 }
