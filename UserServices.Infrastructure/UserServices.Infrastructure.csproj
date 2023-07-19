@@ -8,10 +8,12 @@
 
   <ItemGroup>
     <ProjectReference Include="..\UserServices.Application\UserServices.Application.csproj" />
-    <ProjectReference Include="..\UserServices.Persistence\UserServices.Persistence.csproj" />
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="Firebase.Auth" Version="1.0.0" />
+    <PackageReference Include="FirebaseStorage.net" Version="1.0.3" />
+    <PackageReference Include="MediatR" Version="12.1.0" />
     <PackageReference Include="RabbitMQ.Client" Version="6.5.0" />
   </ItemGroup>
 

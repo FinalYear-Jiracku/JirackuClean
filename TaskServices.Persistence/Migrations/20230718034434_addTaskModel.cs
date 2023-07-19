@@ -7,7 +7,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace TaskServices.Persistence.Migrations
 {
     /// <inheritdoc />
-    public partial class AddTaskModel : Migration
+    public partial class addTaskModel : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -39,7 +39,8 @@ namespace TaskServices.Persistence.Migrations
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     Name = table.Column<string>(type: "text", nullable: true),
                     Email = table.Column<string>(type: "text", nullable: true),
-                    Image = table.Column<string>(type: "text", nullable: true)
+                    Image = table.Column<string>(type: "text", nullable: true),
+                    InviteToken = table.Column<string>(type: "text", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -234,6 +235,7 @@ namespace TaskServices.Persistence.Migrations
                     DueDate = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: true),
                     StatusId = table.Column<int>(type: "integer", nullable: true),
                     SprintId = table.Column<int>(type: "integer", nullable: true),
+                    UserId = table.Column<int>(type: "integer", nullable: true),
                     IsDeleted = table.Column<bool>(type: "boolean", nullable: true),
                     CreatedBy = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: true),
                     CreatedAt = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: true),
@@ -255,6 +257,12 @@ namespace TaskServices.Persistence.Migrations
                         principalTable: "Statuses",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Issues_Users_UserId",
+                        column: x => x.UserId,
+                        principalTable: "Users",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.SetNull);
                 });
 
             migrationBuilder.CreateTable(
@@ -273,6 +281,7 @@ namespace TaskServices.Persistence.Migrations
                     DueDate = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: true),
                     StatusId = table.Column<int>(type: "integer", nullable: true),
                     IssueId = table.Column<int>(type: "integer", nullable: true),
+                    UserId = table.Column<int>(type: "integer", nullable: true),
                     IsDeleted = table.Column<bool>(type: "boolean", nullable: true),
                     CreatedBy = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: true),
                     CreatedAt = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: true),
@@ -294,31 +303,12 @@ namespace TaskServices.Persistence.Migrations
                         principalTable: "Statuses",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "UserIssue",
-                columns: table => new
-                {
-                    IssueId = table.Column<int>(type: "integer", nullable: false),
-                    UserId = table.Column<int>(type: "integer", nullable: false),
-                    JoinDate = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_UserIssue", x => new { x.IssueId, x.UserId });
                     table.ForeignKey(
-                        name: "FK_UserIssue_Issues_IssueId",
-                        column: x => x.IssueId,
-                        principalTable: "Issues",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_UserIssue_Users_UserId",
+                        name: "FK_SubIssues_Users_UserId",
                         column: x => x.UserId,
                         principalTable: "Users",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.SetNull);
                 });
 
             migrationBuilder.CreateTable(
@@ -362,6 +352,7 @@ namespace TaskServices.Persistence.Migrations
                     Id = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     Content = table.Column<string>(type: "character varying(1000)", maxLength: 1000, nullable: true),
+                    UserId = table.Column<int>(type: "integer", nullable: true),
                     NoteId = table.Column<int>(type: "integer", nullable: true),
                     IssueId = table.Column<int>(type: "integer", nullable: true),
                     SubIssueId = table.Column<int>(type: "integer", nullable: true),
@@ -392,27 +383,8 @@ namespace TaskServices.Persistence.Migrations
                         principalTable: "SubIssues",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.SetNull);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "UserSubIssue",
-                columns: table => new
-                {
-                    SubIssueId = table.Column<int>(type: "integer", nullable: false),
-                    UserId = table.Column<int>(type: "integer", nullable: false),
-                    JoinDate = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_UserSubIssue", x => new { x.SubIssueId, x.UserId });
                     table.ForeignKey(
-                        name: "FK_UserSubIssue_SubIssues_SubIssueId",
-                        column: x => x.SubIssueId,
-                        principalTable: "SubIssues",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_UserSubIssue_Users_UserId",
+                        name: "FK_Comments_Users_UserId",
                         column: x => x.UserId,
                         principalTable: "Users",
                         principalColumn: "Id",
@@ -450,6 +422,11 @@ namespace TaskServices.Persistence.Migrations
                 column: "SubIssueId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Comments_UserId",
+                table: "Comments",
+                column: "UserId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Issues_SprintId",
                 table: "Issues",
                 column: "SprintId");
@@ -458,6 +435,11 @@ namespace TaskServices.Persistence.Migrations
                 name: "IX_Issues_StatusId",
                 table: "Issues",
                 column: "StatusId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Issues_UserId",
+                table: "Issues",
+                column: "UserId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Notes_ColumnId",
@@ -500,18 +482,13 @@ namespace TaskServices.Persistence.Migrations
                 column: "StatusId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_UserIssue_UserId",
-                table: "UserIssue",
+                name: "IX_SubIssues_UserId",
+                table: "SubIssues",
                 column: "UserId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_UserProject_UserId",
                 table: "UserProject",
-                column: "UserId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_UserSubIssue_UserId",
-                table: "UserSubIssue",
                 column: "UserId");
         }
 
@@ -528,13 +505,7 @@ namespace TaskServices.Persistence.Migrations
                 name: "Pages");
 
             migrationBuilder.DropTable(
-                name: "UserIssue");
-
-            migrationBuilder.DropTable(
                 name: "UserProject");
-
-            migrationBuilder.DropTable(
-                name: "UserSubIssue");
 
             migrationBuilder.DropTable(
                 name: "Notes");
@@ -546,13 +517,13 @@ namespace TaskServices.Persistence.Migrations
                 name: "Columns");
 
             migrationBuilder.DropTable(
-                name: "Users");
-
-            migrationBuilder.DropTable(
                 name: "Issues");
 
             migrationBuilder.DropTable(
                 name: "Statuses");
+
+            migrationBuilder.DropTable(
+                name: "Users");
 
             migrationBuilder.DropTable(
                 name: "Sprints");

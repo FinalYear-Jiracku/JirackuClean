@@ -33,7 +33,7 @@ namespace UserServices.Persistence.Contexts
             if (_dispatcher == null) return result;
 
             // dispatch events only if save was successful
-            var entitiesWithEvents = ChangeTracker.Entries<BaseEntity>()
+            var entitiesWithEvents = ChangeTracker.Entries<BaseEntity>() 
                                     .Select(e => e.Entity)
                                     .Where(e => e.DomainEvents.Any())
                                     .ToArray();

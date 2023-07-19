@@ -19,7 +19,7 @@ namespace UserServices.Domain.Configurations
             builder.Property(x => x.Name).IsRequired(false).HasMaxLength(100);
             builder.Property(x => x.Email).IsRequired(false).HasMaxLength(100);
             builder.Property(x => x.RefreshToken).IsRequired(false).HasMaxLength(100);
-            builder.Property(x => x.Image).IsRequired(false).HasMaxLength(100);
+            builder.Property(x => x.Image).IsRequired(false).HasMaxLength(500);
             builder.Property(x => x.RefreshTokenExpiryTime).IsRequired(false);
             builder.Property(x => x.IsDeleted).IsRequired(false);
             builder.Property(x => x.CreatedAt).IsRequired(false);

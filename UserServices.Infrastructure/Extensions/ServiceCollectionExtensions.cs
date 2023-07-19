@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using UserServices.Application.Interfaces.IServices;
 using UserServices.Domain.Common;
 using UserServices.Domain.Common.Interfaces;
 using UserServices.Infrastructure.Services;
@@ -22,8 +23,9 @@ namespace UserServices.Infrastructure.Extensions
         {
             services.AddScoped<IMediator, Mediator>()
                     .AddScoped<IDomainEventDispatcher, DomainEventDispatcher>()
-                    .AddScoped<IUserEventPublisher,UserEventPublisher>()
-                    .AddSingleton<IRabbitMQManager,RabbitMQManager>();
+                    .AddScoped<IFirebaseService, FirebaseService>()
+                    .AddScoped<IUserEventPublisher, UserEventPublisher>()
+                    .AddSingleton<IRabbitMQManager, RabbitMQManager>();
         }
     }
 }

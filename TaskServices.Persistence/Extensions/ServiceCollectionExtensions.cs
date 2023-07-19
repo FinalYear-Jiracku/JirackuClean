@@ -25,11 +25,6 @@ namespace TaskServices.Persistence.Extensions
             services.AddRepositories();
         }
 
-        public static void PersistenceErrorHandlerMiddleware(this IApplicationBuilder app)
-        {
-            app.UseMiddleware<ErrorHandlerMiddleware>();
-        }
-
         public static void AddDbContext(this IServiceCollection services, IConfiguration configuration)
         {
             var connectionString = configuration.GetConnectionString("DefaultConnection");

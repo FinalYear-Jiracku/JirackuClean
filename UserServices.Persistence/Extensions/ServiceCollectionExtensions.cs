@@ -5,6 +5,7 @@ using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using UserServices.Application.Interfaces;
@@ -21,13 +22,13 @@ namespace UserServices.Persistence.Extensions
     {
         public static void AddPersistenceLayer(this IServiceCollection services, IConfiguration configuration)
         {
+            services.AddMappings();
             services.AddDbContext(configuration);
             services.AddRepositories();
         }
-
-        public static void PersistenceErrorHandlerMiddleware(this IApplicationBuilder app)
+        private static void AddMappings(this IServiceCollection services)
         {
-            app.UseMiddleware<ErrorHandlerMiddleware>();
+            services.AddAutoMapper(Assembly.GetExecutingAssembly());
         }
 
         public static void AddDbContext(this IServiceCollection services, IConfiguration configuration)

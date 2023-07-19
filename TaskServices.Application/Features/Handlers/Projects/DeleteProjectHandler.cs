@@ -27,14 +27,15 @@ namespace TaskServices.Application.Features.Handlers.Projects
         public async Task<int> Handle(DeleteProjectCommand command, CancellationToken cancellationToken)
         {
             var project = await _unitOfWork.ProjectRepository.GetProjectById(command.Id);
-            if(project == null)
+            var findUser = await _unitOfWork.UserRepository.FindUserByEmail(project.CreatedBy);
+            if (project == null)
             {
                 return default;
             }
             project.IsDeleted = true;
             await _unitOfWork.Repository<Project>().UpdateAsync(project);
             await _unitOfWork.Save(cancellationToken);
-            var projects = await _unitOfWork.ProjectRepository.GetProjectList();
+            var projects = await _unitOfWork.ProjectRepository.GetProjectList(findUser.Id);
             var projectsDto = _mapper.Map<List<ProjectDTO>>(projects).ToList();
             var expireTime = DateTimeOffset.Now.AddSeconds(30);
             _cacheService.SetData<List<ProjectDTO>>($"ProjectDTO", projectsDto, expireTime);

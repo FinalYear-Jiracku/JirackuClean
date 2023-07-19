@@ -20,7 +20,6 @@ namespace TaskServices.Application.Features.Commands.Issues
         public int? SprintId { get; set; }
         public DateTimeOffset? StartDate { get; set; }
         public DateTimeOffset? DueDate { get; set; }
-        public ICollection<UserIssue>? UserIssues { get; set; }
         public string? CreatedBy { get; set; }
     }
     public class IssueCreatedEvent : BaseEvent

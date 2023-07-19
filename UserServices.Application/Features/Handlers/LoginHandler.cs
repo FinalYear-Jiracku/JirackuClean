@@ -20,7 +20,6 @@ namespace UserServices.Application.Features.Handlers
     public partial class LoginHandler : IRequestHandler<LoginCommand, AuthResponseDTO>
     {
         private readonly IUnitOfWork _unitOfWork;
-
         private readonly ITokenService _tokenService;
 
         public LoginHandler(IUnitOfWork unitOfWork, ITokenService tokenService)
@@ -38,12 +37,9 @@ namespace UserServices.Application.Features.Handlers
             //var fpt = new Regex("[a-z0-9]+@fpt.edu.vn");
             //var fe = new Regex("[a-z0-9]+@fe.edu.vn");
 
-            //if (!fpt.IsMatch(email) || !fe.IsMatch(email))
+            //if (!fpt.IsMatch(email) && !fe.IsMatch(email))
             //{
-            //    return new AuthResponseDTO()
-            //    {
-            //        ErrorMessage = "Email must be end @fpt.edu.vn or @fe.edu.vn"
-            //    };
+            //    throw new ApplicationException("Email must be end @fpt.edu.vn or @fe.edu.vn");
             //}
 
             var user = await _unitOfWork.UserRepository.FindUser(payload);
@@ -65,8 +61,9 @@ namespace UserServices.Application.Features.Handlers
             var claims = new List<Claim>()
             {
                 new Claim("Id", user.Id.ToString()),
-                new Claim(ClaimTypes.Email, user.Email == null ? "" : user.Email),
-                new Claim(ClaimTypes.Name, user.Name == null ? "" : user.Name),
+                new Claim("Email", user.Email == null ? "" : user.Email),
+                new Claim("Name", user.Name == null ? "" : user.Name),
+                new Claim("Image", user.Image == null ? "" : user.Image)
             };
 
             var accessToken = _tokenService.GenerateAccessToken(claims);

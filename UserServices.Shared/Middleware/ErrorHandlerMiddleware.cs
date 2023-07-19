@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using System.Net;
+using System.Text;
 using System.Text.Json;
 
 namespace UserServices.Shared.Middleware
@@ -21,23 +22,16 @@ namespace UserServices.Shared.Middleware
             {
                 var response = context.Response;
                 response.ContentType = "application/json";
-                var responseModel = ErrorResponse<string>.Fail(error.Message);
                 switch (error)
                 {
                     case ApplicationException e:
-                        // custom application error
                         response.StatusCode = (int)HttpStatusCode.BadRequest;
-                        responseModel.Message = e.Message;
+                        await response.Body.WriteAsync(Encoding.UTF8.GetBytes(e.Message).AsMemory(0, e.Message.Length));
                         break;
                     default:
-                        // unhandled error
                         response.StatusCode = (int)HttpStatusCode.InternalServerError;
-                        responseModel.Message = "Internal Server Error";
                         break;
                 }
-
-                var result = JsonSerializer.Serialize(responseModel);
-                await response.WriteAsync(result);
             }
         }
     }

@@ -26,7 +26,7 @@
         }
       ],
       "UpstreamPathTemplate": "/api/users/refresh",
-      "UpstreamHttpMethod": [  "POST", "OPTIONS" ],
+      "UpstreamHttpMethod": [ "POST", "OPTIONS" ],
       "AuthenticationOptions": {
         "AuthenticationProviderKey": "",
         "AllowedScopes": []
@@ -42,7 +42,71 @@
         }
       ],
       "UpstreamPathTemplate": "/api/users/me",
-      "UpstreamHttpMethod": [ "GET", "POST", "PUT", "OPTIONS" ],
+      "UpstreamHttpMethod": [ "GET", "OPTIONS" ],
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "Bearer",
+        "AllowedScopes": []
+      }
+    },
+    {
+      "DownstreamPathTemplate": "/api/users",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "userservices.webapi",
+          "Port": 80
+        }
+      ],
+      "UpstreamPathTemplate": "/api/users",
+      "UpstreamHttpMethod": [ "PUT", "OPTIONS" ],
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "Bearer",
+        "AllowedScopes": []
+      }
+    },
+    {
+      "DownstreamPathTemplate": "/api/notifications",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "notificationservices.webapi",
+          "Port": 80
+        }
+      ],
+      "UpstreamPathTemplate": "/api/notifications",
+      "UpstreamHttpMethod": [ "POST", "OPTIONS" ],
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "Bearer",
+        "AllowedScopes": []
+      }
+    },
+    {
+      "DownstreamPathTemplate": "/api/users/accept/{inviteToken}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "taskservices.webapi",
+          "Port": 80
+        }
+      ],
+      "UpstreamPathTemplate": "/api/users/accept/{inviteToken}",
+      "UpstreamHttpMethod": [ "GET", "OPTIONS" ],
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "",
+        "AllowedScopes": []
+      }
+    },
+    {
+      "DownstreamPathTemplate": "/api/users/projects/{id}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "taskservices.webapi",
+          "Port": 80
+        }
+      ],
+      "UpstreamPathTemplate": "/api/users/projects/{id}",
+      "UpstreamHttpMethod": [ "GET", "OPTIONS" ],
       "AuthenticationOptions": {
         "AuthenticationProviderKey": "Bearer",
         "AllowedScopes": []

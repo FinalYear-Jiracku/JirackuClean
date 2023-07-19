@@ -1,4 +1,6 @@
-﻿namespace TaskServices.Domain.Entities
+﻿using TaskServices.Domain.Common;
+
+namespace TaskServices.Domain.Entities
 {
     public class UserProject
     {

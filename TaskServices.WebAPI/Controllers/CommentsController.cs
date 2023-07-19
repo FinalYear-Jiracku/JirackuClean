@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using TaskServices.Application.Features.Commands.Comments;
 using TaskServices.Application.Features.Queries.Comments;
+using TaskServices.Application.Features.Queries.Projects;
 
 namespace TaskServices.WebAPI.Controllers
 {
@@ -15,7 +16,20 @@ namespace TaskServices.WebAPI.Controllers
         {
             _mediator = mediator;
         }
-        
+
+        #region GET API
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetCommentDetail(int id)
+        {
+            var comment = await _mediator.Send(new GetCommentByIdQuery(id));
+            if (comment == null)
+            {
+                return StatusCode(400, "Comment Does Not Exist");
+            }
+            return Ok(comment);
+        }
+        #endregion
+
         #region POST API
         [HttpPost]
         public async Task<IActionResult> CreateComment([FromBody] CreateCommentCommand commentCommand)

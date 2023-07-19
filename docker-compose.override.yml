@@ -19,7 +19,7 @@ services:
       - TZ=Asia/Ho_Chi_Minh
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=bao
-      - POSTGRES_MULTIPLE_DATABASES=Task,User
+      - POSTGRES_MULTIPLE_DATABASES=Task,User,Notification
     restart: always
     ports:
       - "5432:5432"
@@ -32,6 +32,7 @@ services:
     depends_on:
     - taskservices.webapi
     - userservices.webapi
+    - notificationservices.webapi
     ports:
     - "4206:80"
 
@@ -40,11 +41,18 @@ services:
     - CONNECTIONSTRINGS__DEFAULTCONNECTION=Server=postgressql; Port=5432; Database=Task; Username=postgres; Password=bao;
     ports:
     - "4202:80"
+
   userservices.webapi:
     environment:
     - CONNECTIONSTRINGS__DEFAULTCONNECTION=Server=postgressql; Port=5432; Database=User; Username=postgres; Password=bao;
     ports:
     - "4203:80"
+
+  notificationservices.webapi:
+    environment:
+    - CONNECTIONSTRINGS__DEFAULTCONNECTION=Server=postgressql; Port=5432; Database=Notification; Username=postgres; Password=bao;
+    ports:
+    - "4204:80"
 
 volumes:
   postgres_data:

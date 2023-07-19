@@ -38,14 +38,14 @@ namespace UserServices.Persistence.Repositories.Services
                 issuer: _configuration["Jwt:Issuer"],
                 audience: _configuration["Jwt:Audience"],
                 claims: claims,
-                expires: DateTime.UtcNow.AddSeconds(20),
+                expires: DateTime.UtcNow.AddHours(1),
                 signingCredentials: signinCredentials
             );
             var tokenString = new JwtSecurityTokenHandler().WriteToken(tokeOptions);
             return tokenString;
         }
 
-        public ClaimsPrincipal? GetPrincipalFromExpiredToken(string token)
+        public async Task<ClaimsPrincipal?> GetPrincipalFromExpiredToken(string token)
         {
             var tokenValidationParameters = new TokenValidationParameters
             {
@@ -62,5 +62,6 @@ namespace UserServices.Persistence.Repositories.Services
                 throw new SecurityTokenException("Invalid token");
             return principal;
         }
+
     }
 }

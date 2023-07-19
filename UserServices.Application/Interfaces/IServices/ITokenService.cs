@@ -11,6 +11,6 @@ namespace UserServices.Application.Interfaces.IServices
     {
         string GenerateRefreshToken();
         string GenerateAccessToken(IEnumerable<Claim> claims);
-        ClaimsPrincipal? GetPrincipalFromExpiredToken(string token);
+        Task<ClaimsPrincipal?> GetPrincipalFromExpiredToken(string token);
     }
 }

@@ -1,5 +1,6 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 using TaskServices.Application.DTOs;
 using TaskServices.Application.Features.Commands.Projects;
 using TaskServices.Application.Features.Queries.Projects;   
@@ -25,8 +26,11 @@ namespace TaskServices.WebAPI.Controllers
         [HttpGet]
         public async Task<IActionResult> GetProjectList([FromQuery] PaginationFilter filter)
         {
+            var claimsIdentity = (ClaimsIdentity)User.Identity;
+            var claim = claimsIdentity.Claims.FirstOrDefault(c => c.Type == "Email");
+            var email = claim.Subject.Claims.ToList()[1].Value;
             var route = Request.Path.Value;
-            var projectList = await _mediator.Send(new GetProjectListQuery(filter));
+            var projectList = await _mediator.Send(new GetProjectListQuery(filter, email));
             var pagedResponse = PaginationHelper.CreatePagedReponse<ProjectDTO>(projectList.Item1, projectList.Item2, projectList.Item3, _uriService, route);
             return Ok(pagedResponse);
         }

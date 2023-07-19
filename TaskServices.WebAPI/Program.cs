@@ -58,7 +58,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-app.PersistenceErrorHandlerMiddleware();
+app.UseMiddleware<ErrorHandlerMiddleware>();
 
 app.UseRouting();
 

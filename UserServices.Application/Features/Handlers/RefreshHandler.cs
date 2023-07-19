@@ -29,49 +29,31 @@ namespace UserServices.Application.Features.Handlers
 
         public async Task<AuthResponseDTO> Handle(RefreshCommand command, CancellationToken cancellationToken)
         {
-            if (command is null)
+            if (command.AccessToken == null || command.RefreshToken == null || command.AccessToken == "" || command.RefreshToken == "")
             {
-                return new AuthResponseDTO()
-                {
-                    ErrorMessage = "Invalid client request"
-                };
+                throw new ApplicationException("Invalid client request");
             }
 
             string? accessToken = command.AccessToken;
             string? refreshToken = command.RefreshToken;
 
-            var principal = _tokenService.GetPrincipalFromExpiredToken(accessToken);
-            if (principal == null)
-            {
-                return new AuthResponseDTO()
-                {
-                    ErrorMessage = "Invalid access token or refresh token"
-                };
-            }
+            var principal = await _tokenService.GetPrincipalFromExpiredToken(accessToken);
 
-            //var email = (principal.Claims.FirstOrDefault(c => c.Type == "Email").Value);
-            //if(email == null)
-            //{
-            //    return new AuthResponseDTO()
-            //    {
-            //        ErrorMessage = "Email is null"
-            //    };
-            //}
+            var email = principal.Claims.FirstOrDefault(c => c.Type == "Email").Value;
+            if (email == null)
+            {
+                throw new ApplicationException("Invalid Email");
+            }
 
             var userId = principal.Claims.FirstOrDefault(c => c.Type == "Id").Value;
             var user = await _unitOfWork.UserRepository.FindUserById(Int32.Parse(userId));
             if (user == null || user.RefreshToken != refreshToken || user.RefreshTokenExpiryTime <= DateTime.UtcNow)
             {
-                return new AuthResponseDTO()
-                {
-                    ErrorMessage = "User Not Found"
-                };
+                throw new ApplicationException("User Not Found");
             }
 
             var newAccessToken = _tokenService.GenerateAccessToken(principal.Claims);
-            var newRefreshToken = _tokenService.GenerateRefreshToken();
 
-            user.RefreshToken = newRefreshToken;
             user.RefreshTokenExpiryTime = DateTime.UtcNow.AddDays(7);
             await _unitOfWork.Repository<User>().UpdateAsync(user);
             await _unitOfWork.Save(cancellationToken);
@@ -79,7 +61,6 @@ namespace UserServices.Application.Features.Handlers
             return new AuthResponseDTO()
             {
                 AccessToken = newAccessToken,
-                RefreshToken = newRefreshToken
             };
         }
     }

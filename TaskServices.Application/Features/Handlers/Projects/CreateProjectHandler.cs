@@ -10,6 +10,7 @@ using TaskServices.Application.DTOs;
 using TaskServices.Application.Features.Commands.Projects;
 using TaskServices.Application.Interfaces;
 using TaskServices.Application.Interfaces.IServices;
+using TaskServices.Domain.Common.Interfaces;
 using TaskServices.Domain.Entities;
 using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
@@ -36,7 +37,18 @@ namespace TaskServices.Application.Features.Handlers.Projects
             await _unitOfWork.Repository<Project>().AddAsync(newProject);
             newProject.AddDomainEvent(new ProjectCreatedEvent(newProject));
             await _unitOfWork.Save(cancellationToken);
-            var projects = await _unitOfWork.ProjectRepository.GetProjectList();
+
+            var findProject = await _unitOfWork.ProjectRepository.GetProjectById(newProject.Id);
+            var findUser = await _unitOfWork.UserRepository.FindUserByEmail(command.CreatedBy);
+
+            var userProject = new UserProject()
+            {
+                UserId = findUser.Id,
+                ProjectId = findProject.Id
+            };
+            await _unitOfWork.UserRepository.UpdateUserProject(userProject);
+
+            var projects = await _unitOfWork.ProjectRepository.GetProjectList(findUser.Id);
             var projectsDto = _mapper.Map<List<ProjectDTO>>(projects);
             var expireTime = DateTimeOffset.Now.AddSeconds(30);
             _cacheService.SetData<List<ProjectDTO>>($"ProjectDTO", projectsDto, expireTime);

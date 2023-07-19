@@ -12,7 +12,7 @@ namespace TaskServices.Application.Interfaces
 {
     public interface IProjectRepository
     {
-        Task<List<Project>> GetProjectList();
+        Task<List<Project>> GetProjectList(int userId);
         Task<Project> GetProjectById(int id);
         Task<bool> CheckProjectName(CheckProjectNameQuery project);
     }

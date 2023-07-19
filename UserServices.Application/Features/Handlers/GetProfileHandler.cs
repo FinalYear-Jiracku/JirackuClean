@@ -25,7 +25,7 @@ namespace UserServices.Application.Features.Handlers
             var user = await _unitOfWork.UserRepository.FindUserById(queries.Id);
             if (user == null)
             {
-                return null;
+                throw new ApplicationException("User Not Found");
             }
             var userDTO = _mapper.Map<UserDTO>(user);
             return userDTO;

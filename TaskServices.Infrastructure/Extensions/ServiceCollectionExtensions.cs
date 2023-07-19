@@ -26,6 +26,7 @@ namespace TaskServices.Infrastructure.Extensions
                     .AddScoped<IDomainEventDispatcher, DomainEventDispatcher>()
                     .AddScoped<IFirebaseService, FireBaseService>()
                     .AddScoped<IUserEventSubscriber, UserEventSubscriber>()
+                    .AddScoped<INotificationEventSubcriber, NotificationEventSubcriber>()
                     .AddSingleton<IRabbitMQManager, RabbitMQManager>();
         }
     }

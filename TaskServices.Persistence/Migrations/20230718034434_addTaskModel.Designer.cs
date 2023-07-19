@@ -12,8 +12,8 @@ using TaskServices.Persistence.Contexts;
 namespace TaskServices.Persistence.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20230703142804_AddTaskModel")]
-    partial class AddTaskModel
+    [Migration("20230718034434_addTaskModel")]
+    partial class addTaskModel
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -158,6 +158,9 @@ namespace TaskServices.Persistence.Migrations
                         .HasMaxLength(100)
                         .HasColumnType("character varying(100)");
 
+                    b.Property<int?>("UserId")
+                        .HasColumnType("integer");
+
                     b.HasKey("Id");
 
                     b.HasIndex("IssueId");
@@ -165,6 +168,8 @@ namespace TaskServices.Persistence.Migrations
                     b.HasIndex("NoteId");
 
                     b.HasIndex("SubIssueId");
+
+                    b.HasIndex("UserId");
 
                     b.ToTable("Comments", (string)null);
                 });
@@ -226,11 +231,16 @@ namespace TaskServices.Persistence.Migrations
                         .HasMaxLength(100)
                         .HasColumnType("character varying(100)");
 
+                    b.Property<int?>("UserId")
+                        .HasColumnType("integer");
+
                     b.HasKey("Id");
 
                     b.HasIndex("SprintId");
 
                     b.HasIndex("StatusId");
+
+                    b.HasIndex("UserId");
 
                     b.ToTable("Issues", (string)null);
                 });
@@ -518,11 +528,16 @@ namespace TaskServices.Persistence.Migrations
                         .HasMaxLength(100)
                         .HasColumnType("character varying(100)");
 
+                    b.Property<int?>("UserId")
+                        .HasColumnType("integer");
+
                     b.HasKey("Id");
 
                     b.HasIndex("IssueId");
 
                     b.HasIndex("StatusId");
+
+                    b.HasIndex("UserId");
 
                     b.ToTable("SubIssues", (string)null);
                 });
@@ -541,30 +556,15 @@ namespace TaskServices.Persistence.Migrations
                     b.Property<string>("Image")
                         .HasColumnType("text");
 
+                    b.Property<string>("InviteToken")
+                        .HasColumnType("text");
+
                     b.Property<string>("Name")
                         .HasColumnType("text");
 
                     b.HasKey("Id");
 
                     b.ToTable("Users");
-                });
-
-            modelBuilder.Entity("TaskServices.Domain.Entities.UserIssue", b =>
-                {
-                    b.Property<int>("IssueId")
-                        .HasColumnType("integer");
-
-                    b.Property<int>("UserId")
-                        .HasColumnType("integer");
-
-                    b.Property<DateTimeOffset?>("JoinDate")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.HasKey("IssueId", "UserId");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("UserIssue", (string)null);
                 });
 
             modelBuilder.Entity("TaskServices.Domain.Entities.UserProject", b =>
@@ -583,24 +583,6 @@ namespace TaskServices.Persistence.Migrations
                     b.HasIndex("UserId");
 
                     b.ToTable("UserProject", (string)null);
-                });
-
-            modelBuilder.Entity("TaskServices.Domain.Entities.UserSubIssue", b =>
-                {
-                    b.Property<int>("SubIssueId")
-                        .HasColumnType("integer");
-
-                    b.Property<int>("UserId")
-                        .HasColumnType("integer");
-
-                    b.Property<DateTimeOffset?>("JoinDate")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.HasKey("SubIssueId", "UserId");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("UserSubIssue", (string)null);
                 });
 
             modelBuilder.Entity("TaskServices.Domain.Entities.Attachment", b =>
@@ -647,11 +629,18 @@ namespace TaskServices.Persistence.Migrations
                         .HasForeignKey("SubIssueId")
                         .OnDelete(DeleteBehavior.SetNull);
 
+                    b.HasOne("TaskServices.Domain.Entities.User", "User")
+                        .WithMany("Comments")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
                     b.Navigation("Issue");
 
                     b.Navigation("Note");
 
                     b.Navigation("SubIssue");
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("TaskServices.Domain.Entities.Issue", b =>
@@ -666,9 +655,16 @@ namespace TaskServices.Persistence.Migrations
                         .HasForeignKey("StatusId")
                         .OnDelete(DeleteBehavior.Cascade);
 
+                    b.HasOne("TaskServices.Domain.Entities.User", "User")
+                        .WithMany("Issues")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.SetNull);
+
                     b.Navigation("Sprint");
 
                     b.Navigation("Status");
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("TaskServices.Domain.Entities.Note", b =>
@@ -737,26 +733,14 @@ namespace TaskServices.Persistence.Migrations
                         .HasForeignKey("StatusId")
                         .OnDelete(DeleteBehavior.Cascade);
 
+                    b.HasOne("TaskServices.Domain.Entities.User", "User")
+                        .WithMany("SubIssues")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.SetNull);
+
                     b.Navigation("Issue");
 
                     b.Navigation("Status");
-                });
-
-            modelBuilder.Entity("TaskServices.Domain.Entities.UserIssue", b =>
-                {
-                    b.HasOne("TaskServices.Domain.Entities.Issue", "Issue")
-                        .WithMany("UserIssues")
-                        .HasForeignKey("IssueId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("TaskServices.Domain.Entities.User", "User")
-                        .WithMany("UserIssues")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Issue");
 
                     b.Navigation("User");
                 });
@@ -780,25 +764,6 @@ namespace TaskServices.Persistence.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("TaskServices.Domain.Entities.UserSubIssue", b =>
-                {
-                    b.HasOne("TaskServices.Domain.Entities.SubIssue", "SubIssue")
-                        .WithMany("UserSubIssues")
-                        .HasForeignKey("SubIssueId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("TaskServices.Domain.Entities.User", "User")
-                        .WithMany("UserSubIssues")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("SubIssue");
-
-                    b.Navigation("User");
-                });
-
             modelBuilder.Entity("TaskServices.Domain.Entities.Column", b =>
                 {
                     b.Navigation("Notes");
@@ -811,8 +776,6 @@ namespace TaskServices.Persistence.Migrations
                     b.Navigation("Comments");
 
                     b.Navigation("SubIssues");
-
-                    b.Navigation("UserIssues");
                 });
 
             modelBuilder.Entity("TaskServices.Domain.Entities.Note", b =>
@@ -850,21 +813,21 @@ namespace TaskServices.Persistence.Migrations
                     b.Navigation("Attachments");
 
                     b.Navigation("Comments");
-
-                    b.Navigation("UserSubIssues");
                 });
 
             modelBuilder.Entity("TaskServices.Domain.Entities.User", b =>
                 {
+                    b.Navigation("Comments");
+
+                    b.Navigation("Issues");
+
                     b.Navigation("Notes");
 
                     b.Navigation("Pages");
 
-                    b.Navigation("UserIssues");
+                    b.Navigation("SubIssues");
 
                     b.Navigation("UserProjects");
-
-                    b.Navigation("UserSubIssues");
                 });
 #pragma warning restore 612, 618
         }

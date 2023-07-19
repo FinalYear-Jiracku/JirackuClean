@@ -35,8 +35,6 @@ namespace TaskServices.Persistence.Contexts
             modelBuilder.ApplyConfiguration(new StatusConfiguration());
             modelBuilder.ApplyConfiguration(new SubIssueConfiguration());
             modelBuilder.ApplyConfiguration(new UserProjectConfiguration());
-            modelBuilder.ApplyConfiguration(new UserIssueConfiguration());
-            modelBuilder.ApplyConfiguration(new UserSubIssueConfiguration());
         }
         public DbSet<Attachment> Attachments { get; set; }
         public DbSet<Column> Columns { get; set; }
@@ -49,9 +47,7 @@ namespace TaskServices.Persistence.Contexts
         public DbSet<Status> Statuses { get; set; }
         public DbSet<SubIssue> SubIssues { get; set; }
         public DbSet<User> Users { get; set; }
-        public DbSet<UserProject> UserProjects { get; set; }
-        public DbSet<UserIssue> UserIssues { get; set; }
-        public DbSet<UserSubIssue> UserSubIssues { get; set; }
+        public DbSet<UserProject> UserProject { get; set; }
 
         public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = new CancellationToken())
         {

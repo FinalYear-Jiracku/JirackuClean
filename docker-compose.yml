@@ -29,3 +29,8 @@ services:
     build:
       context: .
       dockerfile: UserServices.WebAPI/Dockerfile
+  notificationservices.webapi:
+    image: ${DOCKER_REGISTRY-}notificationserviceswebapi
+    build:
+      context: .
+      dockerfile: NotificationServices.WebAPI/Dockerfile

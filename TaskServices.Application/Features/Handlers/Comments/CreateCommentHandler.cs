@@ -22,6 +22,7 @@ namespace TaskServices.Application.Features.Handlers.Comments
             var newComment = new Comment()
             {
                 Content = command.Content,
+                UserId = command.UserId,
                 CreatedBy = command.CreatedBy,
             }; ;
             if(command.IssueId != null)

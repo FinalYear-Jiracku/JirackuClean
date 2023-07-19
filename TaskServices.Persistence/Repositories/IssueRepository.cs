@@ -107,13 +107,23 @@ namespace TaskServices.Persistence.Repositories
         #region Get Services
         public async Task<Issue> GetIssueById(int id)
         {
-            var issue = await _dbContext.Issues.Include(x => x.Sprint).Include(x => x.Status).Include(x => x.SubIssues.Where(x => x.IsDeleted == false)).Include(x => x.Comments.Where(x => x.IsDeleted == false)).Include(x=>x.Attachments).FirstOrDefaultAsync(x => x.IsDeleted == false && x.Id == id);
+            var issue = await _dbContext.Issues
+                             .Include(x => x.User)
+                             .Include(x => x.Sprint)
+                             .Include(x => x.Status)
+                             .Include(x => x.Comments.Where(x => x.IsDeleted == false))
+                             .Include(x => x.Attachments)
+                             .Include(x => x.SubIssues.Where(x => x.IsDeleted == false))
+                             .ThenInclude(sub => sub.User)
+                             .Include(x => x.SubIssues.Where(x => x.IsDeleted == false))
+                             .ThenInclude(sub => sub.Status)
+                             .FirstOrDefaultAsync(x => x.IsDeleted == false && x.Id == id);
             return  issue == null ? null : issue;
         }
 
         public async Task<List<Issue>> GetIssueListBySprintId(int? sprintId)
         {
-            return await _dbContext.Issues.Where(x => x.IsDeleted == false && x.SprintId == sprintId).Include(x=>x.Sprint).Include(x=>x.Status).Include(x => x.SubIssues.Where(x => x.IsDeleted == false)).ToListAsync();
+            return await _dbContext.Issues.Where(x => x.IsDeleted == false && x.SprintId == sprintId).Include(x => x.User).Include(x=>x.Sprint).Include(x=>x.Status).Include(x => x.SubIssues.Where(x => x.IsDeleted == false)).ToListAsync();
         }
 
         public async Task<List<Issue>> IssueNotCompleted(int? sprintId)

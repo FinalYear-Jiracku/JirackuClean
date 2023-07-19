@@ -13,9 +13,11 @@ namespace TaskServices.Application.Features.Queries.Projects
     public class GetProjectListQuery : IRequest<(List<ProjectDTO>, PaginationFilter, int)>
     {
         public PaginationFilter? Filter { get; set; }
-        public GetProjectListQuery(PaginationFilter filter)
+        public string? Email { get; set; }
+        public GetProjectListQuery(PaginationFilter filter, string? email)
         {
             Filter = filter;
+            Email = email;
         }
     }
 }

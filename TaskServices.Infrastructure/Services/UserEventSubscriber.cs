@@ -62,7 +62,6 @@ namespace TaskServices.Infrastructure.Services
 
                 var user = new User
                 {
-                    Id = userEvent?.User.Id,
                     Name = userEvent?.User.Name,
                     Email = userEvent?.User.Email,
                     Image = userEvent?.User.Image,

@@ -17,8 +17,8 @@ namespace TaskServices.Domain.Entities
         public int? IssueId { get; set; }
         public Status? Status { get; set; }
         public Issue? Issue { get; set; }
+        public User? User { get; set; }
         public ICollection<Attachment>? Attachments { get; set; }
         public ICollection<Comment>? Comments { get; set; }
-        public ICollection<UserSubIssue>? UserSubIssues { get; set; }
     }
 }

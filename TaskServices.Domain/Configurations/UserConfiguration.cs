@@ -14,6 +14,7 @@ namespace TaskServices.Domain.Configurations
             builder.Property(x => x.Name).IsRequired(false).HasMaxLength(100);
             builder.Property(x => x.Email).IsRequired(false).HasMaxLength(100);
             builder.Property(x => x.Image).IsRequired(false).HasMaxLength(100);
+            builder.Property(x => x.InviteToken).IsRequired(false).HasMaxLength(200);
         }
     }
 }

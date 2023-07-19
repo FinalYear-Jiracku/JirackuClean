@@ -38,8 +38,8 @@ namespace UserServices.Persistence.Migrations
                         .HasColumnType("character varying(100)");
 
                     b.Property<string>("Image")
-                        .HasMaxLength(100)
-                        .HasColumnType("character varying(100)");
+                        .HasMaxLength(500)
+                        .HasColumnType("character varying(500)");
 
                     b.Property<bool?>("IsDeleted")
                         .HasColumnType("boolean");
