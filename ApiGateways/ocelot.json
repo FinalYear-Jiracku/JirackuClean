@@ -80,6 +80,7 @@
         "AllowedScopes": []
       }
     },
+    
     {
       "DownstreamPathTemplate": "/api/users/accept/{inviteToken}",
       "DownstreamScheme": "http",
@@ -397,6 +398,22 @@
       "UpstreamHttpMethod": [ "GET", "PUT", "DELETE", "PATCH", "OPTIONS" ],
       "AuthenticationOptions": {
         "AuthenticationProviderKey": "Bearer",
+        "AllowedScopes": []
+      }
+    },
+    {
+      "DownstreamPathTemplate": "/notificationHub",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "notificationservices.webapi",
+          "Port": 80
+        }
+      ],
+      "UpstreamPathTemplate": "/notificationHub",
+      "UpstreamHttpMethod": [ "GET", "POST", "OPTIONS" ],
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "",
         "AllowedScopes": []
       }
     }

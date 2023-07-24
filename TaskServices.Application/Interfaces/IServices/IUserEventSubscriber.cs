@@ -1,4 +1,4 @@
-﻿namespace TaskServices.Domain.Common.Interfaces
+﻿namespace TaskServices.Application.Interfaces.IServices
 {
     public interface IUserEventSubscriber
     {

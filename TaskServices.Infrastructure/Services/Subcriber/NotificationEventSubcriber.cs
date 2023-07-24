@@ -11,7 +11,7 @@ using TaskServices.Application.Interfaces;
 using TaskServices.Domain.Entities;
 using Newtonsoft.Json;
 
-namespace TaskServices.Infrastructure.Services
+namespace TaskServices.Infrastructure.Services.Subcriber
 {
     public class NotificationEventSubcriber : INotificationEventSubcriber
     {

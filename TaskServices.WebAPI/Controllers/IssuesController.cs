@@ -42,6 +42,14 @@ namespace TaskServices.WebAPI.Controllers
         }
 
         [HttpGet]
+        [Route("deadline")]
+        public async Task<IActionResult> CheckDeadline()
+        {
+            var issueList = await _mediator.Send(new CheckDeadlineIssueQuery());
+            return Ok(issueList);
+        }
+
+        [HttpGet]
         [Route("count/sprints/{id}")]
         public async Task<IActionResult> CountIssueNotCompleted(int id)
         {

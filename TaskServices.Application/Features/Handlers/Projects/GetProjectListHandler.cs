@@ -38,13 +38,13 @@ namespace TaskServices.Application.Features.Handlers.Projects
             var findUser = await _unitOfWork.UserRepository.FindUserByEmail(query.Email);
             var validFilter = new PaginationFilter(query.Filter.PageNumber, query.Filter.PageSize, query.Filter.Search, query.Filter.Type, query.Filter.Priority, query.Filter.StatusId, query.Filter.UserId);
             
-            var cacheData = _cacheService.GetData<List<ProjectDTO>>($"ProjectDTO");
+            var cacheData = _cacheService.GetData<List<ProjectDTO>>($"ProjectDTO:{findUser.Email}");
             if(cacheData == null)
             {
                 var projects = await _unitOfWork.ProjectRepository.GetProjectList(findUser.Id);
                 cacheData = _mapper.Map<List<ProjectDTO>>(projects);
                 var expireTime = DateTimeOffset.Now.AddSeconds(30);
-                _cacheService.SetData<List<ProjectDTO>>($"ProjectDTO", cacheData, expireTime);
+                _cacheService.SetData<List<ProjectDTO>>($"ProjectDTO:{findUser.Email}", cacheData, expireTime);
             }
             var projectsDto = cacheData;
             if (!String.IsNullOrEmpty(query.Filter.Search))

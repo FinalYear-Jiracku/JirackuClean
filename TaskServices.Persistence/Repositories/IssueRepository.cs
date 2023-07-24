@@ -130,6 +130,12 @@ namespace TaskServices.Persistence.Repositories
         {
             return await _dbContext.Issues.Include(x => x.Status).Include(x => x.SubIssues.Where(x => x.IsDeleted == false)).Where(x => x.IsDeleted == false && x.SprintId == sprintId && x.Status.Name != "Completed").ToListAsync();
         }
+
+        public async Task<List<Issue>> CheckDeadline(DateTimeOffset dateTimeOffset)
+        {
+            var issues = await _dbContext.Issues.Include(x=>x.User).Where(x => x.DueDate < dateTimeOffset).ToListAsync();
+            return issues == null ? null : issues;
+        }
         #endregion
     }
 }

@@ -26,7 +26,7 @@ namespace NotificationServices.Application.Features.Handlers
                 Body = command.Body,
                 ProjectId = command.ProjectId
             };
-            _emailService.SendEmail(emailDTO);
+           await _emailService.SendEmailInvite(emailDTO);
             return await Task.FromResult(0);
         }
     }

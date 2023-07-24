@@ -8,8 +8,15 @@
 
   <ItemGroup>
     <Folder Include="Contexts\" />
-    <Folder Include="Extensions\" />
     <Folder Include="Repositories\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="7.0.4" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\NotificationServices.Application\NotificationServices.Application.csproj" />
   </ItemGroup>
 
 </Project>

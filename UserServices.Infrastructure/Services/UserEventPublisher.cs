@@ -15,6 +15,7 @@ namespace UserServices.Infrastructure.Services
         private readonly IRabbitMQManager _rabbitMQManager;
         private IModel _channel;
         private const string ExchangeName = "user_exchange";
+        private const string QueueName = "users";
 
         public UserEventPublisher(IRabbitMQManager rabbitMQManager)
         {
@@ -30,12 +31,11 @@ namespace UserServices.Infrastructure.Services
 
         public void SendMessage(BaseEvent @event)
         {
-            _channel.QueueDeclare("users", true, false, false, null);
             _channel.ExchangeDeclare(ExchangeName, ExchangeType.Fanout);
-            _channel.QueueBind("users", ExchangeName, "");
-
+            _channel.QueueDeclare(QueueName, false, false, false, null);
+            _channel.QueueBind(QueueName, ExchangeName, "");
             var body = Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(@event));
-            _channel.BasicPublish(ExchangeName, "users", null, body);
+            _channel.BasicPublish(ExchangeName, QueueName, null, body);
         }
     }
 }

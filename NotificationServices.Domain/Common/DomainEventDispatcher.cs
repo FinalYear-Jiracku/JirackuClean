@@ -13,7 +13,8 @@ namespace NotificationServices.Domain.Common
         private readonly IMediator _mediator;
         private readonly INotificationEventPulisher _notificationEventPulisher;
 
-        public DomainEventDispatcher(IMediator mediator, INotificationEventPulisher notificationEventPulisher)
+        public DomainEventDispatcher(IMediator mediator,
+               INotificationEventPulisher notificationEventPulisher)
         {
             _mediator = mediator;
             _notificationEventPulisher = notificationEventPulisher;
@@ -30,7 +31,6 @@ namespace NotificationServices.Domain.Common
                 foreach (var domainEvent in events)
                 {
                     await _mediator.Publish(domainEvent).ConfigureAwait(false);
-                    //_notificationEventPulisher.SendMessage(domainEvent);
                 }
             }
         }

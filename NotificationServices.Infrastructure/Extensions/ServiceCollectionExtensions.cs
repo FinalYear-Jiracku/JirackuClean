@@ -1,13 +1,11 @@
 ﻿using MediatR;
 using Microsoft.Extensions.DependencyInjection;
 using NotificationServices.Application.Interfaces.IServices;
+using NotificationServices.Domain.Common;
 using NotificationServices.Domain.Common.Interfaces;
 using NotificationServices.Infrastructure.Services;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using NotificationServices.Infrastructure.Services.Publisher;
+using NotificationServices.Infrastructure.Services.Subcriber;
 
 namespace NotificationServices.Infrastructure.Extensions
 {
@@ -17,12 +15,15 @@ namespace NotificationServices.Infrastructure.Extensions
         {
             services.AddServices();
         }
-
+        
         private static void AddServices(this IServiceCollection services)
         {
             services.AddScoped<IMediator, Mediator>()
-                    .AddScoped<IEmailService, EmailService>()
-                    .AddScoped<INotificationEventPulisher, NotificationEventPublisher>()
+                    .AddScoped<IDomainEventDispatcher, DomainEventDispatcher>()
+                    .AddTransient<IEmailService, EmailService>()
+                    .AddTransient<INotificationEventPulisher, NotificationEventPublisher>()
+                    .AddHostedService<CheckDeadlineSubIssueEventSubcriber>()
+                    .AddHostedService<CheckDeadlineIssueEventSubcriber>()
                     .AddSingleton<IRabbitMQManager, RabbitMQManager>();
         }
     }
