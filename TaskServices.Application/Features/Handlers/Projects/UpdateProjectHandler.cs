@@ -44,7 +44,7 @@ namespace TaskServices.Application.Features.Handlers.Projects
             var projects = await _unitOfWork.ProjectRepository.GetProjectList(findUser.Id);
             var projectsDto = _mapper.Map<List<ProjectDTO>>(projects).ToList();
             var expireTime = DateTimeOffset.Now.AddSeconds(30);
-            _cacheService.SetData<List<ProjectDTO>>($"ProjectDTO", projectsDto, expireTime);
+            _cacheService.SetData<List<ProjectDTO>>($"ProjectDTO:{findUser.Email}", projectsDto, expireTime);
             return await Task.FromResult(0);
         }
     }

@@ -9,16 +9,15 @@ using System.Threading.Tasks;
 
 namespace NotificationServices.Domain.Configurations
 {
-    public class EmailLogConfiguration : IEntityTypeConfiguration<EmailLog>
+    public class NotificationConfiguration : IEntityTypeConfiguration<Notification>
     {
-        public void Configure(EntityTypeBuilder<EmailLog> builder)
+        public void Configure(EntityTypeBuilder<Notification> builder)
         {
-            builder.ToTable("EmailLogs");
+            builder.ToTable("Notification");
             builder.HasKey(x => x.Id);
             builder.Property(x => x.Id).UseIdentityColumn();
-            builder.Property(x => x.Email).IsRequired(false).HasMaxLength(100);
-            builder.Property(x => x.Log).IsRequired(false).HasMaxLength(2000);
-            builder.Property(x => x.EmailSent).IsRequired(false);
+            builder.Property(x => x.Content).IsRequired(false).HasMaxLength(1000);
+            builder.Property(x => x.CreatedAt).IsRequired(false);
         }
     }
 }

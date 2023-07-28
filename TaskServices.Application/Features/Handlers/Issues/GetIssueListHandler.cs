@@ -31,13 +31,13 @@ namespace TaskServices.Application.Features.Handlers.Issues
         public async Task<(List<IssueDTO>, PaginationFilter, int)> Handle(GetIssueListQuery query, CancellationToken cancellationToken)
         {
             var validFilter = new PaginationFilter(query.Filter.PageNumber, query.Filter.PageSize, query.Filter.Search, query.Filter.Type, query.Filter.Priority, query.Filter.StatusId, query.Filter.UserId);
-            var cacheData = _cacheService.GetData<List<IssueDTO>>($"IssueDTO?sprintId={query.Id}&pageNumber={query.Filter.PageNumber}&search={query.Filter.Search}");
+            //var cacheData = _cacheService.GetData<List<IssueDTO>>($"IssueDTO?sprintId={query.Id}&pageNumber={query.Filter.PageNumber}&search={query.Filter.Search}");
             var issue = await _unitOfWork.IssueRepository.GetIssueListBySprintId(query.Id);
             var issueDto = _mapper.Map<List<IssueDTO>>(issue).OrderByDescending(x => x.Id).ToList();
-            if (cacheData != null && cacheData.Count() > 0)
-            {
-                return (cacheData, validFilter, issue.Count());
-            }
+            //if (cacheData != null && cacheData.Count() > 0)
+            //{
+            //    return (cacheData, validFilter, issue.Count());
+            //}
             if (!String.IsNullOrEmpty(query.Filter.Search))
             {
                 issueDto = _mapper.Map<List<IssueDTO>>(issue).Where(dto => dto.Name.Contains(query.Filter.Search)).OrderByDescending(x => x.Id).ToList();
@@ -89,8 +89,8 @@ namespace TaskServices.Application.Features.Handlers.Issues
                 issueDto = _mapper.Map<List<IssueDTO>>(issue).Where(dto => dto.User.Equals(query.Filter.UserId)).OrderByDescending(x => x.Id).ToList();
                 return (issueDto, validFilter, issue.Count());
             }
-            var expireTime = DateTimeOffset.Now.AddSeconds(30);
-            _cacheService.SetData<List<IssueDTO>>($"IssueDTO?sprintId={query.Id}&pageNumber={query.Filter.PageNumber}&search={query.Filter.Search}", issueDto, expireTime);
+            //var expireTime = DateTimeOffset.Now.AddSeconds(30);
+            //_cacheService.SetData<List<IssueDTO>>($"IssueDTO?sprintId={query.Id}&pageNumber={query.Filter.PageNumber}&search={query.Filter.Search}", issueDto, expireTime);
             return (issueDto, validFilter, issue.Count());
         }
     }

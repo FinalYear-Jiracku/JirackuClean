@@ -133,6 +133,17 @@ namespace TaskServices.WebAPI.Controllers
             await _mediator.Send(new DeleteIssueCommand(id));
             return Ok();
         }
+
+        [HttpDelete("attachment/{id}")]
+        public async Task<IActionResult> DeleteAttachment(int id)
+        {
+            var findAttachment = await _mediator.Send(new DeleteAttachmentComand(id));
+            if (findAttachment == null)
+            {
+                return StatusCode(400, "Attachment Does Not Exist");
+            }
+            return Ok();
+        }
         #endregion
     }
 }

@@ -26,19 +26,19 @@ namespace TaskServices.Application.Features.Handlers.Statuses
 
         public async Task<StatusDTO> Handle(GetStatusByIdQuery query, CancellationToken cancellationToken)
         {
-            var cacheData = _cacheService.GetData<StatusDTO>($"StatusDTO{query.Id}");
-            if (cacheData != null)
-            {
-                return cacheData;
-            }
+            //var cacheData = _cacheService.GetData<StatusDTO>($"StatusDTO{query.Id}");
+            //if (cacheData != null)
+            //{
+            //    return cacheData;
+            //}
             var status = await _unitOfWork.StatusRepository.GetStatusById(query.Id);
             var statusDto = _mapper.Map<StatusDTO>(status);
             if (statusDto == null)
             {
                 return null;
             }
-            var expireTime = DateTimeOffset.Now.AddSeconds(30);
-            _cacheService.SetData<StatusDTO>($"StatusDTO{statusDto.Id}", statusDto, expireTime);
+            //var expireTime = DateTimeOffset.Now.AddSeconds(30);
+            //_cacheService.SetData<StatusDTO>($"StatusDTO{statusDto.Id}", statusDto, expireTime);
             return statusDto;
         }
     }

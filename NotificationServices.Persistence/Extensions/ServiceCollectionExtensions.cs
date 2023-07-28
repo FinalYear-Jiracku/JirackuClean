@@ -1,7 +1,9 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using NotificationServices.Application.Interfaces;
 using NotificationServices.Persistence.Contexts;
+using NotificationServices.Persistence.Repositories;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -28,7 +30,9 @@ namespace NotificationServices.Persistence.Extensions
 
         private static void AddRepositories(this IServiceCollection services)
         {
-            
+            services.AddScoped(typeof(IUnitOfWork), typeof(UnitOfWork))
+                    .AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>))
+                    .AddScoped<INotificationRepository, NotificationRepository>();
         }
     }
 }

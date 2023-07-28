@@ -79,9 +79,9 @@ namespace TaskServices.Application.Features.Handlers.SubIssues
                 }
                 await _unitOfWork.Repository<SubIssue>().UpdateAsync(subIssue);
                 subIssue.AddDomainEvent(new SubIssueUpdatedEvent(subIssue));
-                var subIssuesFileNull = await _unitOfWork.SubIssueRepository.GetSubIssueListByIssueId(command.IssueId);
-                var subIssuesDtoFileNull = _mapper.Map<List<SubIssueDTO>>(subIssuesFileNull);
-                _cacheService.SetData<List<SubIssueDTO>>($"SubIssueDTO?sprintId={command.IssueId}", subIssuesDtoFileNull, expireTime);
+                //var subIssuesFileNull = await _unitOfWork.SubIssueRepository.GetSubIssueListByIssueId(command.IssueId);
+                //var subIssuesDtoFileNull = _mapper.Map<List<SubIssueDTO>>(subIssuesFileNull);
+                //_cacheService.SetData<List<SubIssueDTO>>($"SubIssueDTO?sprintId={command.IssueId}", subIssuesDtoFileNull, expireTime);
                 return await _unitOfWork.Save(cancellationToken);
             }
             foreach (var file in command.Files)
@@ -133,9 +133,9 @@ namespace TaskServices.Application.Features.Handlers.SubIssues
             }
             await _unitOfWork.Repository<SubIssue>().UpdateAsync(subIssue);
             subIssue.AddDomainEvent(new SubIssueUpdatedEvent(subIssue));
-            var subIssuesFile = await _unitOfWork.SubIssueRepository.GetSubIssueListByIssueId(command.IssueId);
-            var subIssuesDtoFile = _mapper.Map<List<SubIssueDTO>>(subIssuesFile);
-            _cacheService.SetData<List<SubIssueDTO>>($"SubIssueDTO?sprintId={command.IssueId}", subIssuesDtoFile, expireTime);
+            //var subIssuesFile = await _unitOfWork.SubIssueRepository.GetSubIssueListByIssueId(command.IssueId);
+            //var subIssuesDtoFile = _mapper.Map<List<SubIssueDTO>>(subIssuesFile);
+            //_cacheService.SetData<List<SubIssueDTO>>($"SubIssueDTO?sprintId={command.IssueId}", subIssuesDtoFile, expireTime);
             return await _unitOfWork.Save(cancellationToken);
         }
 

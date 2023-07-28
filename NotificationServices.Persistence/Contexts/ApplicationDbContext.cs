@@ -14,15 +14,20 @@ namespace NotificationServices.Persistence.Contexts
     public class ApplicationDbContext : DbContext
     {
         private readonly IDomainEventDispatcher? _dispatcher;
-        public ApplicationDbContext(DbContextOptions options, IDomainEventDispatcher dispatcher) : base(options)
+        public ApplicationDbContext(IDomainEventDispatcher dispatcher, DbContextOptions<ApplicationDbContext> options) : base(options)
         {
             _dispatcher = dispatcher;
         }
+
+        public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
+        {
+
+        }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.ApplyConfiguration(new EmailLogConfiguration());
+            modelBuilder.ApplyConfiguration(new NotificationConfiguration());
         }
-        public DbSet<EmailLog> EmailLogs { get; set; }
+        public DbSet<Notification> Notification { get; set; }
         public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = new CancellationToken())
         {
             int result = await base.SaveChangesAsync(cancellationToken).ConfigureAwait(false);

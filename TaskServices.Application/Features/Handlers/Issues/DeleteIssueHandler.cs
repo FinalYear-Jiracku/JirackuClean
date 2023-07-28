@@ -34,10 +34,10 @@ namespace TaskServices.Application.Features.Handlers.Issues
             issue.IsDeleted = true;
             await _unitOfWork.Repository<Issue>().UpdateAsync(issue);
             await _unitOfWork.Save(cancellationToken);
-            var issueList = await _unitOfWork.IssueRepository.GetIssueListBySprintId(issue.SprintId);
-            var issueDtoList = _mapper.Map<List<IssueDTO>>(issueList).OrderByDescending(x => x.Id).ToList();
-            var expireTime = DateTimeOffset.Now.AddSeconds(30);
-            _cacheService.SetData<List<IssueDTO>>($"IssueDTO?sprintId={issue.SprintId}&pageNumber=1&search=", issueDtoList, expireTime);
+            //var issueList = await _unitOfWork.IssueRepository.GetIssueListBySprintId(issue.SprintId);
+            //var issueDtoList = _mapper.Map<List<IssueDTO>>(issueList).OrderByDescending(x => x.Id).ToList();
+            //var expireTime = DateTimeOffset.Now.AddSeconds(30);
+            //_cacheService.SetData<List<IssueDTO>>($"IssueDTO?sprintId={issue.SprintId}&pageNumber=1&search=", issueDtoList, expireTime);
             return await Task.FromResult(0);
         }
     }

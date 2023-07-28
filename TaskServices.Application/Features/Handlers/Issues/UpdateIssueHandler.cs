@@ -86,9 +86,9 @@ namespace TaskServices.Application.Features.Handlers.Issues
                     await _unitOfWork.Repository<Issue>().UpdateAsync(issue);
                     issue.AddDomainEvent(new IssueUpdatedEvent(issue));
                     await _unitOfWork.Save(cancellationToken);
-                    var issuesFileNull = await _unitOfWork.IssueRepository.GetIssueListBySprintId(command.SprintId);
-                    var issuesDtoFileNull = _mapper.Map<List<IssueDTO>>(issuesFileNull);
-                    _cacheService.SetData<List<IssueDTO>>($"IssueDTO?sprintId={command.SprintId}", issuesDtoFileNull, expireTime);
+                    //var issuesFileNull = await _unitOfWork.IssueRepository.GetIssueListBySprintId(command.SprintId);
+                    //var issuesDtoFileNull = _mapper.Map<List<IssueDTO>>(issuesFileNull);
+                    //_cacheService.SetData<List<IssueDTO>>($"IssueDTO?sprintId={command.SprintId}", issuesDtoFileNull, expireTime);
                     return await Task.FromResult(0);
                 }
                 foreach (var file in command.Files)
@@ -142,9 +142,9 @@ namespace TaskServices.Application.Features.Handlers.Issues
                 await _unitOfWork.Repository<Issue>().UpdateAsync(issue);
                 issue.AddDomainEvent(new IssueUpdatedEvent(issue));
                 await _unitOfWork.Save(cancellationToken);
-                var issues = await _unitOfWork.IssueRepository.GetIssueListBySprintId(command.SprintId);
-                var issuesDto = _mapper.Map<List<IssueDTO>>(issues);
-                _cacheService.SetData<List<IssueDTO>>($"IssueDTO?sprintId={command.SprintId}&pageNumber=1&search=", issuesDto, expireTime);
+                //var issues = await _unitOfWork.IssueRepository.GetIssueListBySprintId(command.SprintId);
+                //var issuesDto = _mapper.Map<List<IssueDTO>>(issues);
+                //_cacheService.SetData<List<IssueDTO>>($"IssueDTO?sprintId={command.SprintId}&pageNumber=1&search=", issuesDto, expireTime);
                 return await Task.FromResult(0);
             }
 
@@ -188,9 +188,9 @@ namespace TaskServices.Application.Features.Handlers.Issues
                 await _unitOfWork.Repository<Issue>().UpdateAsync(issue);
                 issue.AddDomainEvent(new IssueUpdatedEvent(issue));
                 await _unitOfWork.Save(cancellationToken);
-                var issuesFileNull = await _unitOfWork.IssueRepository.GetIssueListBySprintId(command.SprintId);
-                var issuesDtoFileNull = _mapper.Map<List<IssueDTO>>(issuesFileNull);
-                _cacheService.SetData<List<IssueDTO>>($"IssueDTO?sprintId={command.SprintId}", issuesDtoFileNull, expireTime);
+                //var issuesFileNull = await _unitOfWork.IssueRepository.GetIssueListBySprintId(command.SprintId);
+                //var issuesDtoFileNull = _mapper.Map<List<IssueDTO>>(issuesFileNull);
+                //_cacheService.SetData<List<IssueDTO>>($"IssueDTO?sprintId={command.SprintId}", issuesDtoFileNull, expireTime);
                 return await Task.FromResult(0);
             }
 
@@ -246,9 +246,9 @@ namespace TaskServices.Application.Features.Handlers.Issues
             await _unitOfWork.Repository<Issue>().UpdateAsync(issue);
             issue.AddDomainEvent(new IssueUpdatedEvent(issue));
             await _unitOfWork.Save(cancellationToken);
-            var issueList = await _unitOfWork.IssueRepository.GetIssueListBySprintId(command.SprintId);
-            var issueDtoList = _mapper.Map<List<IssueDTO>>(issueList);
-            _cacheService.SetData<List<IssueDTO>>($"IssueDTO?sprintId={command.SprintId}", issueDtoList, expireTime);
+            //var issueList = await _unitOfWork.IssueRepository.GetIssueListBySprintId(command.SprintId);
+            //var issueDtoList = _mapper.Map<List<IssueDTO>>(issueList);
+            //_cacheService.SetData<List<IssueDTO>>($"IssueDTO?sprintId={command.SprintId}", issueDtoList, expireTime);
             return await Task.FromResult(0);
         }
 

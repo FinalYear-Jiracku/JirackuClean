@@ -56,7 +56,6 @@ namespace TaskServices.Infrastructure.Extensions
                     .AddScoped<INotificationEventSubcriber, NotificationEventSubcriber>()
                     .AddScoped<ICheckDeadlineIssueEventPublisher, CheckDeadlineIssueEventPublisher>()
                     .AddScoped<ICheckDeadlineSubIssueEventPublisher, CheckDeadlineSubIssueEventPublisher>()
-                    .AddScoped<IIssueEventPublisher,IssueEventPublisher>()
                     .AddSingleton<IRabbitMQManager, RabbitMQManager>();
         }
     }

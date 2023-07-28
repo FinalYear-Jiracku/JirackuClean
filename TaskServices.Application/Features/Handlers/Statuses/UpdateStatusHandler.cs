@@ -27,6 +27,7 @@ namespace TaskServices.Application.Features.Handlers.Statuses
             }
             status.Name = command.Name;
             status.Color = command.Color;
+            status.SprintId = command.SprintId;
             status.UpdatedBy = command.UpdatedBy;
             status.UpdatedAt = DateTimeOffset.Now;
             await _unitOfWork.Repository<Status>().UpdateAsync(status);

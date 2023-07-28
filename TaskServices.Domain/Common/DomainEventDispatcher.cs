@@ -11,12 +11,10 @@ namespace TaskServices.Domain.Common
     public class DomainEventDispatcher : IDomainEventDispatcher
     {
         private readonly IMediator _mediator;
-        private readonly IIssueEventPublisher _issueEventPublisher;
 
-        public DomainEventDispatcher(IMediator mediator, IIssueEventPublisher issueEventPublisher)
+        public DomainEventDispatcher(IMediator mediator)
         {
             _mediator = mediator;
-            _issueEventPublisher = issueEventPublisher;
         }
 
         public async Task DispatchAndClearEvents(IEnumerable<BaseEntity> entitiesWithEvents)
@@ -30,7 +28,6 @@ namespace TaskServices.Domain.Common
                 foreach (var domainEvent in events)
                 {
                     await _mediator.Publish(domainEvent).ConfigureAwait(false);
-                    _issueEventPublisher.SendMessage(domainEvent);
                 }
             }
         }

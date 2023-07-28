@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using NotificationServices.Application.Features.Commands;
+using NotificationServices.Application.Features.Queries;
 
 namespace NotificationServices.WebAPI.Controllers
 {
@@ -20,6 +21,12 @@ namespace NotificationServices.WebAPI.Controllers
         {
             await _mediator.Send(command);
             return Ok();
+        }
+        [HttpGet("{id}")]
+        public async Task<IActionResult> NotificationList(int id)
+        {
+            var listNoti = await _mediator.Send(new GetListNotificationQueries(id));
+            return Ok(listNoti);
         }
     }
 }

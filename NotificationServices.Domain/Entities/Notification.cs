@@ -7,10 +7,10 @@ using System.Threading.Tasks;
 
 namespace NotificationServices.Domain.Entities
 {
-    public class EmailLog : BaseAuditableEntity
+    public class Notification : BaseEntity
     {
-        public string? Email { get; set; }
-        public string? Log { get; set; }
-        public DateTimeOffset? EmailSent { get; set; }
+        public int ProjectId { get; set; }
+        public string? Content { get; set; }
+        public DateTimeOffset? CreatedAt { get; set; } = DateTimeOffset.Now;
     }
 }

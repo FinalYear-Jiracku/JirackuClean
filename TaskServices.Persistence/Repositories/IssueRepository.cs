@@ -112,6 +112,7 @@ namespace TaskServices.Persistence.Repositories
                              .Include(x => x.Sprint)
                              .Include(x => x.Status)
                              .Include(x => x.Comments.Where(x => x.IsDeleted == false))
+                             .ThenInclude(cm => cm.User)
                              .Include(x => x.Attachments)
                              .Include(x => x.SubIssues.Where(x => x.IsDeleted == false))
                              .ThenInclude(sub => sub.User)
@@ -135,6 +136,11 @@ namespace TaskServices.Persistence.Repositories
         {
             var issues = await _dbContext.Issues.Include(x=>x.User).Where(x => x.DueDate < dateTimeOffset).ToListAsync();
             return issues == null ? null : issues;
+        }
+
+        public async Task<Attachment> FindAttachment(int id)
+        {
+            return await _dbContext.Attachments.FirstOrDefaultAsync(x=>x.Id == id);
         }
         #endregion
     }

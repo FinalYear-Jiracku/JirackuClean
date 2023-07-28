@@ -28,15 +28,15 @@ namespace TaskServices.Application.Features.Handlers.Statuses
         }
         public async Task<List<StatusDTO>> Handle(DropdownStatusListQuery query, CancellationToken cancellationToken)
         {
-            var cacheData = _cacheService.GetData<List<StatusDTO>>($"StatusDTO{query.Id}");
-            if (cacheData != null && cacheData.Count() > 0)
-            {
-                return cacheData;
-            }
+            //var cacheData = _cacheService.GetData<List<StatusDTO>>($"StatusDTO{query.Id}");
+            //if (cacheData != null && cacheData.Count() > 0)
+            //{
+            //    return cacheData;
+            //}
             var status = await _unitOfWork.StatusRepository.GetStatusListBySprintId(query.Id);
             var statusDto = _mapper.Map<List<StatusDTO>>(status).ToList();
-            var expireTime = DateTimeOffset.Now.AddSeconds(30);
-            _cacheService.SetData<List<StatusDTO>>($"StatusDTO{query.Id}", statusDto, expireTime);
+            //var expireTime = DateTimeOffset.Now.AddSeconds(30);
+            //_cacheService.SetData<List<StatusDTO>>($"StatusDTO{query.Id}", statusDto, expireTime);
             return statusDto;
         }
     }

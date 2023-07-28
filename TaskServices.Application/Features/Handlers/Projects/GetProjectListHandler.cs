@@ -58,8 +58,6 @@ namespace TaskServices.Application.Features.Handlers.Projects
                          .Skip((validFilter.PageNumber - 1) * validFilter.PageSize)
                          .Take(validFilter.PageSize).ToList();
             return (projectsDto, validFilter, cacheData.Count());
-
-            
         }
     }
 }

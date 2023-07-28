@@ -45,7 +45,7 @@ namespace TaskServices.Application.Common.Mappings
             CreateMap<Column, ColumnDTO>().ReverseMap();
             CreateMap<Column, DataColumnDTO>().ForMember(dest => dest.Notes, opt => opt.MapFrom(src => src.Notes)).ReverseMap();
             CreateMap<Note, NoteDTO>().ForMember(dest => dest.Comments, opt => opt.MapFrom(src => src.Comments)).ReverseMap();
-            CreateMap<Comment, CommentDTO>().ReverseMap();
+            CreateMap<Comment, CommentDTO>().ForMember(dest => dest.User, opt => opt.MapFrom(src => src.User)).ReverseMap();
             CreateMap<Page, PageDTO>().ReverseMap();
             CreateMap<Attachment, AttachmentDTO>().ReverseMap();
             CreateMap<User, UserDTO>().ReverseMap();

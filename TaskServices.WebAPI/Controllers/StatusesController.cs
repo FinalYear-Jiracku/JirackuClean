@@ -68,7 +68,7 @@ namespace TaskServices.WebAPI.Controllers
         [HttpPost]
         public async Task<IActionResult> CreateStatus([FromBody] CreateStatusCommand statusCommand)
         {
-            var checkStatusName = await _mediator.Send(new CheckStatusNameQuery(statusCommand.Name));
+            var checkStatusName = await _mediator.Send(new CheckStatusNameQuery(statusCommand.Name,statusCommand.SprintId));
             if (checkStatusName)
             {
                 return StatusCode(400, "Status Name already Exist");
@@ -82,7 +82,7 @@ namespace TaskServices.WebAPI.Controllers
         [HttpPut]
         public async Task<IActionResult> UpdateStatus([FromBody] UpdateStatusCommand statusCommand)
         {
-            var checkStatusName = await _mediator.Send(new CheckStatusNameQuery(statusCommand.Id, statusCommand.Name));
+            var checkStatusName = await _mediator.Send(new CheckStatusNameQuery(statusCommand.Id, statusCommand.Name, statusCommand.SprintId));
             if (checkStatusName)
             {
                 return StatusCode(400, "Status Name already Exist");
