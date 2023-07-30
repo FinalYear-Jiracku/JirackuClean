@@ -50,7 +50,7 @@ namespace TaskServices.WebAPI.Controllers
         }
 
         [HttpGet]
-        [Route("count/sprints/{id}")]
+        [Route("uncomplete/sprints/{id}")]
         public async Task<IActionResult> CountIssueNotCompleted(int id)
         {
             var findSprint = await _mediator.Send(new GetSprintByIdQuery(id));
@@ -59,6 +59,19 @@ namespace TaskServices.WebAPI.Controllers
                 return StatusCode(400, "Sprint Does Not Exist");
             }
             var issue = await _mediator.Send(new CountIssueNotCompletedQuery(id));
+            return Ok(issue);
+        }
+
+        [HttpGet]
+        [Route("complete/sprints/{id}")]
+        public async Task<IActionResult> CountIssueCompleted(int id)
+        {
+            var findSprint = await _mediator.Send(new GetSprintByIdQuery(id));
+            if (findSprint == null)
+            {
+                return StatusCode(400, "Sprint Does Not Exist");
+            }
+            var issue = await _mediator.Send(new CountIssueCompletedQuery(id));
             return Ok(issue);
         }
 

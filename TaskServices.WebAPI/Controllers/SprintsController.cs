@@ -55,6 +55,19 @@ namespace TaskServices.WebAPI.Controllers
             return Ok(sprintList);
         }
 
+        [HttpGet]
+        [Route("complete/projects/{id}")]
+        public async Task<IActionResult> SprintListForComplete([FromQuery] int sprintId, int id)
+        {
+            var findProject = await _mediator.Send(new GetProjectByIdQuery(id));
+            if (findProject == null)
+            {
+                return StatusCode(400, "Project Does Not Exist");
+            }
+            var sprintList = await _mediator.Send(new SprintListForCompleteQuery(id,sprintId));
+            return Ok(sprintList);
+        }
+
         [HttpGet("{id}")]
         public async Task<IActionResult> GetSprintDetail(int id)
         {

@@ -93,7 +93,7 @@ namespace TaskServices.WebAPI.Controllers
         #endregion
 
         #region DELETE API
-        [HttpPatch("{id}")]
+        [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteStatus(int id)
         {
             var findStatus = await _mediator.Send(new GetStatusByIdQuery(id));

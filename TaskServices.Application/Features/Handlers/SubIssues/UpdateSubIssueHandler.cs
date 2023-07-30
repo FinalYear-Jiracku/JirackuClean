@@ -33,6 +33,7 @@ namespace TaskServices.Application.Features.Handlers.SubIssues
         {
             var subIssue = await _unitOfWork.SubIssueRepository.GetSubIssueById(command.Id);
             var user = await _unitOfWork.UserRepository.FindUserById(command.UserId);
+            var status = await _unitOfWork.StatusRepository.GetStatusById(command.StatusId);
             if (subIssue == null)
             {
                 return default;
@@ -49,9 +50,22 @@ namespace TaskServices.Application.Features.Handlers.SubIssues
                 subIssue.StoryPoint = command.StoryPoint;
                 subIssue.StartDate = command.StartDate;
                 subIssue.DueDate = command.DueDate;
-                subIssue.StatusId = command.StatusId;
                 subIssue.UpdatedBy = command.UpdatedBy;
                 subIssue.UpdatedAt = DateTimeOffset.Now;
+
+                if (subIssue.Status == null && command.StatusId == 0)
+                {
+                    subIssue.Status = null;
+                }
+                if (subIssue.Status != null && subIssue.Status.Id != command.StatusId)
+                {
+                    subIssue.Status = status;
+                }
+                if (subIssue.Status == null && command.StatusId != 0)
+                {
+                    subIssue.Status = status;
+                }
+
                 if (subIssue.User == null && command.UserId == 0)
                 {
                     subIssue.User = null;
@@ -103,9 +117,22 @@ namespace TaskServices.Application.Features.Handlers.SubIssues
             subIssue.StoryPoint = command.StoryPoint;
             subIssue.StartDate = command.StartDate;
             subIssue.DueDate = command.DueDate;
-            subIssue.StatusId = command.StatusId;
             subIssue.UpdatedBy = command.UpdatedBy;
             subIssue.UpdatedAt = DateTimeOffset.Now;
+
+            if (subIssue.Status == null && command.StatusId == 0)
+            {
+                subIssue.Status = null;
+            }
+            if (subIssue.Status != null && subIssue.Status.Id != command.StatusId)
+            {
+                subIssue.Status = status;
+            }
+            if (subIssue.Status == null && command.StatusId != 0)
+            {
+                subIssue.Status = status;
+            }
+
             if (subIssue.User == null && command.UserId == 0)
             {
                 subIssue.User = null;

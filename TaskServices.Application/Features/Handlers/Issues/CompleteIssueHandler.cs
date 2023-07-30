@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TaskServices.Application.DTOs;
 using TaskServices.Application.Features.Commands.Columns;
 using TaskServices.Application.Features.Commands.Issues;
 using TaskServices.Application.Features.Commands.Sprints;
@@ -24,8 +25,8 @@ namespace TaskServices.Application.Features.Handlers.Issues
         {
             var sprint = await _unitOfWork.SprintRepository.GetSprintById(command.SprintId);
             var issueNotComplete = await _unitOfWork.IssueRepository.IssueNotCompleted(command.SprintId);
-            var statusToDo = await _unitOfWork.StatusRepository.GetStatusToDo(command.SprintIdToUpdate);
-            var order = _unitOfWork.IssueRepository.CheckOrder(statusToDo.Id);
+            //var statusToDo = await _unitOfWork.StatusRepository.GetStatusToDo(command.SprintIdToUpdate);
+            //var order = _unitOfWork.IssueRepository.CheckOrder(statusToDo.Id);
             var i = 1;
             if (command.SprintIdToUpdate == 0)
             {
@@ -98,43 +99,49 @@ namespace TaskServices.Application.Features.Handlers.Issues
                 newSprint.AddDomainEvent(new SprintUpdatedEvent(newSprint));
                 await _unitOfWork.Save(cancellationToken);
 
-                statusToDo = await _unitOfWork.StatusRepository.GetStatusToDo(newSprint.Id);
+                //statusToDo = await _unitOfWork.StatusRepository.GetStatusToDo(newSprint.Id);
                 foreach (var issue in issueNotComplete)
                 {
                     issue.SprintId = newSprint.Id;
-                    issue.StatusId = statusToDo.Id;
+                    issue.Status = null;
                     issue.Order = i++;
                     var subIssueNotCompleteForNewSprint = await _unitOfWork.SubIssueRepository.SubIssueNotCompleted(issue.Id);
                     foreach (var subIssue in subIssueNotCompleteForNewSprint)
                     {
-                        subIssue.StatusId = statusToDo.Id;
+                        subIssue.StatusId = null;
                     }
                 }
                 await _unitOfWork.Repository<Issue>().UpdateRangeAsync(issueNotComplete);
+                sprint.IsCompleted = true;
+                await _unitOfWork.Repository<Sprint>().UpdateAsync(sprint);
                 await _unitOfWork.Save(cancellationToken);
                 return issueNotComplete;
             }
             foreach (var issue in issueNotComplete)
             {
-                if (order != 0)
-                {
-                    issue.SprintId = command.SprintIdToUpdate;
-                    issue.StatusId = statusToDo.Id;
-                    issue.Order = order ++;
-                }
-                else
-                {
-                    issue.SprintId = command.SprintIdToUpdate;
-                    issue.StatusId = statusToDo.Id;
-                    issue.Order = i++;
-                }
+                //if (order != 0)
+                //{
+                //    issue.SprintId = command.SprintIdToUpdate;
+                //    issue.Status = statusToDo.Id;
+                //    issue.Order = order++;
+                //}
+                //else
+                //{
+                //    issue.SprintId = command.SprintIdToUpdate;
+                //    issue.StatusId = statusToDo.Id;
+                //    issue.Order = i++;
+                //}
+                issue.SprintId = command.SprintIdToUpdate;
+                issue.Status = null;
                 var subIssueNotCompleteForExistSprint = await _unitOfWork.SubIssueRepository.SubIssueNotCompleted(issue.Id);
                 foreach (var subIssue in subIssueNotCompleteForExistSprint)
                 {
-                    subIssue.StatusId = statusToDo.Id;
+                    subIssue.Status = null;
                 }
             }
             await _unitOfWork.Repository<Issue>().UpdateRangeAsync(issueNotComplete);
+            sprint.IsCompleted = true;
+            await _unitOfWork.Repository<Sprint>().UpdateAsync(sprint);
             await _unitOfWork.Save(cancellationToken);
             return issueNotComplete;
         }

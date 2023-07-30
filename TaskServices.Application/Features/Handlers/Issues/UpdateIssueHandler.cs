@@ -35,6 +35,7 @@ namespace TaskServices.Application.Features.Handlers.Issues
         {
             var issue = await _unitOfWork.IssueRepository.GetIssueById(command.Id);
             var user = await _unitOfWork.UserRepository.FindUserById(command.UserId);
+            var status = await _unitOfWork.StatusRepository.GetStatusById(command.StatusId);
             if (issue == null)
             {
                 return default;
@@ -44,7 +45,7 @@ namespace TaskServices.Application.Features.Handlers.Issues
             var expireTime = DateTimeOffset.Now.AddSeconds(30);
             if (issue.SprintId != command.SprintId)
             {
-                var statusToDo = await _unitOfWork.StatusRepository.GetStatusToDo(command.SprintId);
+                //var statusToDo = await _unitOfWork.StatusRepository.GetStatusToDo(command.SprintId);
                 if(command.Files == null)
                 {
                     issue.Name = command.Name;
@@ -54,10 +55,11 @@ namespace TaskServices.Application.Features.Handlers.Issues
                     issue.StoryPoint = command.StoryPoint;
                     issue.StartDate = command.StartDate;
                     issue.DueDate = command.DueDate;
-                    issue.StatusId = statusToDo.Id;
+                    issue.Status = null;
                     issue.SprintId = command.SprintId;
                     issue.UpdatedBy = command.UpdatedBy;
                     issue.UpdatedAt = DateTimeOffset.Now;
+
                     if (issue.User == null && command.UserId == 0)
                     {
                         issue.User = null;
@@ -111,7 +113,7 @@ namespace TaskServices.Application.Features.Handlers.Issues
                 issue.StoryPoint = command.StoryPoint;
                 issue.StartDate = command.StartDate;
                 issue.DueDate = command.DueDate;
-                issue.StatusId = statusToDo.Id;
+                issue.Status = null;
                 issue.SprintId = command.SprintId;
                 issue.UpdatedBy = command.UpdatedBy;
                 issue.UpdatedAt = DateTimeOffset.Now;
@@ -157,10 +159,23 @@ namespace TaskServices.Application.Features.Handlers.Issues
                 issue.StoryPoint = command.StoryPoint;
                 issue.StartDate = command.StartDate;
                 issue.DueDate = command.DueDate;
-                issue.StatusId = command.StatusId;
                 issue.UpdatedBy = command.UpdatedBy;
                 issue.UpdatedAt = DateTimeOffset.Now;
-                if(issue.User == null && command.UserId == 0)
+
+                if (issue.Status == null && command.StatusId == 0)
+                {
+                    issue.Status = null;
+                }
+                if (issue.Status != null && issue.Status.Id != command.StatusId)
+                {
+                    issue.Status = status;
+                }
+                if (issue.Status == null && command.StatusId != 0)
+                {
+                    issue.Status = status;
+                }
+
+                if (issue.User == null && command.UserId == 0)
                 {
                     issue.User = null;
                 }
@@ -214,9 +229,21 @@ namespace TaskServices.Application.Features.Handlers.Issues
             issue.StoryPoint = command.StoryPoint;
             issue.StartDate = command.StartDate;
             issue.DueDate = command.DueDate;
-            issue.StatusId = command.StatusId;
             issue.UpdatedBy = command.UpdatedBy;
             issue.UpdatedAt = DateTimeOffset.Now;
+
+            if (issue.Status == null && command.StatusId == 0)
+            {
+                issue.Status = null;
+            }
+            if (issue.Status != null && issue.Status.Id != command.StatusId)
+            {
+                issue.Status = status;
+            }
+            if (issue.Status == null && command.StatusId != 0)
+            {
+                issue.Status = status;
+            }
 
             if (issue.User == null && command.UserId == 0)
             {

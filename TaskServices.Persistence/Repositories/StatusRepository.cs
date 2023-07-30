@@ -35,7 +35,7 @@ namespace TaskServices.Persistence.Repositories
         #endregion
 
         #region Get Services
-        public async Task<Status> GetStatusById(int id)
+        public async Task<Status> GetStatusById(int? id)
         {
             var status = await _connection.QueryFirstOrDefaultAsync<Status>("SELECT * FROM \"Statuses\" WHERE \"IsDeleted\" = false AND \"Id\" = @Id", new { Id = id });
             return status == null ? null : status;

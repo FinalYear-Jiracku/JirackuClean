@@ -25,7 +25,7 @@ namespace TaskServices.Domain.Configurations
             builder.Property(x => x.UpdatedBy).IsRequired(false).HasMaxLength(100);
             builder.Property(x => x.UpdatedAt).IsRequired(false);
 
-            builder.HasOne(x => x.Status).WithMany(x => x.SubIssues).HasForeignKey(x => x.StatusId).OnDelete(DeleteBehavior.Cascade);
+            builder.HasOne(x => x.Status).WithMany(x => x.SubIssues).HasForeignKey(x => x.StatusId).OnDelete(DeleteBehavior.SetNull);
             builder.HasOne(x => x.Issue).WithMany(x => x.SubIssues).HasForeignKey(x => x.IssueId).OnDelete(DeleteBehavior.Cascade);
             builder.HasOne(x => x.User).WithMany(x => x.SubIssues).OnDelete(DeleteBehavior.SetNull);
         }

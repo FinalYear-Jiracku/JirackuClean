@@ -24,8 +24,8 @@ namespace TaskServices.Application.Features.Handlers.Statuses
             {
                 return default;
             }
-            status.IsDeleted = true;
-            await _unitOfWork.Repository<Status>().UpdateAsync(status);
+            //status.IsDeleted = true;
+            await _unitOfWork.Repository<Status>().DeleteAsync(status);
             return await _unitOfWork.Save(cancellationToken);
         }
     }
