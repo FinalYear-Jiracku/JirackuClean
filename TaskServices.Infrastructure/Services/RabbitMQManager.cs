@@ -10,7 +10,6 @@ namespace TaskServices.Infrastructure.Services
 {
     public class RabbitMQManager : IRabbitMQManager
     {
-        private IModel _channel;
         private readonly ConnectionFactory _connectionFactory;
         private IConnection _connection;
 
@@ -31,11 +30,8 @@ namespace TaskServices.Infrastructure.Services
         {
             if (_connection == null || !_connection.IsOpen)
             {
-                //    //throw new Exception("RabbitMQ connection has not started or closed.");
                 Thread.Sleep(1000);
                 _connection = _connectionFactory.CreateConnection();
-                //CheckConnection();
-
             }
 
             return _connection.CreateModel();

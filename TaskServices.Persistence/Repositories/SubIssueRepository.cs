@@ -31,12 +31,23 @@ namespace TaskServices.Persistence.Repositories
             var order = _dbContext.SubIssues.Where(x => x.StatusId == statusId).Max(x => x.Order);
             return (int)(order == null ? 0 : order);
         }
+        public async Task<List<SubIssue>> CheckDeadline(DateTimeOffset dateTimeOffset)
+        {
+            var subIssues = await _dbContext.SubIssues.Include(x => x.User).Where(x => x.DueDate < dateTimeOffset).ToListAsync();
+            return subIssues == null ? null : subIssues;
+        }
         #endregion
 
         #region Get Services
         public async Task<SubIssue> GetSubIssueById(int id)
         {
-            var subIssue = await _dbContext.SubIssues.Include(x=>x.User).Include(x => x.Issue).Include(x => x.Status).Include(x => x.Comments.Where(x => x.IsDeleted == false)).Include(x=>x.Attachments).FirstOrDefaultAsync(x => x.IsDeleted == false && x.Id == id);
+            var subIssue = await _dbContext.SubIssues.Include(x=>x.User)
+                                                     .Include(x => x.Issue)
+                                                     .Include(x => x.Status)
+                                                     .Include(x => x.Comments.Where(x => x.IsDeleted == false))
+                                                     .ThenInclude(x => x.User)
+                                                     .Include(x=>x.Attachments)
+                                                     .FirstOrDefaultAsync(x => x.IsDeleted == false && x.Id == id);
             return subIssue == null ? null : subIssue;
         }
 

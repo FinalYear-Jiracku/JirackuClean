@@ -650,7 +650,7 @@ namespace TaskServices.Persistence.Migrations
                     b.HasOne("TaskServices.Domain.Entities.Status", "Status")
                         .WithMany("Issues")
                         .HasForeignKey("StatusId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.SetNull);
 
                     b.HasOne("TaskServices.Domain.Entities.User", "User")
                         .WithMany("Issues")
@@ -728,7 +728,7 @@ namespace TaskServices.Persistence.Migrations
                     b.HasOne("TaskServices.Domain.Entities.Status", "Status")
                         .WithMany("SubIssues")
                         .HasForeignKey("StatusId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.SetNull);
 
                     b.HasOne("TaskServices.Domain.Entities.User", "User")
                         .WithMany("SubIssues")

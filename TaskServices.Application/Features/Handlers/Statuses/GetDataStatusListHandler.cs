@@ -29,60 +29,62 @@ namespace TaskServices.Application.Features.Handlers.Statuses
         public async Task<(List<DataStatusDTO>, PaginationFilter, int)> Handle(GetDataStatusListQuery query, CancellationToken cancellationToken)
         {
             var validFilter = new PaginationFilter(query.Filter.PageNumber, query.Filter.PageSize, query.Filter.Search, query.Filter.Type, query.Filter.Priority, query.Filter.StatusId, query.Filter.UserId);
-            var cacheData = _cacheService.GetData<List<DataStatusDTO>>($"DataStatusDTO{query.Id}");
-            if (cacheData != null && cacheData.Count() > 0)
-            {
-                return (cacheData, validFilter, cacheData.Count());
-            }
+            //var cacheData = _cacheService.GetData<List<DataStatusDTO>>($"DataStatusDTO{query.Id}");
+            //if (cacheData != null && cacheData.Count() > 0)
+            //{
+            //    return (cacheData, validFilter, cacheData.Count());
+            //}
             var status = await _unitOfWork.StatusRepository.GetStatusListBySprintId(query.Id);
             var statusDto = _mapper.Map<List<DataStatusDTO>>(status);
             if (!String.IsNullOrEmpty(query.Filter.Search))
             {
                 statusDto = _mapper.Map<List<DataStatusDTO>>(status).Select(dto =>
                 {
-                    dto.Issues = dto.Issues.Where(issue => issue.Name.Contains(query.Filter.Search)).ToList();
+                    dto.Issues = dto.Issues?.Where(issue => issue.Name.Contains(query.Filter.Search)).ToList();
                     return dto;
                 }).Where(dto => dto.Issues != null && dto.Issues.Any()).ToList();
                 if(query.Filter.Type == IssueType.Bug || query.Filter.Type == IssueType.Task)
                 {
                     statusDto = _mapper.Map<List<DataStatusDTO>>(status).Select(dto =>
                     {
-                        dto.Issues = dto.Issues.Where(issue => issue.Type.Equals(query.Filter.Type) &&
+                        dto.Issues = dto.Issues?.Where(issue => issue.Type.Equals(query.Filter.Type) &&
                                                       issue.Name.Contains(query.Filter.Search)).ToList();
                         return dto;
                     }).Where(dto => dto.Issues != null && dto.Issues.Any()).ToList();
-                    return (statusDto, validFilter, _mapper.Map<List<DataStatusDTO>>(status).Count());
                 }
                 if (query.Filter.Priority == IssuePriority.Low || query.Filter.Priority == IssuePriority.Normal || 
                     query.Filter.Priority == IssuePriority.High || query.Filter.Priority == IssuePriority.Urgent)
                 {
                     statusDto = _mapper.Map<List<DataStatusDTO>>(status).Select(dto =>
                     {
-                        dto.Issues = dto.Issues.Where(issue => issue.Priority.Equals(query.Filter.Priority) &&
+                        dto.Issues = dto.Issues?.Where(issue => issue.Priority.Equals(query.Filter.Priority) &&
+                                                      issue.Type.Equals(query.Filter.Type) &&
                                                       issue.Name.Contains(query.Filter.Search)).ToList();
                         return dto;
                     }).Where(dto => dto.Issues != null && dto.Issues.Any()).ToList();
-                    return (statusDto, validFilter, _mapper.Map<List<DataStatusDTO>>(status).Count());
                 }
                 if (query.Filter.StatusId != null)
                 {
                     statusDto = _mapper.Map<List<DataStatusDTO>>(status).Select(dto =>
                     {
-                        dto.Issues = dto.Issues.Where(issue => issue.Status.Id.Equals(query.Filter.StatusId) && 
-                                                      issue.Name.Contains(query.Filter.Search)).ToList();
+                        dto.Issues = dto.Issues?.Where(issue => issue.Status?.Id.Equals(query.Filter.StatusId) == true &&
+                                                      issue.Type.Equals(query.Filter.Type) &&
+                                                      issue.Priority.Equals(query.Filter.Priority) &&
+                                                      issue.Name.Contains(query.Filter.Search))?.ToList();
                         return dto;
                     }).Where(dto => dto.Issues != null && dto.Issues.Any()).ToList();
-                    return (statusDto, validFilter, _mapper.Map<List<DataStatusDTO>>(status).Count());
                 }
                 if (query.Filter.UserId != null)
                 {
                     statusDto = _mapper.Map<List<DataStatusDTO>>(status).Select(dto =>
                     {
-                        dto.Issues = dto.Issues.Where(issue => issue.User.Equals(query.Filter.UserId) &&
-                                                      issue.Name.Contains(query.Filter.Search)).ToList();
+                        dto.Issues = dto.Issues?.Where(issue => issue.User?.Id.Equals(query.Filter.UserId) == true &&
+                                                      issue.Status?.Id.Equals(query.Filter.StatusId) == true &&
+                                                      issue.Type.Equals(query.Filter.Type) &&
+                                                      issue.Priority.Equals(query.Filter.Priority) &&
+                                                      issue.Name.Contains(query.Filter.Search))?.ToList();
                         return dto;
                     }).Where(dto => dto.Issues != null && dto.Issues.Any()).ToList();
-                    return (statusDto, validFilter, _mapper.Map<List<DataStatusDTO>>(status).Count());
                 }
                 return (statusDto, validFilter, _mapper.Map<List<DataStatusDTO>>(status).Count());
             }
@@ -90,9 +92,40 @@ namespace TaskServices.Application.Features.Handlers.Statuses
             {
                 statusDto = _mapper.Map<List<DataStatusDTO>>(status).Select(dto =>
                 {
-                    dto.Issues = dto.Issues.Where(issue => issue.Type.Equals(query.Filter.Type)).ToList();
+                    dto.Issues = dto.Issues?.Where(issue => issue.Type.Equals(query.Filter.Type)).ToList();
                     return dto;
                 }).Where(dto => dto.Issues != null && dto.Issues.Any()).ToList();
+                if (query.Filter.Priority == IssuePriority.Low || query.Filter.Priority == IssuePriority.Normal ||
+                    query.Filter.Priority == IssuePriority.High || query.Filter.Priority == IssuePriority.Urgent)
+                {
+                    statusDto = _mapper.Map<List<DataStatusDTO>>(status).Select(dto =>
+                    {
+                        dto.Issues = dto.Issues?.Where(issue => issue.Priority.Equals(query.Filter.Priority) &&
+                                                      issue.Type.Equals(query.Filter.Type)).ToList();
+                        return dto;
+                    }).Where(dto => dto.Issues != null && dto.Issues.Any()).ToList();
+                }
+                if (query.Filter.StatusId != null)
+                {
+                    statusDto = _mapper.Map<List<DataStatusDTO>>(status).Select(dto =>
+                    {
+                        dto.Issues = dto.Issues?.Where(issue => issue.Status?.Id.Equals(query.Filter.StatusId) == true &&
+                                                      issue.Priority.Equals(query.Filter.Priority) &&
+                                                      issue.Type.Equals(query.Filter.Type))?.ToList();
+                        return dto;
+                    }).Where(dto => dto.Issues != null && dto.Issues.Any()).ToList();
+                }
+                if (query.Filter.UserId != null)
+                {
+                    statusDto = _mapper.Map<List<DataStatusDTO>>(status).Select(dto =>
+                    {
+                        dto.Issues = dto.Issues?.Where(issue => issue.User?.Id.Equals(query.Filter.UserId) == true &&
+                                                      issue.Status?.Id.Equals(query.Filter.StatusId) == true &&
+                                                      issue.Priority.Equals(query.Filter.Priority) &&
+                                                      issue.Type.Equals(query.Filter.Type))?.ToList();
+                        return dto;
+                    }).Where(dto => dto.Issues != null && dto.Issues.Any()).ToList();
+                }
                 return (statusDto, validFilter, _mapper.Map<List<DataStatusDTO>>(status).Count());
             }
             if (query.Filter.Priority == IssuePriority.Low || query.Filter.Priority == IssuePriority.Normal ||
@@ -100,27 +133,59 @@ namespace TaskServices.Application.Features.Handlers.Statuses
             {
                 statusDto = _mapper.Map<List<DataStatusDTO>>(status).Select(dto =>
                 {
-                    dto.Issues = dto.Issues.Where(issue => issue.Priority.Equals(query.Filter.Priority)).ToList();
+                    dto.Issues = dto.Issues?.Where(issue => issue.Priority.Equals(query.Filter.Priority)).ToList();
                     return dto;
                 }).Where(dto => dto.Issues != null && dto.Issues.Any()).ToList();
+                if (query.Filter.StatusId != null)
+                {
+                    statusDto = _mapper.Map<List<DataStatusDTO>>(status).Select(dto =>
+                    {
+                        dto.Issues = dto.Issues?.Where(issue => issue.Status?.Id.Equals(query.Filter.StatusId) == true &&
+                                                      issue.Priority.Equals(query.Filter.Priority))?.ToList();
+                        return dto;
+                    }).Where(dto => dto.Issues != null && dto.Issues.Any()).ToList();
+                }
+                if (query.Filter.UserId != null)
+                {
+                    statusDto = _mapper.Map<List<DataStatusDTO>>(status).Select(dto =>
+                    {
+                        dto.Issues = dto.Issues?.Where(issue => issue.User?.Id.Equals(query.Filter.UserId) == true &&
+                                                      issue.Status?.Id.Equals(query.Filter.StatusId) == true &&
+                                                      issue.Priority.Equals(query.Filter.Priority))?.ToList();
+                        return dto;
+                    }).Where(dto => dto.Issues != null && dto.Issues.Any()).ToList();
+                }
                 return (statusDto, validFilter, _mapper.Map<List<DataStatusDTO>>(status).Count());
             }
             if (query.Filter.StatusId != null)
             {
-                statusDto = _mapper.Map<List<DataStatusDTO>>(status).Where(dto => dto.Id.Equals(query.Filter.StatusId)).ToList();
+                statusDto = _mapper.Map<List<DataStatusDTO>>(status).Select(dto =>
+                {
+                    dto.Issues = dto.Issues?.Where(issue => issue.Status?.Id.Equals(query.Filter.StatusId) == true)?.ToList();
+                    return dto;
+                }).Where(dto => dto.Issues != null && dto.Issues.Any()).ToList();
+                if (query.Filter.UserId != null)
+                {
+                    statusDto = _mapper.Map<List<DataStatusDTO>>(status).Select(dto =>
+                    {
+                        dto.Issues = dto.Issues?.Where(issue => issue.User?.Id.Equals(query.Filter.UserId) == true &&
+                                                      issue.Status?.Id.Equals(query.Filter.StatusId) == true)?.ToList();
+                        return dto;
+                    }).Where(dto => dto.Issues != null && dto.Issues.Any()).ToList();
+                }
                 return (statusDto, validFilter, _mapper.Map<List<DataStatusDTO>>(status).Count());
             }
             if (query.Filter.UserId != null)
             {
                 statusDto = _mapper.Map<List<DataStatusDTO>>(status).Select(dto =>
                 {
-                    dto.Issues = dto.Issues.Where(issue => issue.User.Equals(query.Filter.UserId)).ToList();
+                    dto.Issues = dto.Issues?.Where(issue => issue.User?.Id.Equals(query.Filter.UserId) == true)?.ToList();
                     return dto;
                 }).Where(dto => dto.Issues != null && dto.Issues.Any()).ToList();
                 return (statusDto, validFilter, _mapper.Map<List<DataStatusDTO>>(status).Count());
             }
-            var expireTime = DateTimeOffset.Now.AddSeconds(30);
-            _cacheService.SetData<List<DataStatusDTO>>($"DataStatusDTO{query.Id}", statusDto, expireTime);
+            //var expireTime = DateTimeOffset.Now.AddSeconds(30);
+            //_cacheService.SetData<List<DataStatusDTO>>($"DataStatusDTO{query.Id}", statusDto, expireTime);
             return (statusDto, validFilter, statusDto.Count());
         }
     }

@@ -36,7 +36,15 @@ namespace TaskServices.Persistence.Repositories
 
         public async Task<int> CountIssueNotCompleted(int? sprintId)
         {
-            return _dbContext.Issues.Include(x => x.Status).Where(x => x.IsDeleted == false && x.SprintId == sprintId && x.Status.Name != "Completed").Count();
+            var count = _dbContext.Issues.Include(x => x.Status)
+                        .Where(x => x.IsDeleted == false && (x.SprintId == sprintId && x.Status.Name != "Completed") || (x.SprintId == sprintId && x.StatusId == null)).Count();
+            return count;
+        }
+
+        public async Task<int> CountIssueCompleted(int? sprintId)
+        {
+            return _dbContext.Issues.Include(x => x.Status)
+                   .Where(x => x.IsDeleted == false && x.SprintId == sprintId && x.Status != null && x.Status.Name == "Completed").Count();
         }
         #endregion
 
@@ -112,6 +120,7 @@ namespace TaskServices.Persistence.Repositories
                              .Include(x => x.Sprint)
                              .Include(x => x.Status)
                              .Include(x => x.Comments.Where(x => x.IsDeleted == false))
+                             .ThenInclude(cm => cm.User)
                              .Include(x => x.Attachments)
                              .Include(x => x.SubIssues.Where(x => x.IsDeleted == false))
                              .ThenInclude(sub => sub.User)
@@ -128,7 +137,20 @@ namespace TaskServices.Persistence.Repositories
 
         public async Task<List<Issue>> IssueNotCompleted(int? sprintId)
         {
-            return await _dbContext.Issues.Include(x => x.Status).Include(x => x.SubIssues.Where(x => x.IsDeleted == false)).Where(x => x.IsDeleted == false && x.SprintId == sprintId && x.Status.Name != "Completed").ToListAsync();
+            return await _dbContext.Issues.Include(x => x.Status)
+                                          .Include(x => x.SubIssues.Where(x => x.IsDeleted == false))
+                                          .Where(x => x.IsDeleted == false && (x.SprintId == sprintId && x.Status.Name != "Completed") || (x.SprintId == sprintId && x.StatusId == null)).ToListAsync();
+        }
+
+        public async Task<List<Issue>> CheckDeadline(DateTimeOffset dateTimeOffset)
+        {
+            var issues = await _dbContext.Issues.Include(x=>x.User).Where(x => x.DueDate < dateTimeOffset).ToListAsync();
+            return issues == null ? null : issues;
+        }
+
+        public async Task<Attachment> FindAttachment(int id)
+        {
+            return await _dbContext.Attachments.FirstOrDefaultAsync(x=>x.Id == id);
         }
         #endregion
     }

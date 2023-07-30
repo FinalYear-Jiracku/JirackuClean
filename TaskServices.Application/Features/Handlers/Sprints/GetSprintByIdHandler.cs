@@ -26,19 +26,19 @@ namespace TaskServices.Application.Features.Handlers.Sprints
 
         public async Task<SprintDTO> Handle(GetSprintByIdQuery query, CancellationToken cancellationToken)
         {
-            var cacheData = _cacheService.GetData<SprintDTO>($"SprintDTO/{query.Id}");
-            if (cacheData != null)
-            {
-                return cacheData;
-            }
+            //var cacheData = _cacheService.GetData<SprintDTO>($"SprintDTO/{query.Id}");
+            //if (cacheData != null)
+            //{
+            //    return cacheData;
+            //}
             var sprint = await _unitOfWork.SprintRepository.GetSprintById(query.Id);
             var sprintDto = _mapper.Map<SprintDTO>(sprint);
             if (sprintDto == null)
             {
                 return null;
             }
-            var expireTime = DateTimeOffset.Now.AddSeconds(30);
-            _cacheService.SetData<SprintDTO>($"SprintDTO/{sprintDto.Id}", sprintDto, expireTime);
+            //var expireTime = DateTimeOffset.Now.AddSeconds(30);
+            //_cacheService.SetData<SprintDTO>($"SprintDTO/{sprintDto.Id}", sprintDto, expireTime);
             return sprintDto;
         }
     }

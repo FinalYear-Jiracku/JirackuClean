@@ -30,7 +30,6 @@ namespace NotificationServices.Domain.Common
                 foreach (var domainEvent in events)
                 {
                     await _mediator.Publish(domainEvent).ConfigureAwait(false);
-                    //_notificationEventPulisher.SendMessage(domainEvent);
                 }
             }
         }

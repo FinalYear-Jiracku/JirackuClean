@@ -19,6 +19,14 @@ namespace TaskServices.Application.Common.Mappings
                                         .ForMember(dest => dest.SubIssues, opt => opt.MapFrom(src => src.SubIssues.Count()))
                                         .ForMember(dest => dest.User, opt => opt.MapFrom(src => src.User))
                                         .ReverseMap();
+            CreateMap<Issue, DeadlineIssuesDTO>().ForMember(dest => dest.Status, opt => opt.MapFrom(src => src.Status.Name))
+                                                 .ForMember(dest => dest.Sprint, opt => opt.MapFrom(src => src.Sprint.Name))
+                                                 .ForMember(dest => dest.User, opt => opt.MapFrom(src => src.User.Email))
+                                                 .ReverseMap();
+            CreateMap<SubIssue, DeadlineSubIssuesDTO>().ForMember(dest => dest.Status, opt => opt.MapFrom(src => src.Status.Name))
+                                                   .ForMember(dest => dest.Issue, opt => opt.MapFrom(src => src.Issue.Name))
+                                                   .ForMember(dest => dest.User, opt => opt.MapFrom(src => src.User.Email))
+                                                   .ReverseMap();
             CreateMap<Issue, DataIssueDTO>().ForMember(dest => dest.Status, opt => opt.MapFrom(src => src.Status))
                                             .ForMember(dest => dest.Sprint, opt => opt.MapFrom(src => src.Sprint))
                                             .ForMember(dest => dest.Attachments, opt => opt.MapFrom(src => src.Attachments))
@@ -37,7 +45,7 @@ namespace TaskServices.Application.Common.Mappings
             CreateMap<Column, ColumnDTO>().ReverseMap();
             CreateMap<Column, DataColumnDTO>().ForMember(dest => dest.Notes, opt => opt.MapFrom(src => src.Notes)).ReverseMap();
             CreateMap<Note, NoteDTO>().ForMember(dest => dest.Comments, opt => opt.MapFrom(src => src.Comments)).ReverseMap();
-            CreateMap<Comment, CommentDTO>().ReverseMap();
+            CreateMap<Comment, CommentDTO>().ForMember(dest => dest.User, opt => opt.MapFrom(src => src.User)).ReverseMap();
             CreateMap<Page, PageDTO>().ReverseMap();
             CreateMap<Attachment, AttachmentDTO>().ReverseMap();
             CreateMap<User, UserDTO>().ReverseMap();

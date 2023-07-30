@@ -17,7 +17,7 @@ using TaskServices.Domain.Entities;
 
 namespace TaskServices.Application.Features.Handlers.Sprints
 {
-    public class CreateSprintHandler : IRequestHandler<CreateSprintCommand, Sprint>
+     public class CreateSprintHandler : IRequestHandler<CreateSprintCommand, Sprint>
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
@@ -91,7 +91,7 @@ namespace TaskServices.Application.Features.Handlers.Sprints
                 Color = "#dcfce7",
                 CreatedBy = newSprint.CreatedBy,
             };
-            column2.AddDomainEvent(new ColumnCreatedEvent(column2));
+            column3.AddDomainEvent(new ColumnCreatedEvent(column3));
             newSprint.Columns.Add(column3);
             await _unitOfWork.Repository<Sprint>().AddAsync(newSprint);
             newSprint.AddDomainEvent(new SprintCreatedEvent(newSprint));

@@ -59,6 +59,10 @@ namespace TaskServices.Persistence.Repositories
         {
             return await _dbContext.Sprints.Where(x => x.IsDeleted == false && x.ProjectId == projectId).ToListAsync();
         }
+        public async Task<List<Sprint>> GetSprintListForComplete(int? projectId, int sprintId)
+        {
+            return await _dbContext.Sprints.Where(x => x.IsDeleted == false && x.ProjectId == projectId && x.Id != sprintId).ToListAsync();
+        }
         #endregion
     }
 }

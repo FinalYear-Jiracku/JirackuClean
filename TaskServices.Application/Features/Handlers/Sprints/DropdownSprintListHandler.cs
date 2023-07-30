@@ -27,16 +27,16 @@ namespace TaskServices.Application.Features.Handlers.Sprints
         }
         public async Task<List<SprintDTO>> Handle(DropdownSprintListQuery query, CancellationToken cancellationToken)
         {
-            var cacheData = _cacheService.GetData<List<SprintDTO>>($"SprintDTO/dropdown?projectId={query.Id}");
-            if (cacheData != null && cacheData.Count() > 0)
-            {
-                return cacheData;
-            }
-            var status = await _unitOfWork.SprintRepository.GetSprintListByProjectId(query.Id);
-            var issueDto = _mapper.Map<List<SprintDTO>>(status).OrderByDescending(x => x.Id).ToList();
-            var expireTime = DateTimeOffset.Now.AddSeconds(30);
-            _cacheService.SetData<List<SprintDTO>>($"SprintDTO/dropdown?projectId={query.Id}", issueDto, expireTime);
-            return issueDto;
+            //var cacheData = _cacheService.GetData<List<SprintDTO>>($"SprintDTO/dropdown?projectId={query.Id}");
+            //if (cacheData != null && cacheData.Count() > 0)
+            //{
+            //    return cacheData;
+            //}
+            var sprint = await _unitOfWork.SprintRepository.GetSprintListByProjectId(query.Id);
+            var sprintDto = _mapper.Map<List<SprintDTO>>(sprint).OrderByDescending(x => x.Id).ToList();
+            //var expireTime = DateTimeOffset.Now.AddSeconds(30);
+            //_cacheService.SetData<List<SprintDTO>>($"SprintDTO/dropdown?projectId={query.Id}", issueDto, expireTime);
+            return sprintDto;
         }
     }
 }

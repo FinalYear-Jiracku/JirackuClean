@@ -35,6 +35,7 @@ namespace TaskServices.Application.Features.Handlers.Issues
         {
             var issue = await _unitOfWork.IssueRepository.GetIssueById(command.Id);
             var user = await _unitOfWork.UserRepository.FindUserById(command.UserId);
+            var status = await _unitOfWork.StatusRepository.GetStatusById(command.StatusId);
             if (issue == null)
             {
                 return default;
@@ -44,7 +45,7 @@ namespace TaskServices.Application.Features.Handlers.Issues
             var expireTime = DateTimeOffset.Now.AddSeconds(30);
             if (issue.SprintId != command.SprintId)
             {
-                var statusToDo = await _unitOfWork.StatusRepository.GetStatusToDo(command.SprintId);
+                //var statusToDo = await _unitOfWork.StatusRepository.GetStatusToDo(command.SprintId);
                 if(command.Files == null)
                 {
                     issue.Name = command.Name;
@@ -54,10 +55,11 @@ namespace TaskServices.Application.Features.Handlers.Issues
                     issue.StoryPoint = command.StoryPoint;
                     issue.StartDate = command.StartDate;
                     issue.DueDate = command.DueDate;
-                    issue.StatusId = statusToDo.Id;
+                    issue.Status = null;
                     issue.SprintId = command.SprintId;
                     issue.UpdatedBy = command.UpdatedBy;
                     issue.UpdatedAt = DateTimeOffset.Now;
+
                     if (issue.User == null && command.UserId == 0)
                     {
                         issue.User = null;
@@ -86,9 +88,9 @@ namespace TaskServices.Application.Features.Handlers.Issues
                     await _unitOfWork.Repository<Issue>().UpdateAsync(issue);
                     issue.AddDomainEvent(new IssueUpdatedEvent(issue));
                     await _unitOfWork.Save(cancellationToken);
-                    var issuesFileNull = await _unitOfWork.IssueRepository.GetIssueListBySprintId(command.SprintId);
-                    var issuesDtoFileNull = _mapper.Map<List<IssueDTO>>(issuesFileNull);
-                    _cacheService.SetData<List<IssueDTO>>($"IssueDTO?sprintId={command.SprintId}", issuesDtoFileNull, expireTime);
+                    //var issuesFileNull = await _unitOfWork.IssueRepository.GetIssueListBySprintId(command.SprintId);
+                    //var issuesDtoFileNull = _mapper.Map<List<IssueDTO>>(issuesFileNull);
+                    //_cacheService.SetData<List<IssueDTO>>($"IssueDTO?sprintId={command.SprintId}", issuesDtoFileNull, expireTime);
                     return await Task.FromResult(0);
                 }
                 foreach (var file in command.Files)
@@ -111,7 +113,7 @@ namespace TaskServices.Application.Features.Handlers.Issues
                 issue.StoryPoint = command.StoryPoint;
                 issue.StartDate = command.StartDate;
                 issue.DueDate = command.DueDate;
-                issue.StatusId = statusToDo.Id;
+                issue.Status = null;
                 issue.SprintId = command.SprintId;
                 issue.UpdatedBy = command.UpdatedBy;
                 issue.UpdatedAt = DateTimeOffset.Now;
@@ -142,9 +144,9 @@ namespace TaskServices.Application.Features.Handlers.Issues
                 await _unitOfWork.Repository<Issue>().UpdateAsync(issue);
                 issue.AddDomainEvent(new IssueUpdatedEvent(issue));
                 await _unitOfWork.Save(cancellationToken);
-                var issues = await _unitOfWork.IssueRepository.GetIssueListBySprintId(command.SprintId);
-                var issuesDto = _mapper.Map<List<IssueDTO>>(issues);
-                _cacheService.SetData<List<IssueDTO>>($"IssueDTO?sprintId={command.SprintId}&pageNumber=1&search=", issuesDto, expireTime);
+                //var issues = await _unitOfWork.IssueRepository.GetIssueListBySprintId(command.SprintId);
+                //var issuesDto = _mapper.Map<List<IssueDTO>>(issues);
+                //_cacheService.SetData<List<IssueDTO>>($"IssueDTO?sprintId={command.SprintId}&pageNumber=1&search=", issuesDto, expireTime);
                 return await Task.FromResult(0);
             }
 
@@ -157,10 +159,23 @@ namespace TaskServices.Application.Features.Handlers.Issues
                 issue.StoryPoint = command.StoryPoint;
                 issue.StartDate = command.StartDate;
                 issue.DueDate = command.DueDate;
-                issue.StatusId = command.StatusId;
                 issue.UpdatedBy = command.UpdatedBy;
                 issue.UpdatedAt = DateTimeOffset.Now;
-                if(issue.User == null && command.UserId == 0)
+
+                if (issue.Status == null && command.StatusId == 0)
+                {
+                    issue.Status = null;
+                }
+                if (issue.Status != null && issue.Status.Id != command.StatusId)
+                {
+                    issue.Status = status;
+                }
+                if (issue.Status == null && command.StatusId != 0)
+                {
+                    issue.Status = status;
+                }
+
+                if (issue.User == null && command.UserId == 0)
                 {
                     issue.User = null;
                 }
@@ -188,9 +203,9 @@ namespace TaskServices.Application.Features.Handlers.Issues
                 await _unitOfWork.Repository<Issue>().UpdateAsync(issue);
                 issue.AddDomainEvent(new IssueUpdatedEvent(issue));
                 await _unitOfWork.Save(cancellationToken);
-                var issuesFileNull = await _unitOfWork.IssueRepository.GetIssueListBySprintId(command.SprintId);
-                var issuesDtoFileNull = _mapper.Map<List<IssueDTO>>(issuesFileNull);
-                _cacheService.SetData<List<IssueDTO>>($"IssueDTO?sprintId={command.SprintId}", issuesDtoFileNull, expireTime);
+                //var issuesFileNull = await _unitOfWork.IssueRepository.GetIssueListBySprintId(command.SprintId);
+                //var issuesDtoFileNull = _mapper.Map<List<IssueDTO>>(issuesFileNull);
+                //_cacheService.SetData<List<IssueDTO>>($"IssueDTO?sprintId={command.SprintId}", issuesDtoFileNull, expireTime);
                 return await Task.FromResult(0);
             }
 
@@ -214,9 +229,21 @@ namespace TaskServices.Application.Features.Handlers.Issues
             issue.StoryPoint = command.StoryPoint;
             issue.StartDate = command.StartDate;
             issue.DueDate = command.DueDate;
-            issue.StatusId = command.StatusId;
             issue.UpdatedBy = command.UpdatedBy;
             issue.UpdatedAt = DateTimeOffset.Now;
+
+            if (issue.Status == null && command.StatusId == 0)
+            {
+                issue.Status = null;
+            }
+            if (issue.Status != null && issue.Status.Id != command.StatusId)
+            {
+                issue.Status = status;
+            }
+            if (issue.Status == null && command.StatusId != 0)
+            {
+                issue.Status = status;
+            }
 
             if (issue.User == null && command.UserId == 0)
             {
@@ -246,9 +273,9 @@ namespace TaskServices.Application.Features.Handlers.Issues
             await _unitOfWork.Repository<Issue>().UpdateAsync(issue);
             issue.AddDomainEvent(new IssueUpdatedEvent(issue));
             await _unitOfWork.Save(cancellationToken);
-            var issueList = await _unitOfWork.IssueRepository.GetIssueListBySprintId(command.SprintId);
-            var issueDtoList = _mapper.Map<List<IssueDTO>>(issueList);
-            _cacheService.SetData<List<IssueDTO>>($"IssueDTO?sprintId={command.SprintId}", issueDtoList, expireTime);
+            //var issueList = await _unitOfWork.IssueRepository.GetIssueListBySprintId(command.SprintId);
+            //var issueDtoList = _mapper.Map<List<IssueDTO>>(issueList);
+            //_cacheService.SetData<List<IssueDTO>>($"IssueDTO?sprintId={command.SprintId}", issueDtoList, expireTime);
             return await Task.FromResult(0);
         }
 

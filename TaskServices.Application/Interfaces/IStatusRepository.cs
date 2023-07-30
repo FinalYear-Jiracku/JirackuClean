@@ -12,7 +12,7 @@ namespace TaskServices.Application.Interfaces
     public interface IStatusRepository
     {
         Task<List<Status>> GetStatusListBySprintId(int sprintId);
-        Task<Status> GetStatusById(int id);
+        Task<Status> GetStatusById(int? id);
         Task<bool> CheckStatusName(CheckStatusNameQuery status);
         Task<Status> GetStatusToDo(int? sprintId);
     }

@@ -28,11 +28,11 @@ namespace TaskServices.Application.Features.Handlers.Issues
 
         public async Task<DataIssueDTO> Handle(GetIssueByIdQuery query, CancellationToken cancellationToken)
         {
-            var cacheData = _cacheService.GetData<DataIssueDTO>($"DataIssueDTO{query.Id}");
-            if (cacheData != null)
-            {
-                return cacheData;
-            }
+            //var cacheData = _cacheService.GetData<DataIssueDTO>($"DataIssueDTO{query.Id}");
+            //if (cacheData != null)
+            //{
+            //    return cacheData;
+            //}
             var issue = await _unitOfWork.IssueRepository.GetIssueById(query.Id);
             var issueDto = _mapper.Map<DataIssueDTO>(issue);
 
@@ -40,8 +40,8 @@ namespace TaskServices.Application.Features.Handlers.Issues
             {
                 return null;
             }
-            var expireTime = DateTimeOffset.Now.AddSeconds(30);
-            _cacheService.SetData<DataIssueDTO>($"DataIssueDTO{issueDto.Id}", issueDto, expireTime);
+            //var expireTime = DateTimeOffset.Now.AddSeconds(30);
+            //_cacheService.SetData<DataIssueDTO>($"DataIssueDTO{issueDto.Id}", issueDto, expireTime);
             return issueDto;
         }
     }

@@ -11,13 +11,12 @@ using System.Threading.Channels;
 using System.Threading.Tasks;
 using System.Xml.Linq;
 
-namespace NotificationServices.Infrastructure.Services
+namespace NotificationServices.Infrastructure.Services.Publisher
 {
     public class NotificationEventPublisher : INotificationEventPulisher
     {
         private readonly IRabbitMQManager _rabbitMQManager;
         private IModel _channel;
-        
 
         public NotificationEventPublisher(IRabbitMQManager rabbitMQManager)
         {
@@ -37,7 +36,7 @@ namespace NotificationServices.Infrastructure.Services
             _channel.ExchangeDeclare(ExchangeName, ExchangeType.Fanout, false, true, null);
             _channel.QueueDeclare(inviteToken, false, false, true, null);
             _channel.QueueBind(inviteToken, ExchangeName, "");
-            var message = new { email = email, projectId = projectId, inviteToken = inviteToken };
+            var message = new { email, projectId, inviteToken };
             var body = Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(message));
             _channel.BasicPublish(ExchangeName, inviteToken, null, body);
         }

@@ -29,13 +29,13 @@ namespace TaskServices.Persistence.Repositories
         #region Check Services
         public async Task<bool> CheckStatusName(CheckStatusNameQuery status)
         {
-            var findStatus = await _connection.QueryFirstOrDefaultAsync<Status>("SELECT * FROM \"Statuses\" WHERE \"IsDeleted\" = false AND \"Id\" <> @Id AND \"Name\" = @Name", new { Id = status.Id, Name = status.Name });
+            var findStatus = await _connection.QueryFirstOrDefaultAsync<Status>("SELECT * FROM \"Statuses\" WHERE \"IsDeleted\" = false AND \"Id\" <> @Id AND \"SprintId\" = @SprintId AND \"Name\" = @Name", new { Id = status.Id, Name = status.Name, SprintId = status.SprintId });
             return findStatus == null ? false : true;
         }
         #endregion
 
         #region Get Services
-        public async Task<Status> GetStatusById(int id)
+        public async Task<Status> GetStatusById(int? id)
         {
             var status = await _connection.QueryFirstOrDefaultAsync<Status>("SELECT * FROM \"Statuses\" WHERE \"IsDeleted\" = false AND \"Id\" = @Id", new { Id = id });
             return status == null ? null : status;
@@ -43,7 +43,10 @@ namespace TaskServices.Persistence.Repositories
 
         public async Task<List<Status>> GetStatusListBySprintId(int sprintId)
         {
-             return await _dbContext.Statuses.Include(x=>x.Sprint).Include(x => x.Issues.Where(x => x.IsDeleted == false)).Include(x => x.SubIssues.Where(x => x.IsDeleted == false)).Where(x => x.IsDeleted == false && x.SprintId == sprintId).ToListAsync();
+             return await _dbContext.Statuses.Include(x=>x.Sprint)
+                                             .Include(x => x.Issues.Where(x => x.IsDeleted == false).OrderBy(x => x.Order)).ThenInclude(x=>x.User)
+                                             .Include(x => x.SubIssues.Where(x => x.IsDeleted == false))
+                                             .Where(x => x.IsDeleted == false && x.SprintId == sprintId).ToListAsync();
         }
 
         public async Task<Status> GetStatusToDo(int? sprintId)

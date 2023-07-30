@@ -14,8 +14,11 @@ namespace TaskServices.Application.Interfaces
         Task<List<Issue>> UpdateOrderIssue(UpdateOrderIssueCommand command);
         Task<List<Issue>> DndIssue(DndIssueCommand command);
         Task<int> CountIssueNotCompleted(int? sprintId);
+        Task<int> CountIssueCompleted(int? sprintId);
         Task<List<Issue>> IssueNotCompleted(int? sprintId);
         Task<List<Issue>> GetIssueListBySprintId(int? sprintId);
         Task<Issue> GetIssueById(int id);
+        Task<Attachment> FindAttachment(int issueId);
+        Task<List<Issue>> CheckDeadline(DateTimeOffset dateTimeOffset);
     }
 }

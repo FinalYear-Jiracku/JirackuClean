@@ -43,10 +43,10 @@ namespace TaskServices.Application.Features.Handlers.Issues
             await _unitOfWork.Repository<Issue>().AddAsync(newIssue);
             newIssue.AddDomainEvent(new IssueCreatedEvent(newIssue));
             await _unitOfWork.Save(cancellationToken);
-            var issues = await _unitOfWork.IssueRepository.GetIssueListBySprintId(command.SprintId);
-            var issuesDto = _mapper.Map<List<IssueDTO>>(issues).OrderByDescending(x => x.Id).ToList();
-            var expireTime = DateTimeOffset.Now.AddSeconds(30);
-            _cacheService.SetData<List<IssueDTO>>($"IssueDTO?sprintId={command.SprintId}&pageNumber=1&search=", issuesDto, expireTime);
+            //var issues = await _unitOfWork.IssueRepository.GetIssueListBySprintId(command.SprintId);
+            //var issuesDto = _mapper.Map<List<IssueDTO>>(issues).OrderByDescending(x => x.Id).ToList();
+            //var expireTime = DateTimeOffset.Now.AddSeconds(30);
+            //_cacheService.SetData<List<IssueDTO>>($"IssueDTO?sprintId={command.SprintId}&pageNumber=1&search=", issuesDto, expireTime);
             return newIssue;
         }
     }

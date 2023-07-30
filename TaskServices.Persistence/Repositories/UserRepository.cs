@@ -48,9 +48,9 @@ namespace TaskServices.Persistence.Repositories
         {
             await using var context = new ApplicationDbContext(_dbContext);
             var users = await (from u in context.Users
-                                 join up in context.UserProject on u.Id equals up.UserId
-                                 join p in context.Projects on up.ProjectId equals p.Id
-                                 where up.ProjectId == projectId
+                               join up in context.UserProject on u.Id equals up.UserId
+                               join p in context.Projects on up.ProjectId equals p.Id
+                               where up.ProjectId == projectId
                                select u).ToListAsync();
             return users;
         }

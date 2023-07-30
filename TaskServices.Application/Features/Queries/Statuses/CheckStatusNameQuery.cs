@@ -11,14 +11,17 @@ namespace TaskServices.Application.Features.Queries.Statuses
     {
         public int Id { get; set; }
         public string? Name { get; set; }
-        public CheckStatusNameQuery(string? name)
+        public int? SprintId { get; set; }
+        public CheckStatusNameQuery(string? name, int? sprintId)
         {
             Name = name;
+            SprintId = sprintId;
         }
-        public CheckStatusNameQuery(int id, string? name)
+        public CheckStatusNameQuery(int id, string? name, int? sprintId)
         {
             Id = id;
             Name = name;
+            SprintId = sprintId;
         }
     }
 }

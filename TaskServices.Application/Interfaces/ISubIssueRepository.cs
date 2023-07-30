@@ -14,5 +14,6 @@ namespace TaskServices.Application.Interfaces
         Task<SubIssue> GetSubIssueById(int id);
         Task<List<SubIssue>> SubIssueNotCompleted(int? issueId);
         Task<List<SubIssue>> GetSubIssueListByIssueId(int? issueId);
+        Task<List<SubIssue>> CheckDeadline(DateTimeOffset dateTimeOffset);
     }
 }
