@@ -57,6 +57,11 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddGo
                             {
                                 context.Token = accessToken;
                             }
+                            if (!string.IsNullOrEmpty(accessToken) &&
+                                (path.StartsWithSegments("/chat")))
+                            {
+                                context.Token = accessToken;
+                            }
                             return Task.CompletedTask;
                         }
                     };
@@ -98,6 +103,7 @@ app.UseAuthorization();
 app.UseEndpoints(endpoints =>
 {
     endpoints.MapHub<NotificationHub>("/notification");
+    endpoints.MapHub<ChatHub>("/chat");
 });
 
 app.MapControllers();

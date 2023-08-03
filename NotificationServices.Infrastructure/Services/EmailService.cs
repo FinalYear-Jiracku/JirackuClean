@@ -5,7 +5,7 @@ using MimeKit;
 using MimeKit.Text;
 using NotificationServices.Application.DTOs;
 using NotificationServices.Application.Interfaces.IServices;
-using NotificationServices.Application.Message;
+using NotificationServices.Application.Messages;
 using NotificationServices.Domain.Common.Interfaces;
 using Org.BouncyCastle.Asn1.Ocsp;
 using System;

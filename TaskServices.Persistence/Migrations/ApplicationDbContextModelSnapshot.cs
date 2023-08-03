@@ -401,9 +401,18 @@ namespace TaskServices.Persistence.Migrations
                     b.Property<bool?>("IsDeleted")
                         .HasColumnType("boolean");
 
+                    b.Property<bool?>("IsStart")
+                        .HasColumnType("boolean");
+
                     b.Property<string>("Name")
                         .HasMaxLength(100)
                         .HasColumnType("character varying(100)");
+
+                    b.Property<int?>("NumOfIssue")
+                        .HasColumnType("integer");
+
+                    b.Property<int?>("NumOfStoryPoint")
+                        .HasColumnType("integer");
 
                     b.Property<int?>("ProjectId")
                         .HasColumnType("integer");

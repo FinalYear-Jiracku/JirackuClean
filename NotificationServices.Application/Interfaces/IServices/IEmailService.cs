@@ -1,5 +1,5 @@
 ﻿using NotificationServices.Application.DTOs;
-using NotificationServices.Application.Message;
+using NotificationServices.Application.Messages;
 using System;
 using System.Collections.Generic;
 using System.Linq;

@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 using NotificationServices.Domain.Common.Interfaces;
 using Newtonsoft.Json;
 using Microsoft.Extensions.Hosting;
-using NotificationServices.Application.Message;
+using NotificationServices.Application.Messages;
 using NotificationServices.Application.Interfaces.IServices;
 
 namespace NotificationServices.Infrastructure.Services.Subcriber

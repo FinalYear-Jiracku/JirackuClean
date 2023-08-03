@@ -32,7 +32,10 @@ namespace NotificationServices.Persistence.Extensions
         {
             services.AddScoped(typeof(IUnitOfWork), typeof(UnitOfWork))
                     .AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>))
-                    .AddScoped<INotificationRepository, NotificationRepository>();
+                    .AddScoped<INotificationRepository, NotificationRepository>()
+                    .AddScoped<IGroupRepository, GroupRepository>()
+                    .AddScoped<IUserRepository, UserRepository>()
+                    .AddScoped<IMessageRepository, MessageRepository>();
         }
     }
 }

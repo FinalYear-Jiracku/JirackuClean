@@ -7,7 +7,10 @@ namespace TaskServices.Domain.Entities
         public string? Name { get; set; }
         public DateTimeOffset? StartDate { get; set; }
         public DateTimeOffset? EndDate { get; set; }
+        public int? NumOfIssue { get; set; }
+        public int? NumOfStoryPoint { get; set; }
         public bool? IsCompleted { get; set; } = false;
+        public bool? IsStart { get; set; } = false;
         public int? ProjectId { get; set; }
         public Project? Project { get; set; }
         public ICollection<Status>? Statuses { get; set; }

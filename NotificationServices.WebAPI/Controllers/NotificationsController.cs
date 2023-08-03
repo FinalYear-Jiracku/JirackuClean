@@ -25,7 +25,7 @@ namespace NotificationServices.WebAPI.Controllers
         [HttpGet("{id}")]
         public async Task<IActionResult> NotificationList(int id)
         {
-            var listNoti = await _mediator.Send(new GetListNotificationQueries(id));
+            var listNoti = await _mediator.Send(new GetListNotificationQuery(id));
             return Ok(listNoti);
         }
     }

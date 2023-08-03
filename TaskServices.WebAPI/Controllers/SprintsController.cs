@@ -106,6 +106,12 @@ namespace TaskServices.WebAPI.Controllers
             await _mediator.Send(sprintCommand);
             return Ok();
         }
+        [HttpPut("start")]
+        public async Task<IActionResult> StartSprint([FromBody] StartSprintCommand sprintCommand)
+        {
+            await _mediator.Send(sprintCommand);
+            return Ok();
+        }
         #endregion
 
         #region DELETE API

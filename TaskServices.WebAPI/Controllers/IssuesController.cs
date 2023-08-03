@@ -75,6 +75,58 @@ namespace TaskServices.WebAPI.Controllers
             return Ok(issue);
         }
 
+        [HttpGet]
+        [Route("type/sprints/{id}")]
+        public async Task<IActionResult> StatisType(int id)
+        {
+            var findSprint = await _mediator.Send(new GetSprintByIdQuery(id));
+            if (findSprint == null)
+            {
+                return StatusCode(400, "Sprint Does Not Exist");
+            }
+            var issue = await _mediator.Send(new StatisTypeQuery(id));
+            return Ok(issue);
+        }
+
+        [HttpGet]
+        [Route("priority/sprints/{id}")]
+        public async Task<IActionResult> StatisPriority(int id)
+        {
+            var findSprint = await _mediator.Send(new GetSprintByIdQuery(id));
+            if (findSprint == null)
+            {
+                return StatusCode(400, "Sprint Does Not Exist");
+            }
+            var issue = await _mediator.Send(new StatisPriorityQuery(id));
+            return Ok(issue);
+        }
+
+        [HttpGet]
+        [Route("status/sprints/{id}")]
+        public async Task<IActionResult> StatisStatus(int id)
+        {
+            var findSprint = await _mediator.Send(new GetSprintByIdQuery(id));
+            if (findSprint == null)
+            {
+                return StatusCode(400, "Sprint Does Not Exist");
+            }
+            var issue = await _mediator.Send(new StatisStatusQuery(id));
+            return Ok(issue);
+        }
+
+        [HttpGet]
+        [Route("deadline/sprints/{id}")]
+        public async Task<IActionResult> StatisDeadline(int id)
+        {
+            var findSprint = await _mediator.Send(new GetSprintByIdQuery(id));
+            if (findSprint == null)
+            {
+                return StatusCode(400, "Sprint Does Not Exist");
+            }
+            var issue = await _mediator.Send(new StatisDeadlineQuery(id));
+            return Ok(issue);
+        }
+
         [HttpGet("{id}")]
         public async Task<IActionResult> GetIssueDetail(int id)
         {

@@ -5,6 +5,8 @@ using Newtonsoft.Json;
 using System.Security.Claims;
 using UserServices.Application.Features.Commands;
 using UserServices.Application.Features.Queries;
+using UserServices.Application.Interfaces.IServices;
+using UserServices.Application.Resources;
 
 namespace UserServices.WebAPI.Controllers
 {
@@ -13,9 +15,11 @@ namespace UserServices.WebAPI.Controllers
     public class UsersController : ControllerBase
     {
         private readonly IMediator _mediator;
-        public UsersController(IMediator mediator)
+        private readonly IStripeService _stripeService;
+        public UsersController(IMediator mediator, IStripeService stripeService)
         {
             _mediator = mediator;
+            _stripeService = stripeService;
         }
         [HttpGet("me")]
         public async Task<IActionResult> GetProfile()
@@ -41,6 +45,19 @@ namespace UserServices.WebAPI.Controllers
         public async Task<IActionResult> Update([FromForm] UpdateUserCommand command)
         {
             return Ok(await _mediator.Send(command));
+        }
+        [HttpPost("customer")]
+        public async Task<ActionResult<CustomerResource>> CreateCustomer([FromBody] CreateCustomerResource resource,
+        CancellationToken cancellationToken)
+        {
+            var response = await _stripeService.CreateCustomer(resource, cancellationToken);
+            return Ok(response);
+        }
+        [HttpPost("charge")]
+        public async Task<ActionResult<ChargeResource>> CreateCharge([FromBody] CreateChargeResource resource, CancellationToken cancellationToken)
+        {
+            var response = await _stripeService.CreateCharge(resource, cancellationToken);
+            return Ok(response);
         }
     }
 }

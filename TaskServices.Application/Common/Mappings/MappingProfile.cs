@@ -49,6 +49,9 @@ namespace TaskServices.Application.Common.Mappings
             CreateMap<Page, PageDTO>().ReverseMap();
             CreateMap<Attachment, AttachmentDTO>().ReverseMap();
             CreateMap<User, UserDTO>().ReverseMap();
+            //CreateMap<Sprint, SprintBurnDownDTO>().ForMember(dest => dest.CurrentDate, opt => opt.MapFrom(src => src.StartDate))
+            //                                      .ForMember(dest => dest.TotalRemainWork, opt => opt.MapFrom(src => src.ProjectId))
+            //                                      .ReverseMap();
         }
     }
 }

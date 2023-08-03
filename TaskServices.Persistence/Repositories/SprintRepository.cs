@@ -51,7 +51,7 @@ namespace TaskServices.Persistence.Repositories
         #region Get Services
         public async Task<Sprint> GetSprintById(int id)
         {
-            var sprint = await _connection.QueryFirstOrDefaultAsync<Sprint>("SELECT * FROM \"Sprints\" WHERE \"IsDeleted\" = false AND \"Id\" = @Id", new { Id = id });
+            var sprint = await _dbContext.Sprints.Include(x => x.Issues.Where(x => x.IsDeleted == false)).FirstOrDefaultAsync(x => x.Id == id); 
             return sprint == null ? null : sprint;
         }
 

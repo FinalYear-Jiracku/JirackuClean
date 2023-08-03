@@ -13,6 +13,7 @@ namespace UserServices.Domain.Entities
         public string? Email { get; set; }
         public string? Image { get; set; }
         public string? RefreshToken { get; set; }
+        public string? CustomerId { get; set; }
         public DateTimeOffset? RefreshTokenExpiryTime { get; set; }
     }
 }

@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace NotificationServices.Application.Features.Handlers
 {
-    public class GetListNotificationHandler : IRequestHandler<GetListNotificationQueries, List<NotificationDTO>>
+    public class GetListNotificationHandler : IRequestHandler<GetListNotificationQuery, List<NotificationDTO>>
     {
         private readonly INotificationRepository _notificationRepository;
         private readonly IMapper _mapper;
@@ -22,7 +22,7 @@ namespace NotificationServices.Application.Features.Handlers
             _notificationRepository = notificationRepository;
             _mapper = mapper;
         }
-        public async Task<List<NotificationDTO>> Handle(GetListNotificationQueries query, CancellationToken cancellationToken)
+        public async Task<List<NotificationDTO>> Handle(GetListNotificationQuery query, CancellationToken cancellationToken)
         {
             var listNoti = await _notificationRepository.GetNotificationByProjectId(query.Id);
             var listNotiDTO = _mapper.Map<List<NotificationDTO>>(listNoti).OrderByDescending(x => x.CreatedAt).ToList();
