@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using TaskServices.Application.DTOs;
 using TaskServices.Application.Features.Commands.Sprints;
+using TaskServices.Application.Features.Queries.Issues;
 using TaskServices.Application.Features.Queries.Projects;
 using TaskServices.Application.Features.Queries.Sprints;
 using TaskServices.Application.Features.Queries.Statuses;
@@ -56,6 +57,19 @@ namespace TaskServices.WebAPI.Controllers
         }
 
         [HttpGet]
+        [Route("start/{id}")]
+        public async Task<IActionResult> StarSprintList(int id)
+        {
+            var findProject = await _mediator.Send(new GetProjectByIdQuery(id));
+            if (findProject == null)
+            {
+                return StatusCode(400, "Project Does Not Exist");
+            }
+            var sprintList = await _mediator.Send(new StartSprintListQuery(id));
+            return Ok(sprintList);
+        }
+
+        [HttpGet]
         [Route("complete/projects/{id}")]
         public async Task<IActionResult> SprintListForComplete([FromQuery] int sprintId, int id)
         {
@@ -77,6 +91,14 @@ namespace TaskServices.WebAPI.Controllers
                 return StatusCode(400, "Sprint Does Not Exist");
             }
             return Ok(sprint);
+        }
+
+        [HttpGet]
+        [Route("issue/projects")]
+        public async Task<IActionResult> StatisNumOfIssue([FromQuery] int projectId)
+        {
+            var issue = await _mediator.Send(new StatisNumIssuesQuery(projectId));
+            return Ok(issue);
         }
         #endregion
 

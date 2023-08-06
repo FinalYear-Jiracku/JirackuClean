@@ -39,7 +39,7 @@ namespace TaskServices.Infrastructure.Extensions
                     .ForJob(jobKey)
                     .WithIdentity("CheckDeadlineJob-trigger")
                     .WithSchedule(CronScheduleBuilder
-                    .DailyAtHourAndMinute(15,13)
+                    .DailyAtHourAndMinute(14,56)
                     .InTimeZone(TimeZoneInfo.FindSystemTimeZoneById("SE Asia Standard Time")))
                 );
             });

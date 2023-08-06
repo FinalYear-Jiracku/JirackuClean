@@ -33,7 +33,11 @@ namespace TaskServices.Persistence.Repositories
         }
         public async Task<List<SubIssue>> CheckDeadline(DateTimeOffset dateTimeOffset)
         {
-            var subIssues = await _dbContext.SubIssues.Include(x => x.User).Where(x => x.DueDate < dateTimeOffset).ToListAsync();
+            var subIssues = await _dbContext.SubIssues
+                                  .Include(x => x.Issue)
+                                  .ThenInclude(x=>x.Sprint)
+                                  .ThenInclude(x=>x.Project)
+                                  .Include(x => x.User).Where(x => x.DueDate < dateTimeOffset).ToListAsync();
             return subIssues == null ? null : subIssues;
         }
         #endregion

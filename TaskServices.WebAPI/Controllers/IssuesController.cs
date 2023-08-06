@@ -76,54 +76,67 @@ namespace TaskServices.WebAPI.Controllers
         }
 
         [HttpGet]
-        [Route("type/sprints/{id}")]
-        public async Task<IActionResult> StatisType(int id)
+        [Route("type/sprints")]
+        public async Task<IActionResult> StatisType(int sprintId)
         {
-            var findSprint = await _mediator.Send(new GetSprintByIdQuery(id));
+            var findSprint = await _mediator.Send(new GetSprintByIdQuery(sprintId));
             if (findSprint == null)
             {
                 return StatusCode(400, "Sprint Does Not Exist");
             }
-            var issue = await _mediator.Send(new StatisTypeQuery(id));
+            var issue = await _mediator.Send(new StatisTypeQuery(sprintId));
             return Ok(issue);
         }
 
         [HttpGet]
-        [Route("priority/sprints/{id}")]
-        public async Task<IActionResult> StatisPriority(int id)
+        [Route("priority/sprints")]
+        public async Task<IActionResult> StatisPriority([FromQuery] int sprintId)
         {
-            var findSprint = await _mediator.Send(new GetSprintByIdQuery(id));
+            var findSprint = await _mediator.Send(new GetSprintByIdQuery(sprintId));
             if (findSprint == null)
             {
                 return StatusCode(400, "Sprint Does Not Exist");
             }
-            var issue = await _mediator.Send(new StatisPriorityQuery(id));
+            var issue = await _mediator.Send(new StatisPriorityQuery(sprintId));
             return Ok(issue);
         }
 
         [HttpGet]
-        [Route("status/sprints/{id}")]
-        public async Task<IActionResult> StatisStatus(int id)
+        [Route("status/sprints")]
+        public async Task<IActionResult> StatisStatus([FromQuery] int sprintId)
         {
-            var findSprint = await _mediator.Send(new GetSprintByIdQuery(id));
+            var findSprint = await _mediator.Send(new GetSprintByIdQuery(sprintId));
             if (findSprint == null)
             {
                 return StatusCode(400, "Sprint Does Not Exist");
             }
-            var issue = await _mediator.Send(new StatisStatusQuery(id));
+            var issue = await _mediator.Send(new StatisStatusQuery(sprintId));
             return Ok(issue);
         }
 
         [HttpGet]
-        [Route("deadline/sprints/{id}")]
-        public async Task<IActionResult> StatisDeadline(int id)
+        [Route("deadline/sprints")]
+        public async Task<IActionResult> StatisDeadline([FromQuery] int sprintId)
         {
-            var findSprint = await _mediator.Send(new GetSprintByIdQuery(id));
+            var findSprint = await _mediator.Send(new GetSprintByIdQuery(sprintId));
             if (findSprint == null)
             {
                 return StatusCode(400, "Sprint Does Not Exist");
             }
-            var issue = await _mediator.Send(new StatisDeadlineQuery(id));
+            var issue = await _mediator.Send(new StatisDeadlineQuery(sprintId));
+            return Ok(issue);
+        }
+
+        [HttpGet]
+        [Route("user/sprints")]
+        public async Task<IActionResult> StatisUser([FromQuery] int sprintId)
+        {
+            var findSprint = await _mediator.Send(new GetSprintByIdQuery(sprintId));
+            if (findSprint == null)
+            {
+                return StatusCode(400, "Sprint Does Not Exist");
+            }
+            var issue = await _mediator.Send(new StatisUserQuery(sprintId));
             return Ok(issue);
         }
 

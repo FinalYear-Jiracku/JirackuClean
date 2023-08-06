@@ -51,17 +51,26 @@ namespace TaskServices.Persistence.Repositories
         #region Get Services
         public async Task<Sprint> GetSprintById(int id)
         {
-            var sprint = await _dbContext.Sprints.Include(x => x.Issues.Where(x => x.IsDeleted == false)).FirstOrDefaultAsync(x => x.Id == id); 
+            var sprint = await _dbContext.Sprints
+                               .Include(x => x.Statuses.Where(x => x.IsDeleted == false))
+                               .Include(x => x.Issues.Where(x => x.IsDeleted == false))
+                               .Include(x => x.Project).ThenInclude(x => x.UserProjects).ThenInclude(x => x.User)
+                               .FirstOrDefaultAsync(x => x.Id == id); 
             return sprint == null ? null : sprint;
         }
 
         public async Task<List<Sprint>> GetSprintListByProjectId(int? projectId)
         {
-            return await _dbContext.Sprints.Where(x => x.IsDeleted == false && x.ProjectId == projectId).ToListAsync();
+            return await _dbContext.Sprints.Include(x=>x.Issues.Where(x=>x.IsDeleted == false)).Where(x => x.IsDeleted == false && x.ProjectId == projectId).ToListAsync();
         }
         public async Task<List<Sprint>> GetSprintListForComplete(int? projectId, int sprintId)
         {
             return await _dbContext.Sprints.Where(x => x.IsDeleted == false && x.ProjectId == projectId && x.Id != sprintId).ToListAsync();
+        }
+
+        public async Task<List<Sprint>> GetStartSprintListByProjectId(int? projectId)
+        {
+            return await _dbContext.Sprints.Include(x => x.Issues.Where(x => x.IsDeleted == false)).Where(x => x.IsDeleted == false && x.ProjectId == projectId && x.IsStart == true).ToListAsync();
         }
         #endregion
     }

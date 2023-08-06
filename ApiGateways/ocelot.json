@@ -17,38 +17,6 @@
       }
     },
     {
-      "DownstreamPathTemplate": "/api/users/customer",
-      "DownstreamScheme": "http",
-      "DownstreamHostAndPorts": [
-        {
-          "Host": "userservices.webapi",
-          "Port": 80
-        }
-      ],
-      "UpstreamPathTemplate": "/api/users/customer",
-      "UpstreamHttpMethod": [ "POST", "OPTIONS" ],
-      "AuthenticationOptions": {
-        "AuthenticationProviderKey": "Bearer",
-        "AllowedScopes": []
-      }
-    },
-    {
-      "DownstreamPathTemplate": "/api/users/charge",
-      "DownstreamScheme": "http",
-      "DownstreamHostAndPorts": [
-        {
-          "Host": "userservices.webapi",
-          "Port": 80
-        }
-      ],
-      "UpstreamPathTemplate": "/api/users/charge",
-      "UpstreamHttpMethod": [ "POST", "OPTIONS" ],
-      "AuthenticationOptions": {
-        "AuthenticationProviderKey": "Bearer",
-        "AllowedScopes": []
-      }
-    },
-    {
       "DownstreamPathTemplate": "/api/users/refresh",
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
@@ -91,6 +59,22 @@
       ],
       "UpstreamPathTemplate": "/api/users",
       "UpstreamHttpMethod": [ "PUT", "OPTIONS" ],
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "Bearer",
+        "AllowedScopes": []
+      }
+    },
+    {
+      "DownstreamPathTemplate": "/api/paymentIntents/create-payment-intent",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "userservices.webapi",
+          "Port": 80
+        }
+      ],
+      "UpstreamPathTemplate": "/api/paymentIntents/create-payment-intent",
+      "UpstreamHttpMethod": [ "POST", "OPTIONS" ],
       "AuthenticationOptions": {
         "AuthenticationProviderKey": "Bearer",
         "AllowedScopes": []

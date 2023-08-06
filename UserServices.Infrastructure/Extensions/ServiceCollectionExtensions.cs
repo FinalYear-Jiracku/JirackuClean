@@ -36,7 +36,6 @@ namespace UserServices.Infrastructure.Extensions
                     .AddScoped<CustomerService>()
                     .AddScoped<ChargeService>()
                     .AddScoped<TokenService>()
-                    .AddScoped<IStripeService,StripeService>()
                     .AddSingleton<IRabbitMQManager, RabbitMQManager>();
         }
     }
