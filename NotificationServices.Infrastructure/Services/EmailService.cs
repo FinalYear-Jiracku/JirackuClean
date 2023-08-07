@@ -1,5 +1,6 @@
 ﻿using MailKit.Net.Smtp;
 using MailKit.Security;
+using MediatR;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using MimeKit;
@@ -117,6 +118,23 @@ namespace NotificationServices.Infrastructure.Services
             smtp.Authenticate(_config.GetSection("Email").Value, _config.GetSection("Password").Value);
             await smtp.SendAsync(email);
             _notificationEventPulisher.SendMessage(request.To, request.ProjectId, inviteToken);
+            smtp.Disconnect(true);
+        }
+
+        public async Task SendEmailPayment(PaymentProject paymentProject)
+        {
+            var email = new MimeMessage();
+            email.Sender = new MailboxAddress(_config.GetSection("Name").Value, _config.GetSection("Email").Value);
+            email.From.Add(new MailboxAddress(_config.GetSection("Name").Value, _config.GetSection("Email").Value));
+            email.To.Add(MailboxAddress.Parse(paymentProject.Email));
+            email.Subject = "Jiracku Payment";
+            var bodyBuilder = new BodyBuilder();
+            bodyBuilder.HtmlBody = string.Format("<p>You have just paid 50000 vnd for Upgraded {0}", paymentProject.ProjectName);
+            email.Body = bodyBuilder.ToMessageBody();
+            using var smtp = new SmtpClient();
+            smtp.Connect(_config.GetSection("Host").Value, 587, SecureSocketOptions.StartTls);
+            smtp.Authenticate(_config.GetSection("Email").Value, _config.GetSection("Password").Value);
+            await smtp.SendAsync(email);
             smtp.Disconnect(true);
         }
     }

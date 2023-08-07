@@ -13,5 +13,6 @@ namespace NotificationServices.Application.Interfaces.IServices
         Task SendEmailInvite(EmailDTO request);
         Task SendEmailDeadlineIssue(List<DeadlineIssue> request);
         Task SendEmailDeadlineSubIssue(List<DeadlineSubIssue> request);
+        Task SendEmailPayment(PaymentProject paymentProject);
     }
 }

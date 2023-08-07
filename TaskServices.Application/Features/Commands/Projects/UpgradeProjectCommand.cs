@@ -11,5 +11,6 @@ namespace TaskServices.Application.Features.Commands.Projects
     public class UpgradeProjectCommand : IRequest<int>
     {
         public int Id { get; set; }
+        public string? UpdatedBy { get; set; }
     }
 }

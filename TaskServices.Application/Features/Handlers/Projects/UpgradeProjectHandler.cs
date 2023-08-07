@@ -18,11 +18,13 @@ namespace TaskServices.Application.Features.Handlers.Projects
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
         private readonly ICacheService _cacheService;
-        public UpgradeProjectHandler(IUnitOfWork unitOfWork, ICacheService cacheService, IMapper mapper)
+        private readonly IPaymentEventPublisher _messagePublisher;
+        public UpgradeProjectHandler(IUnitOfWork unitOfWork, ICacheService cacheService, IMapper mapper, IPaymentEventPublisher messagePublisher)
         {
             _unitOfWork = unitOfWork;
             _mapper = mapper;
             _cacheService = cacheService;
+            _messagePublisher = messagePublisher;
         }
         public async Task<int> Handle(UpgradeProjectCommand command, CancellationToken cancellationToken)
         {
@@ -33,6 +35,7 @@ namespace TaskServices.Application.Features.Handlers.Projects
                 return default;
             }
             project.IsUpgraded = true;
+            project.UpdatedBy = command.UpdatedBy;
             project.UpdatedAt = DateTimeOffset.Now;
             await _unitOfWork.Repository<Project>().UpdateAsync(project);
             project.AddDomainEvent(new ProjectUpdatedEvent(project));
@@ -41,6 +44,12 @@ namespace TaskServices.Application.Features.Handlers.Projects
             var projectsDto = _mapper.Map<List<ProjectDTO>>(projects).ToList();
             var expireTime = DateTimeOffset.Now.AddSeconds(30);
             _cacheService.SetData<List<ProjectDTO>>($"ProjectDTO:{findUser.Email}", projectsDto, expireTime);
+            var paymentProjectDTO = new PaymentProjectDTO()
+            {
+                ProjectName = project.Name,
+                Email = command.UpdatedBy
+            };
+            _messagePublisher.SendMessage(paymentProjectDTO);
             return await Task.FromResult(0);
         }
     }
