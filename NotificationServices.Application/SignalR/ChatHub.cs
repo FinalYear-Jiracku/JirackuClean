@@ -87,14 +87,17 @@ namespace NotificationServices.Application.SignalR
             var userId = claim.Subject.Claims.ToList()[0].Value;
             string connectionId = _socketsRoom.FirstOrDefault(x => x.Key == projectId).Key;
 
-            var newMessage = new Message()
+            if(message != "Update Message" && message != "Delete Message") 
             {
-                GroupId = Int32.Parse(connectionId),
-                UserId = Int32.Parse(userId),
-                Content = message
-            };
-            await _messageRepository.Add(newMessage);
-
+                var newMessage = new Message()
+                {
+                    GroupId = Int32.Parse(connectionId),
+                    UserId = Int32.Parse(userId),
+                    Content = message
+                };
+                await _messageRepository.Add(newMessage);
+            }
+                
             if (connectionId != null)
             {
                 await Clients.Group(connectionId).SendAsync("ReceiveMessage", message);
