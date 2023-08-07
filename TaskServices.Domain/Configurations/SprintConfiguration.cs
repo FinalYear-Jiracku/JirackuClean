@@ -14,6 +14,9 @@ namespace TaskServices.Domain.Configurations
             builder.Property(x => x.Name).IsRequired(false).HasMaxLength(100);
             builder.Property(x => x.StartDate).IsRequired(false);
             builder.Property(x => x.EndDate).IsRequired(false);
+            builder.Property(x => x.IsStart).IsRequired(false);
+            builder.Property(x => x.NumOfIssue).IsRequired(false);
+            builder.Property(x => x.NumOfStoryPoint).IsRequired(false);
             builder.Property(x => x.IsCompleted).IsRequired(false);
             builder.Property(x => x.IsDeleted).IsRequired(false);
             builder.Property(x => x.CreatedBy).IsRequired(false).HasMaxLength(100);

@@ -73,6 +73,13 @@ namespace TaskServices.WebAPI.Controllers
             await _mediator.Send(projectCommand);
             return Ok();
         }
+
+        [HttpPut("upgrade")]
+        public async Task<IActionResult> UpgradeProject([FromBody] UpgradeProjectCommand projectCommand)
+        {
+            await _mediator.Send(projectCommand);
+            return Ok();
+        }
         #endregion
 
         #region DELETE API

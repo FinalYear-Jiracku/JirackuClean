@@ -1,5 +1,5 @@
 ﻿using NotificationServices.Application.DTOs;
-using NotificationServices.Application.Message;
+using NotificationServices.Application.Messages;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,5 +13,6 @@ namespace NotificationServices.Application.Interfaces.IServices
         Task SendEmailInvite(EmailDTO request);
         Task SendEmailDeadlineIssue(List<DeadlineIssue> request);
         Task SendEmailDeadlineSubIssue(List<DeadlineSubIssue> request);
+        Task SendEmailPayment(PaymentProject paymentProject);
     }
 }

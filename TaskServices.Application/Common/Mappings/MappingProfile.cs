@@ -22,10 +22,13 @@ namespace TaskServices.Application.Common.Mappings
             CreateMap<Issue, DeadlineIssuesDTO>().ForMember(dest => dest.Status, opt => opt.MapFrom(src => src.Status.Name))
                                                  .ForMember(dest => dest.Sprint, opt => opt.MapFrom(src => src.Sprint.Name))
                                                  .ForMember(dest => dest.User, opt => opt.MapFrom(src => src.User.Email))
+                                                 .ForMember(dest => dest.ProjectId, opt => opt.MapFrom(src => src.Sprint.Project.Id))
                                                  .ReverseMap();
             CreateMap<SubIssue, DeadlineSubIssuesDTO>().ForMember(dest => dest.Status, opt => opt.MapFrom(src => src.Status.Name))
                                                    .ForMember(dest => dest.Issue, opt => opt.MapFrom(src => src.Issue.Name))
+                                                   .ForMember(dest => dest.Sprint, opt => opt.MapFrom(src => src.Issue.Sprint.Name))
                                                    .ForMember(dest => dest.User, opt => opt.MapFrom(src => src.User.Email))
+                                                   .ForMember(dest => dest.ProjectId, opt => opt.MapFrom(src => src.Issue.Sprint.Project.Id))
                                                    .ReverseMap();
             CreateMap<Issue, DataIssueDTO>().ForMember(dest => dest.Status, opt => opt.MapFrom(src => src.Status))
                                             .ForMember(dest => dest.Sprint, opt => opt.MapFrom(src => src.Sprint))
@@ -49,6 +52,8 @@ namespace TaskServices.Application.Common.Mappings
             CreateMap<Page, PageDTO>().ReverseMap();
             CreateMap<Attachment, AttachmentDTO>().ReverseMap();
             CreateMap<User, UserDTO>().ReverseMap();
+            CreateMap<Sprint, StatisNumIssueDTO>().ForMember(dest => dest.SprintName, opt => opt.MapFrom(src => src.Name))
+                                                  .ForMember(dest => dest.NumOfIssue, opt => opt.MapFrom(src => src.Issues.Count())).ReverseMap();
         }
     }
 }

@@ -24,6 +24,7 @@ namespace NotificationServices.Infrastructure.Extensions
                     .AddTransient<INotificationEventPulisher, NotificationEventPublisher>()
                     .AddHostedService<CheckDeadlineSubIssueEventSubcriber>()
                     .AddHostedService<CheckDeadlineIssueEventSubcriber>()
+                    .AddHostedService<PaymentEventSubcriber>()
                     .AddSingleton<IRabbitMQManager, RabbitMQManager>();
         }
     }

@@ -5,6 +5,7 @@ using Newtonsoft.Json;
 using System.Security.Claims;
 using UserServices.Application.Features.Commands;
 using UserServices.Application.Features.Queries;
+using UserServices.Application.Interfaces.IServices;
 
 namespace UserServices.WebAPI.Controllers
 {

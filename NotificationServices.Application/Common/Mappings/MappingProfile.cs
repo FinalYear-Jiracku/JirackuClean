@@ -14,6 +14,9 @@ namespace NotificationServices.Application.Common.Mappings
         public MappingProfile()
         {
             CreateMap<Notification, NotificationDTO>().ReverseMap();
+            CreateMap<User, UserDTO>().ReverseMap();
+            CreateMap<Group, GroupDTO>().ReverseMap();
+            CreateMap<Message, MessageDTO>().ForMember(dest => dest.User, opt => opt.MapFrom(src => src.User)).ReverseMap();
         }
     }
 }

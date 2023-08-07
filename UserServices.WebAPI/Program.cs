@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using Stripe;
 using System;
 using System.Text;
 using UserServices.Application.Extensions;
@@ -13,7 +14,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddApplicationLayer();
-builder.Services.AddInfrastructureLayer();
+builder.Services.AddInfrastructureLayer(builder.Configuration);
 builder.Services.AddPersistenceLayer(builder.Configuration);
 
 builder.Services.AddCors(options =>
@@ -28,6 +29,10 @@ builder.Services.AddCors(options =>
 });
 
 builder.Services.AddControllers();
+builder.Services.AddScoped<TokenService>();
+builder.Services.AddScoped<CustomerService>();
+builder.Services.AddScoped<ChargeService>();
+StripeConfiguration.ApiKey = "sk_test_51G7MxMAc9CCZqYNvFkPqyNCEcKkl8Km7x8Pm9Bd2B8fVQMJr3gZ139QD37cEgtOnECVnzX7TApQs7MfSJXOE0HnF007a7Y6Yt9";
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddGoogle(googleOptions =>
 {
     googleOptions.ClientId = builder.Configuration["AppSettings:GoogleClientId"];

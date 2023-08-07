@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace NotificationServices.Application.Message
+namespace NotificationServices.Application.Messages
 {
     public class DeadlineIssue
     {
@@ -14,6 +14,7 @@ namespace NotificationServices.Application.Message
         public string? Status { get; set; }
         public string? Sprint { get; set; }
         public string? User { get; set; }
+        public int ProjectId { get; set; }
         public DateTimeOffset StartDate { get; set; }
         public DateTimeOffset DueDate { get; set; }
     }

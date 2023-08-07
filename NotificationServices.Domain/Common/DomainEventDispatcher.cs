@@ -11,12 +11,10 @@ namespace NotificationServices.Domain.Common
     public class DomainEventDispatcher : IDomainEventDispatcher
     {
         private readonly IMediator _mediator;
-        private readonly INotificationEventPulisher _notificationEventPulisher;
 
-        public DomainEventDispatcher(IMediator mediator, INotificationEventPulisher notificationEventPulisher)
+        public DomainEventDispatcher(IMediator mediator)
         {
             _mediator = mediator;
-            _notificationEventPulisher = notificationEventPulisher;
         }
 
         public async Task DispatchAndClearEvents(IEnumerable<BaseEntity> entitiesWithEvents)

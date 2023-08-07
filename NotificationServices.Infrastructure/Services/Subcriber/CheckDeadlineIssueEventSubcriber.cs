@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 using NotificationServices.Domain.Common.Interfaces;
 using Newtonsoft.Json;
 using Microsoft.Extensions.Hosting;
-using NotificationServices.Application.Message;
+using NotificationServices.Application.Messages;
 using NotificationServices.Application.Interfaces.IServices;
 
 namespace NotificationServices.Infrastructure.Services.Subcriber
@@ -51,7 +51,6 @@ namespace NotificationServices.Infrastructure.Services.Subcriber
                 var message = Encoding.UTF8.GetString(body);
                 List<DeadlineIssue> issueEvent = JsonConvert.DeserializeObject<List<DeadlineIssue>>(message);
                 HandleMessage(issueEvent);
-                _channel.BasicAck(ea.DeliveryTag, false);
             };
             _channel.BasicConsume(queue: QueueName, autoAck: true, consumer: consumer);
 

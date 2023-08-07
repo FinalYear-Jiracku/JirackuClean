@@ -39,7 +39,7 @@ namespace TaskServices.Infrastructure.Extensions
                     .ForJob(jobKey)
                     .WithIdentity("CheckDeadlineJob-trigger")
                     .WithSchedule(CronScheduleBuilder
-                    .DailyAtHourAndMinute(15,45)
+                    .DailyAtHourAndMinute(14,56)
                     .InTimeZone(TimeZoneInfo.FindSystemTimeZoneById("SE Asia Standard Time")))
                 );
             });
@@ -56,6 +56,7 @@ namespace TaskServices.Infrastructure.Extensions
                     .AddScoped<INotificationEventSubcriber, NotificationEventSubcriber>()
                     .AddScoped<ICheckDeadlineIssueEventPublisher, CheckDeadlineIssueEventPublisher>()
                     .AddScoped<ICheckDeadlineSubIssueEventPublisher, CheckDeadlineSubIssueEventPublisher>()
+                    .AddScoped<IPaymentEventPublisher, PaymentEventPublisher>()
                     .AddSingleton<IRabbitMQManager, RabbitMQManager>();
         }
     }

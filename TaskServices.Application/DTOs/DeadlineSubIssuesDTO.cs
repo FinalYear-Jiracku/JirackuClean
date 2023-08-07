@@ -15,6 +15,8 @@ namespace TaskServices.Application.DTOs
         public string? Status { get; set; }
         public string? Issue { get; set; }
         public string? User { get; set; }
+        public string? Sprint { get; set; }
+        public int ProjectId { get; set; }
         public DateTimeOffset? StartDate { get; set; }
         public DateTimeOffset? DueDate { get; set; }
     }
