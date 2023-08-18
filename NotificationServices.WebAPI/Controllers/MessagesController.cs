@@ -1,8 +1,12 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using NotificationServices.Application.DTOs;
 using NotificationServices.Application.Features.Commands;
 using NotificationServices.Application.Features.Queries;
+using NotificationServices.Shared.Pagination.Filter;
+using NotificationServices.Shared.Pagination.Helpers;
+using NotificationServices.Shared.Pagination.Uris;
 
 namespace NotificationServices.WebAPI.Controllers
 {
@@ -11,9 +15,11 @@ namespace NotificationServices.WebAPI.Controllers
     public class MessagesController : ControllerBase
     {
         private readonly IMediator _mediator;
-        public MessagesController(IMediator mediator)
+        private readonly IUriService _uriService;
+        public MessagesController(IMediator mediator, IUriService uriService)
         {
             _mediator = mediator;
+            _uriService = uriService;
         }
 
         [HttpGet("{id}")]

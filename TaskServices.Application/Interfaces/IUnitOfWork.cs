@@ -20,6 +20,7 @@ namespace TaskServices.Application.Interfaces
         INoteRepository NoteRepository { get; }
         ICommentRepository CommentRepository { get; }
         IPageRepository PageRepository { get; }
+        IEventRepository EventRepository { get; }   
         Task<int> Save(CancellationToken cancellationToken);
         Task<int> SaveAndRemoveCache(CancellationToken cancellationToken, params string[] cacheKeys);
         Task Rollback();

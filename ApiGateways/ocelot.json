@@ -241,6 +241,38 @@
       }
     },
     {
+      "DownstreamPathTemplate": "/api/events",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "taskservices.webapi",
+          "Port": 80
+        }
+      ],
+      "UpstreamPathTemplate": "/api/events",
+      "UpstreamHttpMethod": [ "GET", "POST", "PUT", "OPTIONS" ],
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "Bearer",
+        "AllowedScopes": []
+      }
+    },
+    {
+      "DownstreamPathTemplate": "/api/events/{id}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "taskservices.webapi",
+          "Port": 80
+        }
+      ],
+      "UpstreamPathTemplate": "/api/events/{id}",
+      "UpstreamHttpMethod": [ "GET", "PUT", "DELETE", "PATCH", "OPTIONS" ],
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "Bearer",
+        "AllowedScopes": []
+      }
+    },
+    {
       "DownstreamPathTemplate": "/api/statuses",
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [

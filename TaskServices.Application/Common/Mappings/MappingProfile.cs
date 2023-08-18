@@ -12,6 +12,7 @@ namespace TaskServices.Application.Common.Mappings
         {
             CreateMap<Project, ProjectDTO>().ForMember(dest => dest.Sprints, opt => opt.MapFrom(src => src.Sprints.Count())).ReverseMap();
             CreateMap<Sprint, SprintDTO>().ReverseMap();
+            CreateMap<EventCalendar, EventDTO>().ReverseMap();
             CreateMap<Status, StatusDTO>().ReverseMap();
             CreateMap<Status, DataStatusDTO>().ForMember(dest => dest.Issues, opt => opt.MapFrom(src => src.Issues)).ReverseMap();
             CreateMap<Issue, IssueDTO>().ForMember(dest => dest.Status, opt => opt.MapFrom(src => src.Status))
@@ -30,6 +31,8 @@ namespace TaskServices.Application.Common.Mappings
                                                    .ForMember(dest => dest.User, opt => opt.MapFrom(src => src.User.Email))
                                                    .ForMember(dest => dest.ProjectId, opt => opt.MapFrom(src => src.Issue.Sprint.Project.Id))
                                                    .ReverseMap();
+            CreateMap<EventCalendar, EventCalendarDTO>().ForMember(dest => dest.ProjectId, opt => opt.MapFrom(src => src.Project.Id))
+                                                        .ReverseMap();
             CreateMap<Issue, DataIssueDTO>().ForMember(dest => dest.Status, opt => opt.MapFrom(src => src.Status))
                                             .ForMember(dest => dest.Sprint, opt => opt.MapFrom(src => src.Sprint))
                                             .ForMember(dest => dest.Attachments, opt => opt.MapFrom(src => src.Attachments))

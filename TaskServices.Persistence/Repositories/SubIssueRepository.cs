@@ -37,7 +37,8 @@ namespace TaskServices.Persistence.Repositories
                                   .Include(x => x.Issue)
                                   .ThenInclude(x=>x.Sprint)
                                   .ThenInclude(x=>x.Project)
-                                  .Include(x => x.User).Where(x => x.DueDate < dateTimeOffset).ToListAsync();
+                                  .Include(x => x.Status)
+                                  .Include(x => x.User).Where(x => x.Issue.Sprint.IsCompleted == false && x.Status.Name != "Completed" && x.DueDate < dateTimeOffset).ToListAsync();
             return subIssues == null ? null : subIssues;
         }
         #endregion

@@ -33,13 +33,22 @@ namespace TaskServices.Infrastructure.Extensions
             services.AddQuartz(q =>
             {
                 q.UseMicrosoftDependencyInjectionJobFactory();
-                var jobKey = new JobKey("CheckDeadlineJob");
-                q.AddJob<CheckDeadlineJob>(opts => opts.WithIdentity(jobKey));
+                var jobKeyDeadline = new JobKey("CheckDeadlineJob");
+                q.AddJob<CheckDeadlineJob>(opts => opts.WithIdentity(jobKeyDeadline));
                 q.AddTrigger(opts => opts
-                    .ForJob(jobKey)
+                    .ForJob(jobKeyDeadline)
                     .WithIdentity("CheckDeadlineJob-trigger")
                     .WithSchedule(CronScheduleBuilder
-                    .DailyAtHourAndMinute(14,56)
+                    .DailyAtHourAndMinute(11,21)
+                    .InTimeZone(TimeZoneInfo.FindSystemTimeZoneById("SE Asia Standard Time"))) 
+                );
+                var jobKeyEvent = new JobKey("CheckEventJob");
+                q.AddJob<CheckEventJob>(opts => opts.WithIdentity(jobKeyEvent));
+                q.AddTrigger(opts => opts
+                    .ForJob(jobKeyEvent)
+                    .WithIdentity("CheckEventJob-trigger")
+                    .WithSchedule(CronScheduleBuilder
+                    .DailyAtHourAndMinute(16,50)
                     .InTimeZone(TimeZoneInfo.FindSystemTimeZoneById("SE Asia Standard Time")))
                 );
             });
@@ -56,6 +65,7 @@ namespace TaskServices.Infrastructure.Extensions
                     .AddScoped<INotificationEventSubcriber, NotificationEventSubcriber>()
                     .AddScoped<ICheckDeadlineIssueEventPublisher, CheckDeadlineIssueEventPublisher>()
                     .AddScoped<ICheckDeadlineSubIssueEventPublisher, CheckDeadlineSubIssueEventPublisher>()
+                    .AddScoped<ICheckEventPublisher, CheckEventPublisher>()
                     .AddScoped<IPaymentEventPublisher, PaymentEventPublisher>()
                     .AddSingleton<IRabbitMQManager, RabbitMQManager>();
         }

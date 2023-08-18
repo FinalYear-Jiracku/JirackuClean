@@ -35,6 +35,7 @@ namespace TaskServices.Persistence.Contexts
             modelBuilder.ApplyConfiguration(new StatusConfiguration());
             modelBuilder.ApplyConfiguration(new SubIssueConfiguration());
             modelBuilder.ApplyConfiguration(new UserProjectConfiguration());
+            modelBuilder.ApplyConfiguration(new EventConfiguration());
         }
         public DbSet<Attachment> Attachments { get; set; }
         public DbSet<Column> Columns { get; set; }
@@ -44,6 +45,7 @@ namespace TaskServices.Persistence.Contexts
         public DbSet<Page> Pages { get; set; }
         public DbSet<Project> Projects { get; set; }
         public DbSet<Sprint> Sprints { get; set; }
+        public DbSet<EventCalendar> Events { get; set; }
         public DbSet<Status> Statuses { get; set; }
         public DbSet<SubIssue> SubIssues { get; set; }
         public DbSet<User> Users { get; set; }
