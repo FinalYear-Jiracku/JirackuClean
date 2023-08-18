@@ -1,26 +1,26 @@
-﻿using RabbitMQ.Client.Events;
+﻿using Microsoft.Extensions.Hosting;
+using NotificationServices.Application.Interfaces.IServices;
+using NotificationServices.Application.Messages;
+using RabbitMQ.Client.Events;
 using RabbitMQ.Client;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 using Newtonsoft.Json;
-using Microsoft.Extensions.Hosting;
-using System.Data.Common;
-using NotificationServices.Application.Messages;
-using NotificationServices.Application.Interfaces.IServices;
 
 namespace NotificationServices.Infrastructure.Services.Subcriber
 {
-    public class CheckDeadlineSubIssueEventSubcriber : BackgroundService
+    public class CheckEventSubcriber : BackgroundService
     {
         private IConnection _connection;
         private IModel _channel;
-        private readonly IEmailService _emailService;
-        private const string ExchangeName = "deadline_subIssue_exchange";
-        private const string QueueName = "DeadlineSubIssue";
+        private readonly IEventService _eventService;
+        private const string ExchangeName = "event_exchange";
+        private const string QueueName = "Event";
 
-        public CheckDeadlineSubIssueEventSubcriber(IEmailService emailService)
+        public CheckEventSubcriber(IEventService eventService)
         {
             var factory = new ConnectionFactory
             {
@@ -37,7 +37,7 @@ namespace NotificationServices.Infrastructure.Services.Subcriber
             _channel.ExchangeDeclare(ExchangeName, ExchangeType.Fanout);
             _channel.QueueDeclare(QueueName, false, false, false, null);
             _channel.QueueBind(QueueName, ExchangeName, "");
-            _emailService = emailService;
+            _eventService = eventService;
         }
         protected override Task ExecuteAsync(CancellationToken stoppingToken)
         {
@@ -47,16 +47,16 @@ namespace NotificationServices.Infrastructure.Services.Subcriber
             {
                 var body = ea.Body.ToArray();
                 var message = Encoding.UTF8.GetString(body);
-                List<DeadlineSubIssue> issueEvent = JsonConvert.DeserializeObject<List<DeadlineSubIssue>>(message);
-                HandleMessage(issueEvent);
+                List<EventCalendar> events = JsonConvert.DeserializeObject<List<EventCalendar>>(message);
+                HandleMessage(events);
             };
             _channel.BasicConsume(queue: QueueName, autoAck: true, consumer: consumer);
 
             return Task.CompletedTask;
         }
-        private async Task HandleMessage(List<DeadlineSubIssue> deadllineIssues)
+        private async Task HandleMessage(List<EventCalendar> events)
         {
-            await _emailService.SendEmailDeadlineSubIssue(deadllineIssues);
+            await _eventService.SendEvent(events);
         }
     }
 }

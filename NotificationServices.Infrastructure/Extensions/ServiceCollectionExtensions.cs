@@ -21,9 +21,11 @@ namespace NotificationServices.Infrastructure.Extensions
             services.AddScoped<IMediator, Mediator>()
                     .AddScoped<IDomainEventDispatcher, DomainEventDispatcher>()
                     .AddTransient<IEmailService, EmailService>()
+                    .AddTransient<IEventService, EventService>()
                     .AddTransient<INotificationEventPulisher, NotificationEventPublisher>()
                     .AddHostedService<CheckDeadlineSubIssueEventSubcriber>()
                     .AddHostedService<CheckDeadlineIssueEventSubcriber>()
+                    .AddHostedService<CheckEventSubcriber>()
                     .AddHostedService<PaymentEventSubcriber>()
                     .AddSingleton<IRabbitMQManager, RabbitMQManager>();
         }

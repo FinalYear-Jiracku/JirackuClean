@@ -3,6 +3,7 @@ using MediatR;
 using NotificationServices.Application.DTOs;
 using NotificationServices.Application.Features.Queries;
 using NotificationServices.Application.Interfaces;
+using NotificationServices.Shared.Pagination.Filter;
 using System;
 using System.Collections.Generic;
 using System.Linq;

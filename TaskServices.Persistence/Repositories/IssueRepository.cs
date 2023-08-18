@@ -11,6 +11,7 @@ using TaskServices.Application.Features.Commands.Issues;
 using TaskServices.Application.Interfaces;
 using TaskServices.Domain.Entities;
 using TaskServices.Persistence.Contexts;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 namespace TaskServices.Persistence.Repositories
 {
@@ -132,7 +133,13 @@ namespace TaskServices.Persistence.Repositories
 
         public async Task<List<Issue>> GetIssueListBySprintId(int? sprintId)
         {
-            return await _dbContext.Issues.Where(x => x.IsDeleted == false && x.SprintId == sprintId).Include(x => x.User).Include(x=>x.Sprint).Include(x=>x.Status).Include(x => x.SubIssues.Where(x => x.IsDeleted == false)).ToListAsync();
+            return await _dbContext.Issues
+                         .Include(x => x.User)
+                         .Include(x=>x.Sprint)
+                         .Include(x=>x.Status)
+                         .Include(x => x.SubIssues.Where(x => x.IsDeleted == false))
+                         .Where(x => x.IsDeleted == false && x.Status.Name != "Completed" && x.SprintId == sprintId)
+                         .ToListAsync();
         }
 
         public async Task<List<Issue>> IssueNotCompleted(int? sprintId)
@@ -144,13 +151,29 @@ namespace TaskServices.Persistence.Repositories
 
         public async Task<List<Issue>> CheckDeadline(DateTimeOffset dateTimeOffset)
         {
-            var issues = await _dbContext.Issues.Include(x=>x.User).Include(x=>x.Sprint).ThenInclude(x=>x.Project).Where(x => x.DueDate < dateTimeOffset).ToListAsync();
+            var issues = await _dbContext.Issues
+                               .Include(x=>x.User)
+                               .Include(x=>x.Status)
+                               .Include(x=>x.Sprint)
+                               .ThenInclude(x=>x.Project)
+                               .Where(x => x.Sprint.IsCompleted == false && x.Status.Name != "Completed" && x.DueDate < dateTimeOffset).ToListAsync();
             return issues == null ? null : issues;
         }
 
         public async Task<Attachment> FindAttachment(int id)
         {
             return await _dbContext.Attachments.FirstOrDefaultAsync(x=>x.Id == id);
+        }
+
+        public async Task<List<Issue>> ListDeadLineIssue(int projectid, DateTimeOffset dateTimeOffset)
+        {
+            var issues = await _dbContext.Issues
+                               .Include(x => x.User)
+                               .Include(x => x.Status)
+                               .Include(x => x.Sprint)
+                               .ThenInclude(x => x.Project)
+                               .Where(x => x.Sprint.IsCompleted == false && x.Status.Name != "Completed" && x.Sprint.ProjectId == projectid && x.DueDate < dateTimeOffset).ToListAsync();
+            return issues == null ? null : issues;
         }
         #endregion
     }

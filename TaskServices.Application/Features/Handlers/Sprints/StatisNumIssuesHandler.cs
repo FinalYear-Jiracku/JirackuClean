@@ -28,7 +28,7 @@ namespace TaskServices.Application.Features.Handlers.Sprints
         }
         public async Task<List<StatisNumIssueDTO>> Handle(StatisNumIssuesQuery query, CancellationToken cancellationToken)
         {
-            var sprints = await _unitOfWork.SprintRepository.GetSprintListByProjectId(query.Id);
+            var sprints = await _unitOfWork.SprintRepository.GetStartSprintListByProjectId(query.Id);
             var sprintsDTO = _mapper.Map<List<StatisNumIssueDTO>>(sprints);
             return sprintsDTO;
         }

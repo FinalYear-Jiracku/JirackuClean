@@ -46,7 +46,8 @@ namespace TaskServices.Persistence.Extensions
                     .AddScoped<IColumnRepository, ColumnRepository>()
                     .AddScoped<INoteRepository, NoteRepository>()
                     .AddScoped<ICommentRepository, CommentRepository>()
-                    .AddScoped<IPageRepository, PageRepository>();
+                    .AddScoped<IPageRepository, PageRepository>()
+                    .AddScoped<IEventRepository, EventRepository>();
         }
     }
 }

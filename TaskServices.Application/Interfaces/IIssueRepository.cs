@@ -20,5 +20,6 @@ namespace TaskServices.Application.Interfaces
         Task<Issue> GetIssueById(int id);
         Task<Attachment> FindAttachment(int issueId);
         Task<List<Issue>> CheckDeadline(DateTimeOffset dateTimeOffset);
+        Task<List<Issue>> ListDeadLineIssue(int projectid, DateTimeOffset dateTimeOffset);
     }
 }

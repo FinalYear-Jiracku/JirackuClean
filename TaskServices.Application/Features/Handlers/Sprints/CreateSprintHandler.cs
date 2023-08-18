@@ -17,7 +17,7 @@ using TaskServices.Domain.Entities;
 
 namespace TaskServices.Application.Features.Handlers.Sprints
 {
-     public class CreateSprintHandler : IRequestHandler<CreateSprintCommand, Sprint>
+    public class CreateSprintHandler : IRequestHandler<CreateSprintCommand, Sprint>
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;

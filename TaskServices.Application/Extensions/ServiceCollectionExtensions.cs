@@ -18,6 +18,7 @@ namespace TaskServices.Application.Extensions
         public static void AddApplicationLayer(this IServiceCollection services)
         {
             services.AddHttpContextAccessor();
+            services.AddHttpClient();
             services.AddAutoMapper();
             services.AddMediator();
             services.AddUri();

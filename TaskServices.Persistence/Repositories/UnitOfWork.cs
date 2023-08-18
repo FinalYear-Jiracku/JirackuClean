@@ -26,6 +26,7 @@ namespace TaskServices.Persistence.Repositories
         public INoteRepository NoteRepository { get; }
         public ICommentRepository CommentRepository { get; }
         public IPageRepository PageRepository { get; }
+        public IEventRepository EventRepository { get; }
         public UnitOfWork(ApplicationDbContext dbContext, 
                           IUserRepository userRepository, 
                           IProjectRepository projectRepository,
@@ -36,7 +37,8 @@ namespace TaskServices.Persistence.Repositories
                           IColumnRepository columnRepository,
                           INoteRepository noteRepository,
                           ICommentRepository commentRepository,
-                          IPageRepository pageRepository)
+                          IPageRepository pageRepository,
+                          IEventRepository eventRepository)
         {
             _dbContext = dbContext;
             UserRepository = userRepository;
@@ -49,6 +51,7 @@ namespace TaskServices.Persistence.Repositories
             NoteRepository = noteRepository;
             CommentRepository = commentRepository;
             PageRepository = pageRepository;
+            EventRepository = eventRepository;
         }
 
         public void Dispose()

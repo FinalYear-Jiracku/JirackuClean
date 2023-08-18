@@ -8,5 +8,7 @@ namespace TaskServices.Domain.Entities
         public bool? IsUpgraded { get; set; } = false;
         public ICollection<Sprint>? Sprints { get; set; }
         public ICollection<UserProject>? UserProjects { get; set; }
+        public ICollection<EventCalendar>? Events { get; set; }
+
     }
 }

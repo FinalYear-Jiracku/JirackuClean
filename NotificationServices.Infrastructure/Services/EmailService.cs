@@ -1,14 +1,17 @@
 ﻿using MailKit.Net.Smtp;
 using MailKit.Security;
 using MediatR;
+using Microsoft.AspNetCore.SignalR;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using MimeKit;
 using MimeKit.Text;
+using Newtonsoft.Json;
 using NotificationServices.Application.DTOs;
 using NotificationServices.Application.Interfaces;
 using NotificationServices.Application.Interfaces.IServices;
 using NotificationServices.Application.Messages;
+using NotificationServices.Application.SignalR;
 using NotificationServices.Domain.Common.Interfaces;
 using NotificationServices.Domain.Entities;
 using Org.BouncyCastle.Asn1.Ocsp;
@@ -25,12 +28,14 @@ namespace NotificationServices.Infrastructure.Services
         private readonly IConfiguration _config;
         private readonly INotificationEventPulisher _notificationEventPulisher;
         private readonly IServiceProvider _serviceProvider;
+        private readonly IHubContext<NotificationHub> _hubContext;
 
-        public EmailService(IConfiguration config, INotificationEventPulisher notificationEventPulisher, IServiceProvider serviceProvider)
+        public EmailService(IConfiguration config, INotificationEventPulisher notificationEventPulisher, IServiceProvider serviceProvider, IHubContext<NotificationHub> hubContext)
         {
             _config = config;
             _notificationEventPulisher = notificationEventPulisher;
             _serviceProvider = serviceProvider;
+            _hubContext = hubContext;
         }
 
         public async Task SendEmailDeadlineIssue(List<DeadlineIssue> request)
@@ -52,7 +57,7 @@ namespace NotificationServices.Infrastructure.Services
                 smtp.Connect(_config.GetSection("Host").Value, 587, SecureSocketOptions.StartTls);
                 smtp.Authenticate(_config.GetSection("Email").Value, _config.GetSection("Password").Value);
                 await smtp.SendAsync(email);
-                string emailContent = string.Format("Sprint: {0}. The deadline for {1} is currently approaching on {2}. Currently, you are {3} days late", issue.Sprint, issue.Name, issue.DueDate, numberOfDays);
+                string emailContent = string.Format("Sprint: {0}. The deadline for {1} is currently approaching on {2}. Currently, {3} are {4} days late", issue.Sprint, issue.Name, issue.DueDate, issue.User, numberOfDays);
                 using var scope = _serviceProvider.CreateScope();
                 var notificationRepository = scope.ServiceProvider.GetRequiredService<INotificationRepository>();
                 var noti = new Notification()
@@ -61,6 +66,7 @@ namespace NotificationServices.Infrastructure.Services
                     Content = emailContent,
                 };
                 await notificationRepository.Add(noti);
+                await _hubContext.Clients.Groups(issue.ProjectId.ToString()).SendAsync("ReceiveMessage", emailContent);
                 smtp.Disconnect(true);
             }
         }
@@ -85,7 +91,7 @@ namespace NotificationServices.Infrastructure.Services
                 smtp.Connect(_config.GetSection("Host").Value, 587, SecureSocketOptions.StartTls);
                 smtp.Authenticate(_config.GetSection("Email").Value, _config.GetSection("Password").Value);
                 await smtp.SendAsync(email);
-                string emailContent = string.Format("Sprint: {0}. The deadline for {1} of Issue: {2} is currently approaching on {3}. Currently, you are {4} days late", subIssue.Sprint, subIssue.Name, subIssue.Issue, subIssue.DueDate, numberOfDays);
+                string emailContent = string.Format("Sprint: {0}. The deadline for {1} of Issue: {2} is currently approaching on {3}. Currently, {4} are {5} days late", subIssue.Sprint, subIssue.Name, subIssue.Issue, subIssue.DueDate, subIssue.User, numberOfDays);
                 using var scope = _serviceProvider.CreateScope();
                 var notificationRepository = scope.ServiceProvider.GetRequiredService<INotificationRepository>();
                 var noti = new Notification()
@@ -94,6 +100,7 @@ namespace NotificationServices.Infrastructure.Services
                     Content = emailContent,
                 };
                 await notificationRepository.Add(noti);
+                await _hubContext.Clients.Groups(subIssue.ProjectId.ToString()).SendAsync("ReceiveMessage", emailContent);
                 smtp.Disconnect(true);
             }
         }
