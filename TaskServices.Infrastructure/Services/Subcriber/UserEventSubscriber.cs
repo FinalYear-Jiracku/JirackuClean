@@ -127,6 +127,7 @@ namespace TaskServices.Infrastructure.Services.Subcriber
                     Name = userEvent?.User.Name,
                     Email = userEvent?.User.Email,
                     Image = userEvent?.User.Image,
+                    Role = userEvent?.User.Role,
                 };
                 users.Add(user);
 

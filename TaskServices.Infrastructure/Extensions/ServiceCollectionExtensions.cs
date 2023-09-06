@@ -1,31 +1,24 @@
 ﻿using MediatR;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Options;
-using Newtonsoft.Json.Serialization;
 using Quartz;
-using Quartz.Impl.Calendar;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
 using TaskServices.Application.Interfaces.IServices;
 using TaskServices.Domain.Common;
 using TaskServices.Domain.Common.Interfaces;
 using TaskServices.Infrastructure.Services;
 using TaskServices.Infrastructure.Services.Publisher;
 using TaskServices.Infrastructure.Services.Subcriber;
+using TaskServices.Infrastructure.Utils;
 
 namespace TaskServices.Infrastructure.Extensions
 {
     public static class ServiceCollectionExtensions
     {
-        public static void AddInfrastructureLayer(this IServiceCollection services)
+        public static void AddInfrastructureLayer(this IServiceCollection services, IConfiguration configuration)
         {
             services.AddServices();
             services.AddQuartz();
+            services.AddFireBase(configuration);
         }
 
         private static void AddQuartz(this IServiceCollection services)
@@ -47,9 +40,9 @@ namespace TaskServices.Infrastructure.Extensions
                 q.AddTrigger(opts => opts
                     .ForJob(jobKeyEvent)
                     .WithIdentity("CheckEventJob-trigger")
-                    .WithSchedule(CronScheduleBuilder
-                    .DailyAtHourAndMinute(16,50)
-                    .InTimeZone(TimeZoneInfo.FindSystemTimeZoneById("SE Asia Standard Time")))
+                    .WithSimpleSchedule(x => x
+                    .WithIntervalInMinutes(1)
+                    .RepeatForever())
                 );
             });
             services.AddQuartzHostedService(q => q.WaitForJobsToComplete = true);
@@ -68,6 +61,16 @@ namespace TaskServices.Infrastructure.Extensions
                     .AddScoped<ICheckEventPublisher, CheckEventPublisher>()
                     .AddScoped<IPaymentEventPublisher, PaymentEventPublisher>()
                     .AddSingleton<IRabbitMQManager, RabbitMQManager>();
+        }
+        private static void AddFireBase(this IServiceCollection services, IConfiguration configuration)
+        {
+            services.Configure<FirebaseConfiguration>(fireBaseConfig =>
+            {
+                fireBaseConfig.ApiKey = configuration.GetSection("FireBase:ApiKey").Value;
+                fireBaseConfig.Bucket = configuration.GetSection("FireBase:Bucket").Value;
+                fireBaseConfig.AuthEmail = configuration.GetSection("FireBase:AuthEmail").Value;
+                fireBaseConfig.AuthPassword = configuration.GetSection("FireBase:AuthPassword").Value;
+            });
         }
     }
 }

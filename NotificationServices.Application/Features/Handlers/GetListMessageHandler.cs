@@ -25,8 +25,11 @@ namespace NotificationServices.Application.Features.Handlers
         }
         public async Task<List<MessageDTO>> Handle(GetListMessageQuery query, CancellationToken cancellationToken)
         {
+            //var validFilter = new PaginationFilter(query.Filter.PageNumber, query.Filter.PageSize, query.Filter.Search);
             var listMessage = await _messageRepository.GetMessageByProjectId(query.Id);
-            var listMessageDTO = _mapper.Map<List<MessageDTO>>(listMessage).ToList();
+            var listMessageDTO = _mapper.Map<List<MessageDTO>>(listMessage).OrderByDescending(x => x.CreatedAt).ToList();
+                                 //.Skip((validFilter.PageNumber - 1) * validFilter.PageSize)
+                                 //.Take(validFilter.PageSize).ToList();
             return listMessageDTO;
         }
     }

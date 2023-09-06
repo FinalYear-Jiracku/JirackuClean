@@ -27,7 +27,7 @@ namespace TaskServices.Infrastructure.Services
         public async Task Execute(IJobExecutionContext context)
         {
             var date = DateTimeOffset.UtcNow;
-            var checkEvent = await _eventRepository.CheckEventCalendar(date);
+            var checkEvent = await _eventRepository.CheckEventCalendar();
             var checkEventDTO = _mapper.Map<List<EventCalendarDTO>>(checkEvent);
             _eventPublisher.SendMessage(checkEventDTO);
         }

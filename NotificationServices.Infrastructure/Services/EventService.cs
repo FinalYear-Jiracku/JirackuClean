@@ -39,8 +39,8 @@ namespace NotificationServices.Infrastructure.Services
             {
                 var startTime = eventCalendar.StartTime;
                 var endTime = eventCalendar.EndTime;
-                int startHour = startTime?.Hour ?? 0;
-                int endHour = endTime?.Hour ?? 0;
+                int startHour = startTime?.Hour + 7 ?? 0;
+                int endHour = endTime?.Hour + 7 ?? 0;
                 string content = string.Format("Today you have an event {0} that will take place from {1} o'clock to {2} o'clock", eventCalendar.Title, startHour, endHour);
                 using var scope = _serviceProvider.CreateScope();
                 var notificationRepository = scope.ServiceProvider.GetRequiredService<INotificationRepository>();

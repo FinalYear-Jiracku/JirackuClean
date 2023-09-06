@@ -26,15 +26,16 @@ namespace TaskServices.Persistence.Repositories
             _connection = new NpgsqlConnection(_configuration.GetConnectionString("DefaultConnection"));
         }
 
-        public async Task<List<EventCalendar>> CheckEventCalendar(DateTimeOffset dateTimeOffset)
+        public async Task<List<EventCalendar>> CheckEventCalendar()
         {
+            TimeSpan tolerance = TimeSpan.FromSeconds(30);
+            var current = DateTimeOffset.UtcNow;
             TimeZoneInfo targetTimeZone = TimeZoneInfo.FindSystemTimeZoneById("SE Asia Standard Time");
-            dateTimeOffset = TimeZoneInfo.ConvertTime(dateTimeOffset, targetTimeZone);
-            DateTimeOffset startOfDay = new DateTimeOffset(dateTimeOffset.Date, targetTimeZone.GetUtcOffset(dateTimeOffset));
-            DateTimeOffset endOfDay = startOfDay.AddDays(1);
+            var dateTimeOffset = TimeZoneInfo.ConvertTime(current, targetTimeZone);
             var eventCalendar = await _dbContext.Events
-                               .Include(x => x.Project)
-                               .Where(x => x.StartTime >= startOfDay && x.StartTime < endOfDay).ToListAsync();
+                                      .Include(x => x.Project)
+                                      .Where(r => Math.Abs((r.StartTime - dateTimeOffset).Value.TotalSeconds) < tolerance.TotalSeconds)
+                                      .ToListAsync();
             return eventCalendar == null ? null : eventCalendar;
         }
 

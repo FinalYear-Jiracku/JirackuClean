@@ -9,7 +9,7 @@ using UserServices.Domain.Entities;
 
 namespace UserServices.Application.Features.Handlers
 {
-    public class GetProfileHandler : IRequestHandler<GetProfileQueries, UserDTO>
+    public class GetProfileHandler : IRequestHandler<GetProfileQuery, UserDTO>
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
@@ -20,7 +20,7 @@ namespace UserServices.Application.Features.Handlers
             _mapper = mapper;
         }
 
-        public async Task<UserDTO> Handle(GetProfileQueries queries, CancellationToken cancellationToken)
+        public async Task<UserDTO> Handle(GetProfileQuery queries, CancellationToken cancellationToken)
         {
             var user = await _unitOfWork.UserRepository.FindUserById(queries.Id);
             if (user == null)

@@ -11,5 +11,6 @@ namespace UserServices.Application.Interfaces
     {
         Task<User> FindUser(Google.Apis.Auth.GoogleJsonWebSignature.Payload payload);
         Task<User> FindUserById(int userId);
+        Task<User> FindUserByEmail(string email);
     }
 }

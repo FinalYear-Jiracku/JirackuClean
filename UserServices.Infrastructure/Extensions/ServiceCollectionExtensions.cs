@@ -32,10 +32,10 @@ namespace UserServices.Infrastructure.Extensions
             services.AddScoped<IMediator, Mediator>()
                     .AddScoped<IDomainEventDispatcher, DomainEventDispatcher>()
                     .AddScoped<IFirebaseService, FirebaseService>()
-                    .AddScoped<IUserEventPublisher, UserEventPublisher>()
                     .AddScoped<CustomerService>()
                     .AddScoped<ChargeService>()
                     .AddScoped<TokenService>()
+                    .AddScoped<IUserEventPublisher, UserEventPublisher>()
                     .AddSingleton<IRabbitMQManager, RabbitMQManager>();
         }
     }

@@ -28,7 +28,7 @@ namespace TaskServices.Application.Features.Handlers.Issues
         }
         public async Task<StatisTypeDTO> Handle(StatisTypeQuery query, CancellationToken cancellationToken)
         {
-            var issues = await _unitOfWork.IssueRepository.GetIssueListBySprintId(query.Id);
+            var issues = await _unitOfWork.IssueRepository.GetStatisBySprintId(query.Id);
             if(issues == null)
             {
                 return null;

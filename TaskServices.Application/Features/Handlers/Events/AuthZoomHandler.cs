@@ -63,7 +63,17 @@ namespace TaskServices.Application.Features.Handlers.Events
                         mute_upon_entry = true,
                         watermark = true,
                         audio = "voip",
-                        auto_recording = "cloud"
+                        auto_recording = "cloud",
+                        approval_type = 0, // Tùy chọn phê duyệt (0: Tự động, 1: Thủ công, 2: Không cần phê duyệt)
+                        registration_type = 1, // Loại đăng ký (1: Bắt buộc, 2: Tùy chọn, 3: Không cho phép)
+                        registrants_email_notification = true,
+                        meeting_authentication = true, // Yêu cầu xác thực để tham gia cuộc họp
+                        authentication_option = "2", // Tùy chọn xác thực (1: Chỉ cần mật khẩu, 2: Mật khẩu và email)
+                        meeting_password = "your_meeting_password",
+                        global_dial_in_countries = new[] { "US" },
+                        contact_name = "Người liên hệ",
+                        contact_email = "lienhe@example.com",
+                        registrants_restrict_number = 1 // Giới hạn số người đăng ký
                     }
                 };
                 var createMeetingContent = new StringContent(JsonConvert.SerializeObject(meetingInfo), Encoding.UTF8, "application/json");

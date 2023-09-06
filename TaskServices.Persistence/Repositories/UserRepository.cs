@@ -37,13 +37,6 @@ namespace TaskServices.Persistence.Repositories
             return findUser == null ? null : findUser;
         }
 
-        public async Task<User> GetUserByInviteToken(string inviteToken)
-        {
-            await using var context = new ApplicationDbContext(_dbContext);
-            var findUser = await context.Users.FirstOrDefaultAsync(u => u.InviteToken == inviteToken);
-            return findUser == null ? null : findUser;
-        }
-
         public async Task<List<User>> GetListUserByProjectId(int projectId)
         {
             await using var context = new ApplicationDbContext(_dbContext);
