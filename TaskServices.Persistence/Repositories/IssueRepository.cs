@@ -133,13 +133,25 @@ namespace TaskServices.Persistence.Repositories
 
         public async Task<List<Issue>> GetIssueListBySprintId(int? sprintId)
         {
-            return await _dbContext.Issues
+            var issues = await _dbContext.Issues
                          .Include(x => x.User)
-                         .Include(x=>x.Sprint)
-                         .Include(x=>x.Status)
+                         .Include(x => x.Sprint)
+                         .Include(x => x.Status)
                          .Include(x => x.SubIssues.Where(x => x.IsDeleted == false))
                          .Where(x => x.IsDeleted == false && x.Status.Name != "Completed" && x.SprintId == sprintId)
                          .ToListAsync();
+            return issues;
+        }
+        public async Task<List<Issue>> GetStatisBySprintId(int? sprintId)
+        {
+            var issues = await _dbContext.Issues
+                         .Include(x => x.User)
+                         .Include(x => x.Sprint)
+                         .Include(x => x.Status)
+                         .Include(x => x.SubIssues.Where(x => x.IsDeleted == false))
+                         .Where(x => x.IsDeleted == false && x.SprintId == sprintId)
+                         .ToListAsync();
+            return issues;
         }
 
         public async Task<List<Issue>> IssueNotCompleted(int? sprintId)
@@ -156,7 +168,7 @@ namespace TaskServices.Persistence.Repositories
                                .Include(x=>x.Status)
                                .Include(x=>x.Sprint)
                                .ThenInclude(x=>x.Project)
-                               .Where(x => x.Sprint.IsCompleted == false && x.Status.Name != "Completed" && x.DueDate < dateTimeOffset).ToListAsync();
+                               .Where(x => x.IsDeleted == false && x.Sprint.IsCompleted == false && x.Status.Name != "Completed" && x.DueDate < dateTimeOffset).ToListAsync();
             return issues == null ? null : issues;
         }
 
@@ -172,7 +184,7 @@ namespace TaskServices.Persistence.Repositories
                                .Include(x => x.Status)
                                .Include(x => x.Sprint)
                                .ThenInclude(x => x.Project)
-                               .Where(x => x.Sprint.IsCompleted == false && x.Status.Name != "Completed" && x.Sprint.ProjectId == projectid && x.DueDate < dateTimeOffset).ToListAsync();
+                               .Where(x => x.IsDeleted == false && x.Sprint.IsCompleted == false && x.Status.Name != "Completed" && x.Sprint.ProjectId == projectid && x.DueDate < dateTimeOffset).ToListAsync();
             return issues == null ? null : issues;
         }
         #endregion

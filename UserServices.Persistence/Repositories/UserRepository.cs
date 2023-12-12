@@ -27,8 +27,13 @@ namespace UserServices.Infrastructure.Services
 
         public async Task<User> FindUser(GoogleJsonWebSignature.Payload payload)
         {
-            var user = await _dbContext.Users.Where(x => x.IsDeleted == false && x.Email == payload.Email).FirstOrDefaultAsync();
+            var user = await _dbContext.Users.Where(x => x.Email == payload.Email).FirstOrDefaultAsync();
             return user == null ? null : user;
+        }
+
+        public async Task<User> FindUserByEmail(string email)
+        {
+            return await _dbContext.Users.FirstOrDefaultAsync(u => u.Email == email);
         }
     }
 }

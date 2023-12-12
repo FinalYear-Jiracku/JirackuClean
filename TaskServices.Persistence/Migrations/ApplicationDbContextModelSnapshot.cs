@@ -171,7 +171,7 @@ namespace TaskServices.Persistence.Migrations
                     b.ToTable("Comments", (string)null);
                 });
 
-            modelBuilder.Entity("TaskServices.Domain.Entities.Event", b =>
+            modelBuilder.Entity("TaskServices.Domain.Entities.EventCalendar", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -611,10 +611,10 @@ namespace TaskServices.Persistence.Migrations
                     b.Property<string>("Image")
                         .HasColumnType("text");
 
-                    b.Property<string>("InviteToken")
+                    b.Property<string>("Name")
                         .HasColumnType("text");
 
-                    b.Property<string>("Name")
+                    b.Property<string>("Role")
                         .HasColumnType("text");
 
                     b.HasKey("Id");
@@ -698,7 +698,7 @@ namespace TaskServices.Persistence.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("TaskServices.Domain.Entities.Event", b =>
+            modelBuilder.Entity("TaskServices.Domain.Entities.EventCalendar", b =>
                 {
                     b.HasOne("TaskServices.Domain.Entities.Project", "Project")
                         .WithMany("Events")

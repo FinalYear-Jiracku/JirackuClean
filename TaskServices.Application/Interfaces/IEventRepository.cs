@@ -12,6 +12,6 @@ namespace TaskServices.Application.Interfaces
     {
         Task<List<EventCalendar>> GetEventListByProjectId(int? projectId);
         Task<EventCalendar> GetEventById(int id);
-        Task<List<EventCalendar>> CheckEventCalendar(DateTimeOffset dateTimeOffset);
+        Task<List<EventCalendar>> CheckEventCalendar();
     }
 }

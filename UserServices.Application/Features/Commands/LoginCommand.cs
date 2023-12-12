@@ -23,9 +23,5 @@ namespace UserServices.Application.Features.Commands
         {
             User = user;
         }
-        public UserLoggedInEvent(AuthResponseDTO auth)
-        {
-            Auth = auth;
-        }
     }
 }

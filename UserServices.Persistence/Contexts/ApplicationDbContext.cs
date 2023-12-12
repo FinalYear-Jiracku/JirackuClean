@@ -22,6 +22,14 @@ namespace UserServices.Persistence.Contexts
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.ApplyConfiguration(new UserConfiguration());
+            modelBuilder.Entity<User>().HasData(new User
+            {
+                Id = -1,
+                Name = "Admin",
+                Email = "admin@gmail.com",
+                Password = BCrypt.Net.BCrypt.HashPassword("admin@123"),
+                Role = "Admin"
+            });
         }
         public DbSet<User> Users { get; set; }
 

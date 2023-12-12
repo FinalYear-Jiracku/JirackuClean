@@ -55,7 +55,7 @@ namespace UserServices.Persistence.Repositories
 
         public async Task<List<T>> GetAllAsync()
         {
-            return await _dbContext.Set<T>().Where(x => x.IsDeleted == false).ToListAsync();
+            return await _dbContext.Set<T>().ToListAsync();
         }
 
         public async Task<T> GetByIdAsync(int id)

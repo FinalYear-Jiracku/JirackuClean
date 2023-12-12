@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace NotificationServices.Application.Features.Handlers
@@ -19,6 +20,13 @@ namespace NotificationServices.Application.Features.Handlers
         }
         public async Task<int> Handle(SendEmaiCommand command, CancellationToken cancellationToken)
         {
+            var fpt = new Regex("[a-z0-9]+@fpt.edu.vn");
+            var fe = new Regex("[a-z0-9]+@fe.edu.vn");
+
+            if (!fpt.IsMatch(command.To) && !fe.IsMatch(command.To))
+            {
+                throw new ApplicationException("Email must be end @fpt.edu.vn or @fe.edu.vn");
+            }
             var emailDTO = new EmailDTO
             {
                 To = command.To,

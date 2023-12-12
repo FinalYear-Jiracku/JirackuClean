@@ -8,15 +8,21 @@ using System.Net.Sockets;
 using System.Text;
 using System.Threading.Tasks;
 using TaskServices.Application.Interfaces.IServices;
+using TaskServices.Infrastructure.Utils;
 
 namespace TaskServices.Infrastructure.Services
 {
     public class FireBaseService : IFirebaseService
     {
-        private static string apiKey = "AIzaSyAOieBJUgTWNgzdlrQToC309z4d4CmCnxY";
-        private static string Bucket = "jiracku.appspot.com";
-        private static string AuthEmail = "dinhgiabao1120@gmail.com";
-        private static string AuthPassword = "dinhgiabao";
+        private readonly FirebaseConfiguration _configuration;
+        public static string ApiKey = "AIzaSyAOieBJUgTWNgzdlrQToC309z4d4CmCnxY";
+        public static string Bucket = "jiracku.appspot.com";
+        public static string AuthEmail = "dinhgiabao1120@gmail.com";
+        public static string AuthPassword = "dinhgiabao";
+        //public FireBaseService(FirebaseConfiguration configuration)
+        //{
+        //    _configuration = configuration;
+        //}
         public async Task<string> CreateImage(IFormFile file)
         {
             if (!IsValidFileType(file.FileName))
@@ -27,7 +33,7 @@ namespace TaskServices.Infrastructure.Services
             var fileType = GetFileType(file.FileName);
             var fileStream = file.OpenReadStream();
             string document = "";
-            var auth = new FirebaseAuthProvider(new FirebaseConfig(apiKey));
+            var auth = new FirebaseAuthProvider(new FirebaseConfig(ApiKey));
             var a = await auth.SignInWithEmailAndPasswordAsync(AuthEmail, AuthPassword);
             var cancel = new CancellationTokenSource();
             var task = new FirebaseStorage(

@@ -43,6 +43,8 @@ namespace UserServices.Application.Features.Handlers
             //}
 
             var user = await _unitOfWork.UserRepository.FindUser(payload);
+            
+
             if (user == null)
             {
                 user = new User()
@@ -50,12 +52,18 @@ namespace UserServices.Application.Features.Handlers
                     Name = payload.Name,
                     Email = payload.Email,
                     Image = payload.Picture,
+                    Role = "User",
                     IsDeleted = false,
-                    CreatedAt = DateTimeOffset.Now
+                    CreatedAt = DateTimeOffset.UtcNow,
                 };
                 await _unitOfWork.Repository<User>().AddAsync(user);
                 user.AddDomainEvent(new UserLoggedInEvent(user));
                 await _unitOfWork.Save(cancellationToken);
+            }
+
+            if (user.IsDeleted == true)
+            {
+                throw new ApplicationException("User Already Deleted");
             }
 
             var claims = new List<Claim>()
@@ -63,7 +71,10 @@ namespace UserServices.Application.Features.Handlers
                 new Claim("Id", user.Id.ToString()),
                 new Claim("Email", user.Email == null ? "" : user.Email),
                 new Claim("Name", user.Name == null ? "" : user.Name),
-                new Claim("Image", user.Image == null ? "" : user.Image)
+                new Claim("Image", user.Image == null ? "" : user.Image),
+                new Claim("IsOtp", user.IsOtp.ToString()),
+                new Claim("IsSms", user.IsSms.ToString()),
+                new Claim("Role", user.Role.ToString()),
             };
 
             var accessToken = _tokenService.GenerateAccessToken(claims);

@@ -11,6 +11,7 @@ namespace NotificationServices.Application.Features.Queries
 {
     public class GetListMessageQuery : IRequest<List<MessageDTO>>
     {
+        
         public int Id { get; set; }
         public GetListMessageQuery(int id)
         {

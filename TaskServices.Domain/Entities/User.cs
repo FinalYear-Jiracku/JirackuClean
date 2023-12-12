@@ -12,7 +12,7 @@ namespace TaskServices.Domain.Entities
         public string? Name { get; set; }
         public string? Email { get; set; }
         public string? Image { get; set; }
-        public string? InviteToken { get; set; }
+        public string? Role { get; set; }
         public ICollection<Issue>? Issues { get; set; }
         public ICollection<UserProject>? UserProjects { get; set; }
         public ICollection<SubIssue>? SubIssues { get; set; }
