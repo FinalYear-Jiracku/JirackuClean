@@ -24,24 +24,24 @@ namespace TaskServices.Application.Features.Handlers.Comments
                 Content = command.Content,
                 UserId = command.UserId,
                 CreatedBy = command.CreatedBy,
-            }; ;
-            if(command.IssueId != null)
+            };
+            if(command.IssueId != 0)
             {
                 var issue = await _unitOfWork.IssueRepository.GetIssueById(command.IssueId);
                 newComment.Issue = issue;
             }
-            if (command.SubIssueId != null)
+            if (command.SubIssueId != 0)
             {
                 var subIssue = await _unitOfWork.SubIssueRepository.GetSubIssueById(command.SubIssueId);
                 newComment.SubIssue = subIssue;
             }
-            if (command.NoteId != null)
+            if (command.NoteId != 0)
             {
                 var note = await _unitOfWork.NoteRepository.GetNoteById(command.NoteId);
                 newComment.Note = note;
             }
             await _unitOfWork.Repository<Comment>().AddAsync(newComment);
-            newComment.AddDomainEvent(new CommentCreatedEvent(newComment));
+            //newComment.AddDomainEvent(new CommentCreatedEvent(newComment));
             await _unitOfWork.Save(cancellationToken);
             return newComment;
         }

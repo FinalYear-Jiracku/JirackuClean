@@ -43,10 +43,7 @@ namespace UserServices.Application.Features.Handlers
             //}
 
             var user = await _unitOfWork.UserRepository.FindUser(payload);
-            if(user.IsDeleted == true)
-            {
-                throw new ApplicationException("User Already Deleted");
-            }
+            
 
             if (user == null)
             {
@@ -55,12 +52,18 @@ namespace UserServices.Application.Features.Handlers
                     Name = payload.Name,
                     Email = payload.Email,
                     Image = payload.Picture,
+                    Role = "User",
                     IsDeleted = false,
-                    CreatedAt = DateTimeOffset.Now
+                    CreatedAt = DateTimeOffset.UtcNow,
                 };
                 await _unitOfWork.Repository<User>().AddAsync(user);
                 user.AddDomainEvent(new UserLoggedInEvent(user));
                 await _unitOfWork.Save(cancellationToken);
+            }
+
+            if (user.IsDeleted == true)
+            {
+                throw new ApplicationException("User Already Deleted");
             }
 
             var claims = new List<Claim>()

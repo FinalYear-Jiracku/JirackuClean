@@ -44,7 +44,7 @@ namespace TaskServices.Persistence.Repositories
             var projects = await (from p in _dbContext.Projects.Include(x => x.Sprints.Where(x => x.IsDeleted == false))
                                   join up in _dbContext.UserProject on p.Id equals up.ProjectId
                                   join u in _dbContext.Users on up.UserId equals u.Id
-                                  where up.UserId == userId
+                                  where up.UserId == userId && p.IsDeleted == false
                                   select p).ToListAsync();
             return projects;
         }

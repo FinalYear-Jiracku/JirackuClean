@@ -72,11 +72,11 @@ namespace UserServices.WebAPI.Controllers
         {
             return Ok(await _mediator.Send(command));
         }
-        [HttpPut]
-        public async Task<IActionResult> Disable([FromForm] UpdateUserCommand command)
-        {
-            return Ok(await _mediator.Send(command));
-        }
+        //[HttpPut]
+        //public async Task<IActionResult> Disable([FromForm] UpdateUserCommand command)
+        //{
+        //    return Ok(await _mediator.Send(command));
+        //}
         [HttpPatch("disable/{id}")]
         public async Task<IActionResult> DisableUser(int id)
         {

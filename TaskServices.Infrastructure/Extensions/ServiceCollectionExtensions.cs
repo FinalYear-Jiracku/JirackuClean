@@ -32,7 +32,7 @@ namespace TaskServices.Infrastructure.Extensions
                     .ForJob(jobKeyDeadline)
                     .WithIdentity("CheckDeadlineJob-trigger")
                     .WithSchedule(CronScheduleBuilder
-                    .DailyAtHourAndMinute(11,21)
+                    .DailyAtHourAndMinute(08,06)
                     .InTimeZone(TimeZoneInfo.FindSystemTimeZoneById("SE Asia Standard Time"))) 
                 );
                 var jobKeyEvent = new JobKey("CheckEventJob");
