@@ -39,10 +39,6 @@ namespace TaskServices.WebAPI.Controllers
         public async Task<IActionResult> GetProjectDetail(int id)
         {   
             var project = await _mediator.Send(new GetProjectByIdQuery(id));
-            if (project == null)
-            {
-                return StatusCode(400, "Project Does Not Exist");
-            }
             return Ok(project);
         }
         #endregion

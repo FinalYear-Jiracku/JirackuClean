@@ -2,12 +2,8 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Stripe;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using UserServices.Application.Interfaces.IServices;
+using UserServices.Application.Utils;
 using UserServices.Domain.Common;
 using UserServices.Domain.Common.Interfaces;
 using UserServices.Infrastructure.Services;
@@ -20,11 +16,23 @@ namespace UserServices.Infrastructure.Extensions
         {
             services.AddServices();
             services.AddStripe(configuration);
+            services.AddFireBase(configuration);
         }
 
         private static void AddStripe(this IServiceCollection services, IConfiguration configuration)
         {
             StripeConfiguration.ApiKey = configuration.GetConnectionString("Stripe:SecretKey");
+        }
+
+        private static void AddFireBase(this IServiceCollection services, IConfiguration configuration)
+        {
+            services.Configure<FirebaseConfiguration>(firebaseConfig =>
+            {
+                firebaseConfig.ApiKey = configuration.GetSection("FireBase:ApiKey").Value;
+                firebaseConfig.Bucket = configuration.GetSection("FireBase:Bucket").Value;
+                firebaseConfig.AuthEmail = configuration.GetSection("FireBase:AuthEmail").Value;
+                firebaseConfig.AuthPassword = configuration.GetSection("FireBase:AuthPassword").Value;
+            });
         }
 
         private static void AddServices(this IServiceCollection services)

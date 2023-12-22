@@ -25,6 +25,11 @@ namespace TaskServices.Application.Features.Handlers.Users
         }
         public async Task<List<UserDTO>> Handle(GetListUserQuery query, CancellationToken cancellationToken)
         {
+            var findProject = _unitOfWork.ProjectRepository.GetProjectById(query.Id);
+            if(findProject == null)
+            {
+                throw new ApplicationException("Project does not exist");
+            }
             var cacheData = _cacheService.GetData<List<UserDTO>>($"UserDTO?projectId={query.Id}");
             if (cacheData != null)
             {

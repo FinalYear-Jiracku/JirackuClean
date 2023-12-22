@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using UserServices.Application.Features.Commands;
+using UserServices.Application.Features.Commands.QRCode;
 
 namespace UserServices.WebAPI.Controllers
 {

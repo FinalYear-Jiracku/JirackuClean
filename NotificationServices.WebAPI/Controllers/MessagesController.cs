@@ -25,9 +25,7 @@ namespace NotificationServices.WebAPI.Controllers
         [HttpGet("{id}")]
         public async Task<IActionResult> MessageList(int id)
         {
-            var route = Request.Path.Value;
             var messageList = await _mediator.Send(new GetListMessageQuery(id));
-            //var pagedResponse = PaginationHelper.CreatePagedReponse<MessageDTO>(projectList.Item1, projectList.Item2, projectList.Item3, _uriService, route);
             return Ok(messageList);
         }
         [HttpGet("detail/{id}")]

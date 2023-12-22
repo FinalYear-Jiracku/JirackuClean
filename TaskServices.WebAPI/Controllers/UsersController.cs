@@ -1,9 +1,6 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using TaskServices.Application.Features.Queries.Pages;
-using TaskServices.Application.Features.Queries.Projects;
-using TaskServices.Application.Features.Queries.Sprints;
 using TaskServices.Application.Features.Queries.Users;
 
 namespace TaskServices.WebAPI.Controllers
@@ -27,11 +24,6 @@ namespace TaskServices.WebAPI.Controllers
         [Route("projects/{id}")]
         public async Task<IActionResult> DropdownUser(int id)
         {
-            var findProject = await _mediator.Send(new GetProjectByIdQuery(id));
-            if (findProject == null)
-            {
-                return StatusCode(400, "Project Does Not Exist");
-            }
             var userList = await _mediator.Send(new GetListUserQuery(id));
             return Ok(userList);
         }

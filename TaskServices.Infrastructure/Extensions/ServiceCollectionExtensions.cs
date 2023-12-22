@@ -48,6 +48,17 @@ namespace TaskServices.Infrastructure.Extensions
             services.AddQuartzHostedService(q => q.WaitForJobsToComplete = true);
         }
 
+        private static void AddFireBase(this IServiceCollection services, IConfiguration configuration)
+        {
+            services.Configure<FirebaseConfiguration>(firebaseConfig =>
+            {
+                firebaseConfig.ApiKey = configuration.GetSection("FireBase:ApiKey").Value;
+                firebaseConfig.Bucket = configuration.GetSection("FireBase:Bucket").Value;
+                firebaseConfig.AuthEmail = configuration.GetSection("FireBase:AuthEmail").Value;
+                firebaseConfig.AuthPassword = configuration.GetSection("FireBase:AuthPassword").Value;
+            });
+        }
+
         private static void AddServices(this IServiceCollection services)
         {
             services.AddScoped<IMediator, Mediator>()
@@ -61,16 +72,6 @@ namespace TaskServices.Infrastructure.Extensions
                     .AddScoped<ICheckEventPublisher, CheckEventPublisher>()
                     .AddScoped<IPaymentEventPublisher, PaymentEventPublisher>()
                     .AddSingleton<IRabbitMQManager, RabbitMQManager>();
-        }
-        private static void AddFireBase(this IServiceCollection services, IConfiguration configuration)
-        {
-            services.Configure<FirebaseConfiguration>(fireBaseConfig =>
-            {
-                fireBaseConfig.ApiKey = configuration.GetSection("FireBase:ApiKey").Value;
-                fireBaseConfig.Bucket = configuration.GetSection("FireBase:Bucket").Value;
-                fireBaseConfig.AuthEmail = configuration.GetSection("FireBase:AuthEmail").Value;
-                fireBaseConfig.AuthPassword = configuration.GetSection("FireBase:AuthPassword").Value;
-            });
         }
     }
 }

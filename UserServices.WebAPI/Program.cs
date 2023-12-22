@@ -1,21 +1,16 @@
 using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.AspNetCore.RateLimiting;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Stripe;
-using System;
 using System.Text;
-using System.Threading.RateLimiting;
 using UserServices.Application.Extensions;
 using UserServices.Infrastructure.Extensions;
 using UserServices.Persistence.Contexts;
 using UserServices.Persistence.Extensions;
 using UserServices.Shared.Middleware;
-using UserServices.WebAPI.RateLimit;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
 builder.Services.AddApplicationLayer((builder.Configuration));
 builder.Services.AddInfrastructureLayer(builder.Configuration);
 builder.Services.AddPersistenceLayer(builder.Configuration);
@@ -53,21 +48,6 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddGo
                         IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"]))
                     };
                 });
-builder.Services.Configure<MyRateLimitOptions>(builder.Configuration.GetSection(MyRateLimitOptions.MyRateLimit));
-var myOptions = new MyRateLimitOptions();
-builder.Configuration.GetSection(MyRateLimitOptions.MyRateLimit).Bind(myOptions);
-var fixedPolicy = "fixed";
-builder.Services.AddRateLimiter(rateLimit =>
-{
-    rateLimit.AddFixedWindowLimiter(policyName: fixedPolicy, options =>
-    {
-        options.PermitLimit = myOptions.PermitLimit;
-        options.Window = TimeSpan.FromSeconds(myOptions.Window);
-        options.QueueProcessingOrder = QueueProcessingOrder.OldestFirst;
-        options.QueueLimit = myOptions.QueueLimit;
-    });
-    rateLimit.RejectionStatusCode = StatusCodes.Status429TooManyRequests;
-});
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
@@ -95,11 +75,7 @@ app.UseMiddleware<TokenExpirationMiddleware>();
 
 app.UseAuthorization();
 
-app.UseRateLimiter();
-
 app.MapControllers();
-
-app.MapDefaultControllerRoute().RequireRateLimiting(fixedPolicy);
 
 using (var scope = app.Services.CreateScope())
 {

@@ -20,8 +20,6 @@ namespace NotificationServices.Infrastructure.Services
 {
     public class EventService : IEventService
     {
-        private readonly IConfiguration _config;
-        private readonly INotificationEventPulisher _notificationEventPulisher;
         private readonly IServiceProvider _serviceProvider;
         private readonly IHubContext<NotificationHub> _hubContext;
 

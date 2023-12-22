@@ -74,7 +74,7 @@ namespace NotificationServices.Application.SignalR
             }
             else
             {
-                await Console.Out.WriteLineAsync("Không tin thấy người nhận");
+                await Console.Out.WriteLineAsync("There is no reciever");
             }
         }
     }

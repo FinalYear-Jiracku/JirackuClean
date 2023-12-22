@@ -27,19 +27,12 @@ namespace TaskServices.Application.Features.Handlers.Projects
 
         public async Task<ProjectDTO> Handle(GetProjectByIdQuery query, CancellationToken cancellationToken)
         {
-            //var cacheData = _cacheService.GetData<ProjectDTO>($"ProjectDTO:Id{query.Id}");
-            //if (cacheData != null)
-            //{
-            //    return cacheData;
-            //}
             var project = await _unitOfWork.ProjectRepository.GetProjectById(query.Id);
             var projectDto = _mapper.Map<ProjectDTO>(project);
             if(projectDto == null)
             {
-                return null;
+                throw new ApplicationException("Project Does Not Exist");
             }
-            //var expireTime = DateTimeOffset.Now.AddSeconds(30);
-            //_cacheService.SetData<ProjectDTO>($"ProjectDTO:Id{projectDto.Id}", projectDto, expireTime);
             return projectDto;
         }
     }

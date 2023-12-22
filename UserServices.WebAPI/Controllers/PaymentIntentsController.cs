@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
-using UserServices.Application.Features.Commands;
+using UserServices.Application.Features.Commands.Payment;
 using UserServices.Application.Features.Queries;
 using UserServices.Application.Interfaces.IServices;
 

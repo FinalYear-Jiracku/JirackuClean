@@ -23,7 +23,6 @@ namespace NotificationServices.Persistence.Extensions
         public static void AddDbContext(this IServiceCollection services, IConfiguration configuration)
         {
             var connectionString = configuration.GetConnectionString("DefaultConnection");
-
             services.AddDbContext<ApplicationDbContext>(x => x.UseNpgsql(connectionString,
             builder => builder.MigrationsAssembly(typeof(ApplicationDbContext).Assembly.FullName)));
         }
